@@ -72,7 +72,7 @@ def format_detailed_message():
     
     msg += f"\n━━━━━━━━━━━━━━━━━━━━\n"
     msg += f"🔗 *互動儀表板*\n"
-    msg += f"👉 https://github.com/AC7127/manulife-mpf-tracker\n"
+    msg += f"👉 https://ac7127.github.io/manulife-mpf-tracker/\n"
     msg += f"   (入去睇圖表 + 完整數據)\n\n"
     msg += f"📊 MPF整體2025平均 +6.2~7.55%，連續第4年正回報\n"
     msg += f"⚠️ 過往不代表未來 | 非投資建議"
