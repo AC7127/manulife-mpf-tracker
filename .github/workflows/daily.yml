@@ -1,19 +1,45 @@
 name: 宏利強積金每日監控推送
+
 on:
   schedule:
+    # 每日 01:00 UTC = 09:00 HKT 香港時間
     - cron: '0 1 * * *'
-  workflow_dispatch:
+  workflow_dispatch:  # 允許手動觸發測試
+
 jobs:
   mpf-monitor:
     runs-on: ubuntu-latest
+    
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - name: Checkout 程式碼
+        uses: actions/checkout@v4
+      
+      - name: 設定 Python
+        uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - run: pip install requests
-      - env:
+      
+      - name: 安裝依賴
+        run: |
+          pip install requests
+      
+      - name: 執行宏利強積金監控推送 (全29基金 Q3版)
+        env:
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
           CHAT_ID: ${{ secrets.CHAT_ID }}
         run: |
-          if [ -f mpf_bot.py ]; then python mpf_bot.py; else python mpf_x5f_bot.py; fi
+          if [ -f "mpf_x5f_bot.py" ]; then
+            echo "找到 mpf_x5f_bot.py，執行全29基金版"
+            python mpf_x5f_bot.py
+          elif [ -f "mpf_bot.py" ]; then
+            python mpf_bot.py
+          else
+            echo "找不到 bot 檔，列出檔案："
+            ls -la
+            exit 1
+          fi
+      
+      - name: 推送失敗通知
+        if: failure()
+        run: |
+          echo "推送失敗，請檢查 Secrets 是否正確設定"
