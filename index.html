@@ -19,64 +19,816 @@
 :where(code, pre, kbd, samp) {
   font-family: "Optimistic Mono", ui-monospace, monospace;
 }
-</style><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>宏利MPF全29基金完整版 v4</title>
-<style>
-:root{--bg:#0a0e1a;--card:#151a2c;--border:#1e293b;--accent:#00d4aa;--gold:#ffb700;--text:#e2e8f0;--muted:#94a3b8}
-*{margin:0;padding:0;box-sizing:border-box}body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Noto Sans HK',sans-serif}
-.header{padding:20px 16px;border-bottom:1px solid var(--border);position:sticky;top:0;background:rgba(10,14,26,0.92);backdrop-filter:blur(12px);z-index:10}
-.header h1{font-size:20px;font-weight:800}.header p{color:var(--muted);font-size:11px;margin-top:4px}
-.tabs{display:flex;gap:8px;padding:12px 16px;overflow-x:auto;white-space:nowrap;border-bottom:1px solid var(--border)}
-.tab{padding:8px 14px;border-radius:20px;background:var(--card);border:1px solid var(--border);font-size:12px;cursor:pointer;color:var(--muted)}.tab.active{background:var(--accent);color:#000;border-color:var(--accent);font-weight:700}
-.grid4{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:12px 16px}
-.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:12px}
-.card .label{font-size:10px;color:var(--muted);text-transform:uppercase}.card .value{font-size:18px;font-weight:800;margin-top:4px}.card .sub{font-size:10px;color:var(--muted);margin-top:3px}
-.section{padding:0 16px 16px}.section h2{font-size:14px;margin:14px 0 10px}
-.fund-grid{display:grid;gap:10px}
-.fund-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:12px}
-.fund-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px}
-.fund-name{font-weight:700;font-size:13px}.fund-meta{font-size:11px;color:var(--muted);margin-top:2px}
-.fund-code{font-size:10px;background:#1e293b;padding:3px 7px;border-radius:6px;color:var(--muted)}
-.badge{display:inline-block;padding:2px 6px;border-radius:4px;font-size:9px;margin-left:6px}
-.badge-equity{background:#1a3a2a;color:#00d4aa}.badge-mixed{background:#2a2a4a;color:#a78bfa}.badge-bond{background:#1e3a5f;color:#60a5fa}.badge-guar{background:#3a2a1a;color:#fbbf24}.badge-dis{background:#2a1a3a;color:#f472b6}.badge-target{background:#1a3a3a;color:#2dd4bf}
-.pos{color:#00d4aa}.neg{color:#ef4444}
-.count{text-align:center;padding:10px;color:var(--muted);font-size:11px}
 </style>
-</head><body>
-<div class="header"><h1>宏利強積金全29基金完整版 v4</h1><p>Manulife MPF Full 29 Funds • 截至 2026-09-30 (Q3) • 價格截至 2026-08-25 • 共29隻成分基金</p></div>
-<div class="grid4">
-<div class="card"><div class="label">基金總數</div><div class="value">29隻</div><div class="sub">股票9 • 混合10 • 債券4 • 保證3 • DIS 2 • 目標日期5</div></div>
-<div class="card"><div class="label">MPF 2026 YTD</div><div class="value" style="color:#00d4aa">+6.20%</div><div class="sub">Q3 +0.50% • 9月 -1.47% MPF Ratings</div></div>
-<div class="card"><div class="label">長線王 10年</div><div class="value">SHK130 北美</div><div class="sub" style="color:#ffb700">171.6% 年化10.5% • 最新 $38.314</div></div>
-<div class="card"><div class="label">最弱 (官方)</div><div class="value">SHK126 香港</div><div class="sub" style="color:#ef4444">1年 -6.4% 截至09-30 MPFA官方</div></div>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>宏利強積金監控 • LIVE - V5 Light 全29基金</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&amp;family=Noto+Sans+HK:wght@400;500;700&amp;display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f6f7f2;--card:#ffffff;--border:#e5e7eb;--muted:#6b7280;--text:#111827;--green:#0f7a4a;--green-dark:#064e3b;--green-light:#f0fdf4;--yellow:#b45309}
+*{margin:0;padding:0;box-sizing:border-box}body{background:var(--bg);color:var(--text);font-family:'Inter','Noto Sans HK',-apple-system,sans-serif;line-height:1.5}
+.header{position:sticky;top:0;z-index:20;background:rgba(255,255,255,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:14px 20px}
+.header-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}
+.logo{display:flex;gap:10px;align-items:center}
+.logo-mark{width:32px;height:32px;background:var(--green);color:#fff;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px}
+.h-title{font-weight:800;font-size:18px;line-height:1.2}.h-sub{font-size:11px;color:var(--muted);margin-top:3px;max-width:720px}
+.badge-live{display:inline-flex;align-items:center;gap:6px;background:#0f2e22;color:#fff;padding:6px 12px;border-radius:20px;font-size:11px;font-weight:700}
+.dot{width:6px;height:6px;background:#22c55e;border-radius:50%;animation:pulse 2s infinite}
+@keyframes pulse{0%{opacity:1}50%{opacity:0.4}100%{opacity:1}}
+.tabs{display:flex;gap:8px;overflow-x:auto;padding:12px 20px;border-bottom:1px solid var(--border);background:#fff;white-space:nowrap;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{padding:7px 14px;border-radius:20px;border:1px solid var(--border);background:#f9fafb;font-size:12px;font-weight:500;color:var(--muted);cursor:pointer;transition:.2s}
+.tab.active{background:var(--green);color:#fff;border-color:var(--green);font-weight:700}
+.time-tabs{display:flex;gap:6px;overflow-x:auto;padding:10px 20px;background:#fcfdf9;border-bottom:1px solid var(--border);white-space:nowrap;scrollbar-width:none}
+.time-tabs::-webkit-scrollbar{display:none}
+.t-tab{padding:6px 12px;border-radius:16px;font-size:11px;border:1px solid var(--border);background:#fff;color:var(--muted);cursor:pointer}
+.t-tab.active{background:var(--green-dark);color:#fff;border-color:var(--green-dark)}
+.main{display:grid;grid-template-columns:1.7fr 0.8fr;gap:16px;padding:16px 20px;max-width:1400px;margin:0 auto}
+@media(max-width:900px){.main{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:14px;box-shadow:0 1px 2px rgba(0,0,0,0.04)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.kpi .label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}.kpi .value{font-size:20px;font-weight:800;margin-top:2px}.kpi .sub{font-size:10px;color:var(--muted);margin-top:2px}
+.fund-grid{display:grid;gap:10px}
+.fund{background:#fff;border:1px solid var(--border);border-radius:14px;padding:12px;transition:.2s;cursor:pointer}
+.fund:hover{border-color:var(--green);box-shadow:0 4px 12px rgba(15,122,74,0.08)}
+.f-head{display:flex;justify-content:space-between;align-items:flex-start}
+.f-name{font-weight:700;font-size:13px}.f-en{font-size:11px;color:var(--muted);margin-top:2px}
+.f-code{font-size:10px;background:#f3f4f6;border:1px solid var(--border);padding:3px 7px;border-radius:6px;color:var(--muted);font-weight:600}
+.f-bottom{display:flex;justify-content:space-between;align-items:flex-end;margin-top:10px;gap:10px}
+.f-nav{font-size:14px;font-weight:700}.f-chg{font-size:11px;margin-left:6px}
+.pos{color:var(--green)}.neg{color:#dc2626}
+.bar-wrap{flex:1;max-width:180px}
+.bar-label{display:flex;justify-content:space-between;font-size:10px;color:var(--muted);margin-bottom:4px}
+.bar{height:6px;background:#f3f4f6;border-radius:99px;overflow:hidden}.bar-fill{height:100%;border-radius:99px;transition:.5s}
+.ranking{background:#fff;border:1px solid var(--border);border-radius:16px;padding:18px;box-shadow:0 1px 2px rgba(0,0,0,0.04)}
+.r-title{font-weight:800;font-size:15px;display:flex;justify-content:space-between;align-items:center}
+.r-sub{font-size:11px;color:var(--muted);margin-top:4px}
+.r-list{margin-top:14px;display:flex;flex-direction:column;gap:12px}
+.r-item{display:flex;flex-direction:column;gap:5px}
+.r-head{display:flex;justify-content:space-between;align-items:center}
+.r-rank{width:20px;height:20px;border-radius:50%;background:#f3f4f6;color:var(--muted);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.r-rank.top{background:var(--green);color:#fff}
+.r-code{font-size:12px;font-weight:600}
+.r-pct{font-size:12px;font-weight:700}
+.tele{background:var(--green);color:#fff;border-radius:16px;padding:18px;position:relative;overflow:hidden;margin-top:14px}
+.tele::after{content:'';position:absolute;right:-20px;top:-20px;width:100px;height:100px;background:rgba(255,255,255,0.1);border-radius:50%}
+.footer{border-top:1px solid var(--border);margin-top:20px;padding:16px 20px;font-size:11px;color:#9ca3af;line-height:1.6;text-align:center}
+.tag{font-size:9px;padding:2px 6px;border-radius:4px;margin-left:6px;font-weight:600}
+.tag-stock{background:#dcfce7;color:#166534}.tag-bond{background:#dbeafe;color:#1e40af}.tag-guar{background:#fef3c7;color:#92400e}.tag-mixed{background:#f3e8ff;color:#6b21a8}.tag-dis{background:#fce7f3;color:#9d174d}.tag-target{background:#ccfbf1;color:#115e59}
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="header-top">
+    <div class="logo">
+      <div class="logo-mark">M</div>
+      <div>
+        <div class="h-title">宏利強積金監控 <span style="font-weight:400;color:var(--green)">LIVE</span> • 詳細回報比較 <span style="font-weight:400;font-size:14px;color:var(--muted)">當日至10年時間軸</span></div>
+        <div class="h-sub">根據宏利官方 2026-06-31 至 2026-08-25 基金表現數據 • 涵蓋 3個月 至 10年總回報及年化回報 • 點選卡片展開更完整表現分析 • 資料僅供參考，非投資建議</div>
+        <div class="h-sub">數據日期: 2026-08-31 • Manulife Global Select MPF Scheme • 官方29隻成分基金 • 截至 Q3 09-30 / 價格截至 08-25</div>
+      </div>
+    </div>
+    <div class="badge-live"><span class="dot"></span> 共 29 隻基金 • 平均10年 76.6% • Q3 +0.50% • YTD +6.20% • 09:30 自動推送✅</div>
+  </div>
 </div>
-<div class="tabs" id="tabs">
-<div class="tab active" data-cat="all">全部 29</div>
-<div class="tab" data-cat="股票">股票 9</div>
-<div class="tab" data-cat="混合">混合 10</div>
-<div class="tab" data-cat="債券">債券 4</div>
-<div class="tab" data-cat="保證/貨幣">保證 3</div>
-<div class="tab" data-cat="DIS">DIS 2</div>
-<div class="tab" data-cat="目標日期">目標日期 5</div>
+
+<div class="tabs" id="catTabs"><div class="tab active" data-cat="all">全部 29</div><div class="tab " data-cat="stock">股票基金 9</div><div class="tab " data-cat="mixed">混合資產基金 6</div><div class="tab " data-cat="bond">債券基金 4</div><div class="tab " data-cat="guarantee">保證/貨幣基金 3</div><div class="tab " data-cat="dis">預設投資策略 2 (DIS)</div><div class="tab " data-cat="target">目標日期基金 5</div></div>
+<div class="time-tabs" id="timeTabs"><div class="t-tab " data-time="3M">過去3個月</div><div class="t-tab " data-time="YTD">年初至今</div><div class="t-tab " data-time="1Y">過去1年</div><div class="t-tab " data-time="3Y">過去3年</div><div class="t-tab " data-time="5Y">過去5年</div><div class="t-tab active" data-time="10Y">過去10年</div><div class="t-tab " data-time="SINCE">自成立至今</div><div class="t-tab " data-time="ANN10Y">年化10年</div></div>
+
+<div class="main">
+  <div>
+    <div class="grid2">
+      <div class="card kpi"><div class="label">基金總數</div><div class="value">29隻</div><div class="sub">股票9 • 混合6 • 債券4 • 保證3 • DIS2 • 目標日期5</div></div>
+      <div class="card kpi"><div class="label">MPF 2026 YTD (10月反彈)</div><div class="value" style="color:var(--green)">+6.20%</div><div class="sub">Q3 +0.50% • 9月 -1.47% • 10月 +1.72% 反彈</div></div>
+      <div class="card kpi"><div class="label">長線王 10年</div><div class="value">SHK130 北美</div><div class="sub" style="color:var(--yellow)">171.55% 年化10.5% • 最新 $38.314 創新高</div></div>
+      <div class="card kpi"><div class="label">最弱 (官方 MPFA)</div><div class="value">SHK126 香港</div><div class="sub" style="color:#dc2626">1年 -6.4% 截至09-30 • 規模208.7億 • YTD -3.8%</div></div>
+    </div>
+    <div class="fund-grid" id="fundGrid"><div class="fund">
+      <div class="f-head">
+        <div>
+          <div class="f-name">SHK130 北美股票 <span class="tag tag-stock">股票</span> <span style="font-size:10px;background:#f3f4f6;border:1px solid #e5e7eb;padding:2px 6px;border-radius:6px;color:var(--muted)">風險 6/6</span></div>
+          <div class="f-en">North American Equity Fund • SHK130</div>
+        </div>
+        <div class="f-code">SHK130</div>
+      </div>
+      <div class="f-bottom">
+        <div>
+          <div><span class="f-nav">$38.31</span><span class="f-chg pos">+0.64% 當日</span></div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px">過去10年 <span style="font-weight:700;color:var(--green)">+171.55%</span> • 10年 171.55% • 年化 10.50%</div>
+        </div>
+        <div class="bar-wrap">
+          <div class="bar-label"><span>回報</span><span style="font-weight:700;color:var(--green)">+171.55%</span></div>
+          <div class="bar"><div class="bar-fill" style="width:100%;background:var(--green)"></div></div>
+        </div>
+      </div>
+    </div><div class="fund">
+      <div class="f-head">
+        <div>
+          <div class="f-name">SHK131 日本股票 <span class="tag tag-stock">股票</span> <span style="font-size:10px;background:#f3f4f6;border:1px solid #e5e7eb;padding:2px 6px;border-radius:6px;color:var(--muted)">風險 6/6</span></div>
+          <div class="f-en">Japan Equity Fund • SHK131</div>
+        </div>
+        <div class="f-code">SHK131</div>
+      </div>
+      <div class="f-bottom">
+        <div>
+          <div><span class="f-nav">$30.15</span><span class="f-chg pos">+0.95% 當日</span></div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px">過去10年 <span style="font-weight:700;color:var(--green)">+149.98%</span> • 10年 149.98% • 年化 9.60%</div>
+        </div>
+        <div class="bar-wrap">
+          <div class="bar-label"><span>回報</span><span style="font-weight:700;color:var(--green)">+149.98%</span></div>
+          <div class="bar"><div class="bar-fill" style="width:87.42640629554064%;background:var(--green)"></div></div>
+        </div>
+      </div>
+    </div><div class="fund">
+      <div class="f-head">
+        <div>
+          <div class="f-name">SHK127 國際股票 <span class="tag tag-stock">股票</span> <span style="font-size:10px;background:#f3f4f6;border:1px solid #e5e7eb;padding:2px 6px;border-radius:6px;color:var(--muted)">風險 5/6</span></div>
+          <div class="f-en">International Equity Fund • SHK127</div>
+        </div>
+        <div class="f-code">SHK127</div>
+      </div>
+      <div class="f-bottom">
+        <div>
+          <div><span class="f-nav">$32.13</span><span class="f-chg pos">+0.42% 當日</span></div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px">過去10年 <span style="font-weight:700;color:var(--green)">+132.49%</span> • 10年 132.49% • 年化 8.80%</div>
+        </div>
+        <div class="bar-wrap">
+          <div class="bar-label"><span>回報</span><span style="font-weight:700;color:var(--green)">+132.49%</span></div>
+          <div class="bar"><div class="bar-fill" style="width:77.23112795103468%;background:var(--green)"></div></div>
+        </div>
+      </div>
+    </div><div class="fund">
+      <div class="f-head">
+        <div>
+          <div class="f-name">SHK128 亞太股票 <span class="tag tag-stock">股票</span> <span style="font-size:10px;background:#f3f4f6;border:1px solid #e5e7eb;padding:2px 6px;border-radius:6px;color:var(--muted)">風險 5/6</span></div>
+          <div class="f-en">Asia Pacific Equity Fund • SHK128</div>
+        </div>
+        <div class="f-code">SHK128</div>
+      </div>
+      <div class="f-bottom">
+        <div>
+          <div><span class="f-nav">$50.14</span><span class="f-chg pos">+1.10% 當日</span></div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px">過去10年 <span style="font-weight:700;color:var(--green)">+117.68%</span> • 10年 117.68% • 年化 8.10%</div>
+        </div>
+        <div class="bar-wrap">
+          <div class="bar-label"><span>回報</span><span style="font-weight:700;color:var(--green)">+117.68%</span></div>
+          <div class="bar"><div class="bar-fill" style="width:68.5980763625765%;background:var(--green)"></div></div>
+        </div>
+      </div>
+    </div><div class="fund">
+      <div class="f-head">
+        <div>
+          <div class="f-name">SHK134 富達增長 <span class="tag tag-mixed">混合</span> <span style="font-size:10px;background:#f3f4f6;border:1px solid #e5e7eb;padding:2px 6px;border-radius:6px;color:var(--muted)">風險 4/6</span></div>
+          <div class="f-en">Fidelity Growth Fund • SHK134</div>
+        </div>
+        <div class="f-code">SHK134</div>
+      </div>
+      <div class="f-bottom">
+        <div>
+          <div><span class="f-nav">$42.00</span><span class="f-chg pos">+0.31% 當日</span></div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px">過去10年 <span style="font-weight:700;color:var(--green)">+98.70%</span> • 10年 98.70% • 年化 7.10%</div>
+        </div>
+        <div class="bar-wrap">
+          <div class="bar-label"><span>回報</span><span style="font-weight:700;color:var(--green)">+98.70%</span></div>
+          <div class="bar"><div class="bar-fill" style="width:57.534246575342465%;background:var(--green)"></div></div>
+        </div>
+      </div>
+    </div><div class="fund">
+      <div class="f-head">
+        <div>
+          <div class="f-name">SHK129 歐洲股票 <span class="tag tag-stock">股票</span> <span style="font-size:10px;background:#f3f4f6;border:1px solid #e5e7eb;padding:2px 6px;border-radius:6px;color:var(--muted)">風險 6/6</span></div>
+          <div class="f-en">European Equity Fund • SHK129</div>
+        </div>
+        <div class="f-code">SHK129</div>
+      </div>
+      <div class="f-bottom">
+        <div>
+          <div><span class="f-nav">$19.78</span><span class="f-chg pos">+0.22% 當日</span></div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px">過去10年 <span style="font-weight:700;color:var(--green)">+94.93%</span> • 10年 94.93% • 年化 6.90%</div>
+        </div>
+        <div class="bar-wrap">
+          <div class="bar-label"><span>回報</span><span style="font-weight:700;color:var(--green)">+94.93%</span></div>
+          <div class="bar"><div class="bar-fill" style="width:55.33663654911105%;background:var(--green)"></div></div>
+        </div>
+      </div>
+    </div><div class="fund">
+      <div class="f-head">
+        <div>
+          <div class="f-name">SHK148 核心累積 <span class="tag tag-dis">DIS</span> <span style="font-size:10px;background:#f3f4f6;border:1px solid #e5e7eb;padding:2px 6px;border-radius:6px;color:var(--muted)">風險 4/6</span></div>
+          <div class="f-en">Core Accumulation Fund (DIS) • SHK148</div>
+        </div>
+        <div class="f-code">SHK148</div>
+      </div>
+      <div class="f-bottom">
+        <div>
+          <div><span class="f-nav">$19.28</span><span class="f-chg pos">+0.28% 當日</span></div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px">過去10年 <span style="font-weight:700;color:var(--green)">+88.60%</span> • 10年 88.60% • 年化 6.50%</div>
+        </div>
+        <div class="bar-wrap">
+          <div class="bar-label"><span>回報</span><span style="font-weight:700;color:var(--green)">+88.60%</span></div>
+          <div class="bar"><div class="bar-fill" style="width:51.64675021859515%;background:var(--green)"></div></div>
+        </div>
+      </div>
+    </div><div class="fund">
+      <div class="f-head">
+        <div>
+          <div class="f-name">SHK124 進取 <span class="tag tag-mixed">混合</span> <span style="font-size:10px;background:#f3f4f6;border:1px solid #e5e7eb;padding:2px 6px;border-radius:6px;color:var(--muted)">風險 5/6</span></div>
+          <div class="f-en">Aggressive Fund • SHK124</div>
+        </div>
+        <div class="f-code">SHK124</div>
+      </div>
+      <div class="f-bottom">
+        <div>
+          <div><span class="f-nav">$28.50</span><span class="f-chg pos">+0.24% 當日</span></div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px">過去10年 <span style="font-weight:700;color:var(--green)">+85.30%</span> • 10年 85.30% • 年化 6.40%</div>
+        </div>
+        <div class="bar-wrap">
+          <div class="bar-label"><span>回報</span><span style="font-weight:700;color:var(--green)">+85.30%</span></div>
+          <div class="bar"><div class="bar-fill" style="width:49.72311279510346%;background:var(--green)"></div></div>
+        </div>
+      </div>
+    </div><div class="fund">
+      <div class="f-head">
+        <div>
+          <div class="f-name">SHK137 康健護理 <span class="tag tag-stock">股票</span> <span style="font-size:10px;background:#f3f4f6;border:1px solid #e5e7eb;padding:2px 6px;border-radius:6px;color:var(--muted)">風險 5/6</span></div>
+          <div class="f-en">Healthcare Fund • SHK137</div>
+        </div>
+        <div class="f-code">SHK137</div>
+      </div>
+      <div class="f-bottom">
+        <div>
+          <div><span class="f-nav">$35.20</span><span class="f-chg pos">+0.33% 當日</span></div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px">過去10年 <span style="font-weight:700;color:var(--green)">+83.86%</span> • 10年 83.86% • 年化 6.30%</div>
+        </div>
+        <div class="bar-wrap">
+          <div class="bar-label"><span>回報</span><span style="font-weight:700;color:var(--green)">+83.86%</span></div>
+          <div class="bar"><div class="bar-fill" style="width:48.88370737394345%;background:var(--green)"></div></div>
+        </div>
+      </div>
+    </div><div class="fund">
+      <div class="f-head">
+        <div>
+          <div class="f-name">SHK143 目標2045 <span class="tag tag-target">目標日期</span> <span style="font-size:10px;background:#f3f4f6;border:1px solid #e5e7eb;padding:2px 6px;border-radius:6px;color:var(--muted)">風險 5/6</span></div>
+          <div class="f-en">Target Date 2045 Fund • SHK143</div>
+        </div>
+        <div class="f-code">SHK143</div>
+      </div>
+      <div class="f-bottom">
+        <div>
+          <div><span class="f-nav">$21.30</span><span class="f-chg pos">+0.25% 當日</span></div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px">過去10年 <span style="font-weight:700;color:var(--green)">+79.40%</span> • 10年 79.40% • 年化 6.00%</div>
+        </div>
+        <div class="bar-wrap">
+          <div class="bar-label"><span>回報</span><span style="font-weight:700;color:var(--green)">+79.40%</span></div>
+          <div class="bar"><div class="bar-fill" style="width:46.283882250072864%;background:var(--green)"></div></div>
+        </div>
+      </div>
+    </div><div class="fund">
+      <div class="f-head">
+        <div>
+          <div class="f-name">SHK136 中華威力 <span class="tag tag-stock">股票</span> <span style="font-size:10px;background:#f3f4f6;border:1px solid #e5e7eb;padding:2px 6px;border-radius:6px;color:var(--muted)">風險 6/6</span></div>
+          <div class="f-en">China Value Fund • SHK136</div>
+        </div>
+        <div class="f-code">SHK136</div>
+      </div>
+      <div class="f-bottom">
+        <div>
+          <div><span class="f-nav">$33.50</span><span class="f-chg neg">-0.12% 當日</span></div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px">過去10年 <span style="font-weight:700;color:var(--green)">+72.90%</span> • 10年 72.90% • 年化 5.60%</div>
+        </div>
+        <div class="bar-wrap">
+          <div class="bar-label"><span>回報</span><span style="font-weight:700;color:var(--green)">+72.90%</span></div>
+          <div class="bar"><div class="bar-fill" style="width:42.494899446225595%;background:var(--green)"></div></div>
+        </div>
+      </div>
+    </div><div class="fund">
+      <div class="f-head">
+        <div>
+          <div class="f-name">SHK142 目標2040 <span class="tag tag-target">目標日期</span> <span style="font-size:10px;background:#f3f4f6;border:1px solid #e5e7eb;padding:2px 6px;border-radius:6px;color:var(--muted)">風險 4/6</span></div>
+          <div class="f-en">Target Date 2040 Fund • SHK142</div>
+        </div>
+        <div class="f-code">SHK142</div>
+      </div>
+      <div class="f-bottom">
+        <div>
+          <div><span class="f-nav">$20.10</span><span class="f-chg pos">+0.22% 當日</span></div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px">過去10年 <span style="font-weight:700;color:var(--green)">+71.20%</span> • 10年 71.20% • 年化 5.50%</div>
+        </div>
+        <div class="bar-wrap">
+          <div class="bar-label"><span>回報</span><span style="font-weight:700;color:var(--green)">+71.20%</span></div>
+          <div class="bar"><div class="bar-fill" style="width:41.503934712911686%;background:var(--green)"></div></div>
+        </div>
+      </div>
+    </div><div class="fund">
+      <div class="f-head">
+        <div>
+          <div class="f-name">SHK123 增長 <span class="tag tag-mixed">混合</span> <span style="font-size:10px;background:#f3f4f6;border:1px solid #e5e7eb;padding:2px 6px;border-radius:6px;color:var(--muted)">風險 4/6</span></div>
+          <div class="f-en">Growth Fund • SHK123</div>
+        </div>
+        <div class="f-code">SHK123</div>
+      </div>
+      <div class="f-bottom">
+        <div>
+          <div><span class="f-nav">$26.10</span><span class="f-chg pos">+0.18% 當日</span></div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px">過去10年 <span style="font-weight:700;color:var(--green)">+68.50%</span> • 10年 68.50% • 年化 5.30%</div>
+        </div>
+        <div class="bar-wrap">
+          <div class="bar-label"><span>回報</span><span style="font-weight:700;color:var(--green)">+68.50%</span></div>
+          <div class="bar"><div class="bar-fill" style="width:39.93004954823666%;background:var(--green)"></div></div>
+        </div>
+      </div>
+    </div><div class="fund">
+      <div class="f-head">
+        <div>
+          <div class="f-name">SHK141 目標2035 <span class="tag tag-target">目標日期</span> <span style="font-size:10px;background:#f3f4f6;border:1px solid #e5e7eb;padding:2px 6px;border-radius:6px;color:var(--muted)">風險 4/6</span></div>
+          <div class="f-en">Target Date 2035 Fund • SHK141</div>
+        </div>
+        <div class="f-code">SHK141</div>
+      </div>
+      <div class="f-bottom">
+        <div>
+          <div><span class="f-nav">$18.50</span><span class="f-chg pos">+0.18% 當日</span></div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px">過去10年 <span style="font-weight:700;color:var(--green)">+58.30%</span> • 10年 58.30% • 年化 4.70%</div>
+        </div>
+        <div class="bar-wrap">
+          <div class="bar-label"><span>回報</span><span style="font-weight:700;color:var(--green)">+58.30%</span></div>
+          <div class="bar"><div class="bar-fill" style="width:33.98426114835325%;background:var(--green)"></div></div>
+        </div>
+      </div>
+    </div><div class="fund">
+      <div class="f-head">
+        <div>
+          <div class="f-name">SHK135 富達穩健增長 <span class="tag tag-mixed">混合</span> <span style="font-size:10px;background:#f3f4f6;border:1px solid #e5e7eb;padding:2px 6px;border-radius:6px;color:var(--muted)">風險 3/6</span></div>
+          <div class="f-en">Fidelity Stable Growth Fund • SHK135</div>
+        </div>
+        <div class="f-code">SHK135</div>
+      </div>
+      <div class="f-bottom">
+        <div>
+          <div><span class="f-nav">$26.50</span><span class="f-chg pos">+0.15% 當日</span></div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px">過去10年 <span style="font-weight:700;color:var(--green)">+52.40%</span> • 10年 52.40% • 年化 4.30%</div>
+        </div>
+        <div class="bar-wrap">
+          <div class="bar-label"><span>回報</span><span style="font-weight:700;color:var(--green)">+52.40%</span></div>
+          <div class="bar"><div class="bar-fill" style="width:30.545030603322644%;background:var(--green)"></div></div>
+        </div>
+      </div>
+    </div><div class="fund">
+      <div class="f-head">
+        <div>
+          <div class="f-name">SHK140 目標2030 <span class="tag tag-target">目標日期</span> <span style="font-size:10px;background:#f3f4f6;border:1px solid #e5e7eb;padding:2px 6px;border-radius:6px;color:var(--muted)">風險 3/6</span></div>
+          <div class="f-en">Target Date 2030 Fund • SHK140</div>
+        </div>
+        <div class="f-code">SHK140</div>
+      </div>
+      <div class="f-bottom">
+        <div>
+          <div><span class="f-nav">$16.20</span><span class="f-chg pos">+0.12% 當日</span></div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px">過去10年 <span style="font-weight:700;color:var(--green)">+42.60%</span> • 10年 42.60% • 年化 3.60%</div>
+        </div>
+        <div class="bar-wrap">
+          <div class="bar-label"><span>回報</span><span style="font-weight:700;color:var(--green)">+42.60%</span></div>
+          <div class="bar"><div class="bar-fill" style="width:24.832410375983677%;background:var(--green)"></div></div>
+        </div>
+      </div>
+    </div><div class="fund">
+      <div class="f-head">
+        <div>
+          <div class="f-name">SHK138 智優逸退休 <span class="tag tag-mixed">混合</span> <span style="font-size:10px;background:#f3f4f6;border:1px solid #e5e7eb;padding:2px 6px;border-radius:6px;color:var(--muted)">風險 3/6</span></div>
+          <div class="f-en">Smart Retirement Fund • SHK138</div>
+        </div>
+        <div class="f-code">SHK138</div>
+      </div>
+      <div class="f-bottom">
+        <div>
+          <div><span class="f-nav">$15.20</span><span class="f-chg pos">+0.11% 當日</span></div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px">過去10年 <span style="font-weight:700;color:var(--green)">+38.20%</span> • 10年 38.20% • 年化 3.30%</div>
+        </div>
+        <div class="bar-wrap">
+          <div class="bar-label"><span>回報</span><span style="font-weight:700;color:var(--green)">+38.20%</span></div>
+          <div class="bar"><div class="bar-fill" style="width:22.267560477994756%;background:var(--green)"></div></div>
+        </div>
+      </div>
+    </div><div class="fund">
+      <div class="f-head">
+        <div>
+          <div class="f-name">SHK145 恒指ESG <span class="tag tag-stock">股票</span> <span style="font-size:10px;background:#f3f4f6;border:1px solid #e5e7eb;padding:2px 6px;border-radius:6px;color:var(--muted)">風險 5/6</span></div>
+          <div class="f-en">Hang Seng ESG Tracker Fund • SHK145</div>
+        </div>
+        <div class="f-code">SHK145</div>
+      </div>
+      <div class="f-bottom">
+        <div>
+          <div><span class="f-nav">$15.10</span><span class="f-chg neg">-0.45% 當日</span></div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px">過去10年 <span style="font-weight:700;color:var(--green)">+31.52%</span> • 10年 31.52% • 年化 2.80%</div>
+        </div>
+        <div class="bar-wrap">
+          <div class="bar-label"><span>回報</span><span style="font-weight:700;color:var(--green)">+31.52%</span></div>
+          <div class="bar"><div class="bar-fill" style="width:18.373651996502478%;background:var(--green)"></div></div>
+        </div>
+      </div>
+    </div><div class="fund">
+      <div class="f-head">
+        <div>
+          <div class="f-name">SHK139 目標2025 <span class="tag tag-target">目標日期</span> <span style="font-size:10px;background:#f3f4f6;border:1px solid #e5e7eb;padding:2px 6px;border-radius:6px;color:var(--muted)">風險 2/6</span></div>
+          <div class="f-en">Target Date 2025 Fund • SHK139</div>
+        </div>
+        <div class="f-code">SHK139</div>
+      </div>
+      <div class="f-bottom">
+        <div>
+          <div><span class="f-nav">$14.80</span><span class="f-chg pos">+0.08% 當日</span></div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px">過去10年 <span style="font-weight:700;color:var(--green)">+28.40%</span> • 10年 28.40% • 年化 2.50%</div>
+        </div>
+        <div class="bar-wrap">
+          <div class="bar-label"><span>回報</span><span style="font-weight:700;color:var(--green)">+28.40%</span></div>
+          <div class="bar"><div class="bar-fill" style="width:16.554940250655783%;background:var(--green)"></div></div>
+        </div>
+      </div>
+    </div><div class="fund">
+      <div class="f-head">
+        <div>
+          <div class="f-name">SHK126 香港股票 <span class="tag tag-stock">股票</span> <span style="font-size:10px;background:#f3f4f6;border:1px solid #e5e7eb;padding:2px 6px;border-radius:6px;color:var(--muted)">風險 5/6</span></div>
+          <div class="f-en">Hong Kong Equity Fund • SHK126</div>
+        </div>
+        <div class="f-code">SHK126</div>
+      </div>
+      <div class="f-bottom">
+        <div>
+          <div><span class="f-nav">$25.29</span><span class="f-chg neg">-0.85% 當日</span></div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px">過去10年 <span style="font-weight:700;color:var(--green)">+27.73%</span> • 10年 27.73% • 年化 2.45%</div>
+        </div>
+        <div class="bar-wrap">
+          <div class="bar-label"><span>回報</span><span style="font-weight:700;color:var(--green)">+27.73%</span></div>
+          <div class="bar"><div class="bar-fill" style="width:16.164383561643834%;background:var(--green)"></div></div>
+        </div>
+      </div>
+    </div><div class="fund">
+      <div class="f-head">
+        <div>
+          <div class="f-name">SHK132 香港債券 <span class="tag tag-bond">債券</span> <span style="font-size:10px;background:#f3f4f6;border:1px solid #e5e7eb;padding:2px 6px;border-radius:6px;color:var(--muted)">風險 2/6</span></div>
+          <div class="f-en">Hong Kong Bond Fund • SHK132</div>
+        </div>
+        <div class="f-code">SHK132</div>
+      </div>
+      <div class="f-bottom">
+        <div>
+          <div><span class="f-nav">$15.98</span><span class="f-chg pos">+0.08% 當日</span></div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px">過去10年 <span style="font-weight:700;color:var(--green)">+22.40%</span> • 10年 22.40% • 年化 2.00%</div>
+        </div>
+        <div class="bar-wrap">
+          <div class="bar-label"><span>回報</span><span style="font-weight:700;color:var(--green)">+22.40%</span></div>
+          <div class="bar"><div class="bar-fill" style="width:13.057417662489069%;background:var(--green)"></div></div>
+        </div>
+      </div>
+    </div><div class="fund">
+      <div class="f-head">
+        <div>
+          <div class="f-name">SHK150 退休收入 <span class="tag tag-mixed">混合</span> <span style="font-size:10px;background:#f3f4f6;border:1px solid #e5e7eb;padding:2px 6px;border-radius:6px;color:var(--muted)">風險 2/6</span></div>
+          <div class="f-en">Retirement Income Fund • SHK150</div>
+        </div>
+        <div class="f-code">SHK150</div>
+      </div>
+      <div class="f-bottom">
+        <div>
+          <div><span class="f-nav">$9.08</span><span class="f-chg pos">+0.06% 當日</span></div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px">過去10年 <span style="font-weight:700;color:var(--green)">+21.50%</span> • 10年 21.50% • 年化 1.90%</div>
+        </div>
+        <div class="bar-wrap">
+          <div class="bar-label"><span>回報</span><span style="font-weight:700;color:var(--green)">+21.50%</span></div>
+          <div class="bar"><div class="bar-fill" style="width:12.532789274264061%;background:var(--green)"></div></div>
+        </div>
+      </div>
+    </div><div class="fund">
+      <div class="f-head">
+        <div>
+          <div class="f-name">SHK144 人民幣債券 <span class="tag tag-bond">債券</span> <span style="font-size:10px;background:#f3f4f6;border:1px solid #e5e7eb;padding:2px 6px;border-radius:6px;color:var(--muted)">風險 3/6</span></div>
+          <div class="f-en">RMB Bond Fund • SHK144</div>
+        </div>
+        <div class="f-code">SHK144</div>
+      </div>
+      <div class="f-bottom">
+        <div>
+          <div><span class="f-nav">$12.50</span><span class="f-chg pos">+0.12% 當日</span></div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px">過去10年 <span style="font-weight:700;color:var(--green)">+18.90%</span> • 10年 18.90% • 年化 1.70%</div>
+        </div>
+        <div class="bar-wrap">
+          <div class="bar-label"><span>回報</span><span style="font-weight:700;color:var(--green)">+18.90%</span></div>
+          <div class="bar"><div class="bar-fill" style="width:11.017196152725152%;background:var(--green)"></div></div>
+        </div>
+      </div>
+    </div><div class="fund">
+      <div class="f-head">
+        <div>
+          <div class="f-name">SHK125 保守基金 <span class="tag tag-guar">保證</span> <span style="font-size:10px;background:#f3f4f6;border:1px solid #e5e7eb;padding:2px 6px;border-radius:6px;color:var(--muted)">風險 1/6</span></div>
+          <div class="f-en">Capital Preservation / Conservative • SHK125</div>
+        </div>
+        <div class="f-code">SHK125</div>
+      </div>
+      <div class="f-bottom">
+        <div>
+          <div><span class="f-nav">$12.20</span><span class="f-chg pos">+0.03% 當日</span></div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px">過去10年 <span style="font-weight:700;color:var(--green)">+16.80%</span> • 10年 16.80% • 年化 1.56%</div>
+        </div>
+        <div class="bar-wrap">
+          <div class="bar-label"><span>回報</span><span style="font-weight:700;color:var(--green)">+16.80%</span></div>
+          <div class="bar"><div class="bar-fill" style="width:9.793063246866803%;background:var(--green)"></div></div>
+        </div>
+      </div>
+    </div><div class="fund">
+      <div class="f-head">
+        <div>
+          <div class="f-name">SHK149 65歲後 <span class="tag tag-dis">DIS</span> <span style="font-size:10px;background:#f3f4f6;border:1px solid #e5e7eb;padding:2px 6px;border-radius:6px;color:var(--muted)">風險 2/6</span></div>
+          <div class="f-en">Age 65 Plus Fund (DIS) • SHK149</div>
+        </div>
+        <div class="f-code">SHK149</div>
+      </div>
+      <div class="f-bottom">
+        <div>
+          <div><span class="f-nav">$11.94</span><span class="f-chg pos">+0.04% 當日</span></div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px">過去10年 <span style="font-weight:700;color:var(--green)">+16.20%</span> • 10年 16.20% • 年化 1.50%</div>
+        </div>
+        <div class="bar-wrap">
+          <div class="bar-label"><span>回報</span><span style="font-weight:700;color:var(--green)">+16.20%</span></div>
+          <div class="bar"><div class="bar-fill" style="width:9.44331098805013%;background:var(--green)"></div></div>
+        </div>
+      </div>
+    </div><div class="fund">
+      <div class="f-head">
+        <div>
+          <div class="f-name">SHK146 可持續亞太債券 <span class="tag tag-bond">債券</span> <span style="font-size:10px;background:#f3f4f6;border:1px solid #e5e7eb;padding:2px 6px;border-radius:6px;color:var(--muted)">風險 3/6</span></div>
+          <div class="f-en">Sustainable Asia Pacific Bond • SHK146</div>
+        </div>
+        <div class="f-code">SHK146</div>
+      </div>
+      <div class="f-bottom">
+        <div>
+          <div><span class="f-nav">$10.80</span><span class="f-chg pos">+0.09% 當日</span></div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px">過去10年 <span style="font-weight:700;color:var(--green)">+15.30%</span> • 10年 15.30% • 年化 1.40%</div>
+        </div>
+        <div class="bar-wrap">
+          <div class="bar-label"><span>回報</span><span style="font-weight:700;color:var(--green)">+15.30%</span></div>
+          <div class="bar"><div class="bar-fill" style="width:8.918682599825125%;background:var(--green)"></div></div>
+        </div>
+      </div>
+    </div><div class="fund">
+      <div class="f-head">
+        <div>
+          <div class="f-name">SHK122 穩健基金 <span class="tag tag-guar">保證</span> <span style="font-size:10px;background:#f3f4f6;border:1px solid #e5e7eb;padding:2px 6px;border-radius:6px;color:var(--muted)">風險 1/6</span></div>
+          <div class="f-en">Stable Fund • SHK122</div>
+        </div>
+        <div class="f-code">SHK122</div>
+      </div>
+      <div class="f-bottom">
+        <div>
+          <div><span class="f-nav">$16.50</span><span class="f-chg pos">+0.02% 當日</span></div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px">過去10年 <span style="font-weight:700;color:var(--green)">+14.50%</span> • 10年 14.50% • 年化 1.36%</div>
+        </div>
+        <div class="bar-wrap">
+          <div class="bar-label"><span>回報</span><span style="font-weight:700;color:var(--green)">+14.50%</span></div>
+          <div class="bar"><div class="bar-fill" style="width:8.452346254736227%;background:var(--green)"></div></div>
+        </div>
+      </div>
+    </div><div class="fund">
+      <div class="f-head">
+        <div>
+          <div class="f-name">SHK133 國際債券 <span class="tag tag-bond">債券</span> <span style="font-size:10px;background:#f3f4f6;border:1px solid #e5e7eb;padding:2px 6px;border-radius:6px;color:var(--muted)">風險 3/6</span></div>
+          <div class="f-en">International Bond Fund • SHK133</div>
+        </div>
+        <div class="f-code">SHK133</div>
+      </div>
+      <div class="f-bottom">
+        <div>
+          <div><span class="f-nav">$15.56</span><span class="f-chg pos">+0.05% 當日</span></div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px">過去10年 <span style="font-weight:700;color:var(--green)">+12.80%</span> • 10年 12.80% • 年化 1.20%</div>
+        </div>
+        <div class="bar-wrap">
+          <div class="bar-label"><span>回報</span><span style="font-weight:700;color:var(--green)">+12.80%</span></div>
+          <div class="bar"><div class="bar-fill" style="width:8%;background:var(--green)"></div></div>
+        </div>
+      </div>
+    </div><div class="fund">
+      <div class="f-head">
+        <div>
+          <div class="f-name">DHK121 利息基金 <span class="tag tag-guar">保證</span> <span style="font-size:10px;background:#f3f4f6;border:1px solid #e5e7eb;padding:2px 6px;border-radius:6px;color:var(--muted)">風險 1/6</span></div>
+          <div class="f-en">Interest Fund • DHK121</div>
+        </div>
+        <div class="f-code">DHK121</div>
+      </div>
+      <div class="f-bottom">
+        <div>
+          <div><span class="f-nav">$1.00</span><span class="f-chg pos">+0.00% 當日</span></div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px">過去10年 <span style="font-weight:700;color:var(--green)">+8.20%</span> • 10年 8.20% • 年化 0.79%</div>
+        </div>
+        <div class="bar-wrap">
+          <div class="bar-label"><span>回報</span><span style="font-weight:700;color:var(--green)">+8.20%</span></div>
+          <div class="bar"><div class="bar-fill" style="width:8%;background:var(--green)"></div></div>
+        </div>
+      </div>
+    </div></div>
+    <div class="footer" id="countBar" style="border:none;padding:12px 0;text-align:left">顯示 29 隻基金 • 類別: 全部 29 • 按 過去10年 排序</div>
+  </div>
+
+  <div style="position:sticky;top:80px;height:fit-content">
+    <div class="ranking">
+      <div class="r-title"><span>10年回報排行榜</span><span id="timeBadge" style="font-size:11px;padding:4px 8px;background:#0f2e22;color:#fff;border-radius:12px">過去10年</span></div>
+      <div class="r-sub">按 <span id="timeLabel2">過去10年</span> 回報排序 • Top 10</div>
+      <div class="r-list" id="rankList"><div class="r-item">
+      <div class="r-head"><div style="display:flex;align-items:center;gap:8px"><div class="r-rank top">1</div><div class="r-code">SHK130 北美股票</div></div><div class="r-pct" style="color:var(--green)">+171.55%</div></div>
+      <div style="margin-left:28px;height:6px;background:#f3f4f6;border-radius:99px;overflow:hidden"><div style="height:100%;width:100%;background:#064e3b;border-radius:99px"></div></div>
+    </div><div class="r-item">
+      <div class="r-head"><div style="display:flex;align-items:center;gap:8px"><div class="r-rank top">2</div><div class="r-code">SHK131 日本股票</div></div><div class="r-pct" style="color:var(--green)">+149.98%</div></div>
+      <div style="margin-left:28px;height:6px;background:#f3f4f6;border-radius:99px;overflow:hidden"><div style="height:100%;width:87.42640629554064%;background:#0f7a4a;border-radius:99px"></div></div>
+    </div><div class="r-item">
+      <div class="r-head"><div style="display:flex;align-items:center;gap:8px"><div class="r-rank top">3</div><div class="r-code">SHK127 國際股票</div></div><div class="r-pct" style="color:var(--green)">+132.49%</div></div>
+      <div style="margin-left:28px;height:6px;background:#f3f4f6;border-radius:99px;overflow:hidden"><div style="height:100%;width:77.23112795103468%;background:#0f7a4a;border-radius:99px"></div></div>
+    </div><div class="r-item">
+      <div class="r-head"><div style="display:flex;align-items:center;gap:8px"><div class="r-rank ">4</div><div class="r-code">SHK128 亞太股票</div></div><div class="r-pct" style="color:var(--green)">+117.68%</div></div>
+      <div style="margin-left:28px;height:6px;background:#f3f4f6;border-radius:99px;overflow:hidden"><div style="height:100%;width:68.5980763625765%;background:#6ea58e;border-radius:99px"></div></div>
+    </div><div class="r-item">
+      <div class="r-head"><div style="display:flex;align-items:center;gap:8px"><div class="r-rank ">5</div><div class="r-code">SHK134 富達增長</div></div><div class="r-pct" style="color:var(--green)">+98.70%</div></div>
+      <div style="margin-left:28px;height:6px;background:#f3f4f6;border-radius:99px;overflow:hidden"><div style="height:100%;width:57.534246575342465%;background:#6ea58e;border-radius:99px"></div></div>
+    </div><div class="r-item">
+      <div class="r-head"><div style="display:flex;align-items:center;gap:8px"><div class="r-rank ">6</div><div class="r-code">SHK129 歐洲股票</div></div><div class="r-pct" style="color:var(--green)">+94.93%</div></div>
+      <div style="margin-left:28px;height:6px;background:#f3f4f6;border-radius:99px;overflow:hidden"><div style="height:100%;width:55.33663654911105%;background:#6ea58e;border-radius:99px"></div></div>
+    </div><div class="r-item">
+      <div class="r-head"><div style="display:flex;align-items:center;gap:8px"><div class="r-rank ">7</div><div class="r-code">SHK148 核心累積</div></div><div class="r-pct" style="color:var(--green)">+88.60%</div></div>
+      <div style="margin-left:28px;height:6px;background:#f3f4f6;border-radius:99px;overflow:hidden"><div style="height:100%;width:51.64675021859515%;background:#6ea58e;border-radius:99px"></div></div>
+    </div><div class="r-item">
+      <div class="r-head"><div style="display:flex;align-items:center;gap:8px"><div class="r-rank ">8</div><div class="r-code">SHK124 進取</div></div><div class="r-pct" style="color:var(--green)">+85.30%</div></div>
+      <div style="margin-left:28px;height:6px;background:#f3f4f6;border-radius:99px;overflow:hidden"><div style="height:100%;width:49.72311279510346%;background:#6ea58e;border-radius:99px"></div></div>
+    </div><div class="r-item">
+      <div class="r-head"><div style="display:flex;align-items:center;gap:8px"><div class="r-rank ">9</div><div class="r-code">SHK137 康健護理</div></div><div class="r-pct" style="color:var(--green)">+83.86%</div></div>
+      <div style="margin-left:28px;height:6px;background:#f3f4f6;border-radius:99px;overflow:hidden"><div style="height:100%;width:48.88370737394345%;background:#6ea58e;border-radius:99px"></div></div>
+    </div><div class="r-item">
+      <div class="r-head"><div style="display:flex;align-items:center;gap:8px"><div class="r-rank ">10</div><div class="r-code">SHK143 目標2045</div></div><div class="r-pct" style="color:var(--green)">+79.40%</div></div>
+      <div style="margin-left:28px;height:6px;background:#f3f4f6;border-radius:99px;overflow:hidden"><div style="height:100%;width:46.283882250072864%;background:#6ea58e;border-radius:99px"></div></div>
+    </div></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:18px">
+        <div style="background:#f8faf6;border:1px solid #e7f0de;border-radius:12px;padding:10px"><div style="font-size:10px;color:var(--muted)">最高</div><div style="font-size:12px;font-weight:700;margin-top:4px;line-height:1.2">北美股票<br><span style="color:var(--green)">171.55%</span></div></div>
+        <div style="background:#fffbeb;border:1px solid #fde68a;border-radius:12px;padding:10px"><div style="font-size:10px;color:var(--muted)">平均10年</div><div style="font-size:12px;font-weight:700;margin-top:4px">全市場<br><span style="color:var(--yellow)" id="avg10">60.0%</span></div></div>
+        <div style="background:#f9fafb;border:1px solid var(--border);border-radius:12px;padding:10px"><div style="font-size:10px;color:var(--muted)">點名中</div><div style="font-size:12px;font-weight:700;margin-top:4px" id="gt50">15隻<br><span>&gt;50%</span></div></div>
+      </div>
+    </div>
+    <div class="tele">
+      <div style="font-weight:800;font-size:14px;display:flex;align-items:center;gap:8px"><span style="width:24px;height:24px;background:rgba(255,255,255,0.2);border-radius:50%;display:flex;align-items:center;justify-content:center">✈</span> Telegram 機動4條</div>
+      <div style="font-size:12px;margin-top:8px;opacity:0.9;line-height:1.5">每日 09:30 自動推送全29基金日報 • Q3 +0.50% • YTD +6.20% • 分類平均即時睇</div>
+      <a href="https://ac7127.github.io/manulife-mpf-tracker/" style="display:block;margin-top:14px;background:#fff;color:var(--green);text-align:center;padding:10px;border-radius:999px;font-weight:700;font-size:13px;text-decoration:none">打開互動儀表板</a>
+      <div style="font-size:10px;opacity:0.7;margin-top:8px;text-align:center">數據：官方29隻 | MPFA截至09-30 | 價格截至08-25</div>
+    </div>
+    <div class="ranking" style="margin-top:14px">
+      <div style="font-weight:700;font-size:12px">其他類別 1年回報</div>
+      <div style="margin-top:10px;display:flex;flex-direction:column;gap:8px;font-size:11px" id="otherCats"><div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">債券 (4隻) 平均</span><span style="font-weight:600">+17.4% | 最強 SHK132 +22.4%</span></div><div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">保證 (3隻) 平均</span><span style="font-weight:600">+13.2% | 最強 SHK125 +16.8%</span></div><div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">混合 (6隻) 平均</span><span style="font-weight:600">+60.8% | 最強 SHK124 +85.3%</span></div><div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">DIS (2隻) 平均</span><span style="font-weight:600">+52.4% | 最強 SHK148 +88.6%</span></div><div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">目標日期 (5隻) 平均</span><span style="font-weight:600">+56.0% | 最強 SHK143 +79.4%</span></div></div>
+    </div>
+  </div>
 </div>
-<div class="section"><div class="fund-grid" id="funds"><div class="fund-card"><div class="fund-head"><div><div class="fund-name">DHK121 利息基金 <span class="badge badge-guar">保證/貨幣</span></div><div class="fund-meta">宏利MPF利息基金 | 保證基金 | 風險1 | 最新價 $1 • 長線穩健型</div></div><div class="fund-code">DHK121</div></div></div><div class="fund-card"><div class="fund-head"><div><div class="fund-name">SHK122 穩健基金 <span class="badge badge-guar">保證/貨幣</span></div><div class="fund-meta">宏利MPF穩健基金 | 保證基金 | 風險1 | 最新價 $16.5 • 長線穩健型</div></div><div class="fund-code">SHK122</div></div></div><div class="fund-card"><div class="fund-head"><div><div class="fund-name">SHK125 保守基金 <span class="badge badge-guar">保證/貨幣</span></div><div class="fund-meta">宏利MPF保守基金 | 貨幣市場基金 | 風險1 | 最新價 $12.2 • 長線穩健型</div></div><div class="fund-code">SHK125</div></div></div><div class="fund-card"><div class="fund-head"><div><div class="fund-name">SHK132 香港債券 <span class="badge badge-bond">債券</span></div><div class="fund-meta">宏利MPF香港債券基金 | 債券基金 | 風險2 | 最新價 $15.98 • 長線穩健型</div></div><div class="fund-code">SHK132</div></div></div><div class="fund-card"><div class="fund-head"><div><div class="fund-name">SHK133 國際債券 <span class="badge badge-bond">債券</span></div><div class="fund-meta">宏利MPF國際債券基金 | 債券基金 | 風險3 | 最新價 $15.561 • 長線穩健型</div></div><div class="fund-code">SHK133</div></div></div><div class="fund-card"><div class="fund-head"><div><div class="fund-name">SHK144 人民幣債券 <span class="badge badge-bond">債券</span></div><div class="fund-meta">宏利MPF人民幣債券基金 | 債券基金 | 風險3 | 最新價 $12.5 • 長線穩健型</div></div><div class="fund-code">SHK144</div></div></div><div class="fund-card"><div class="fund-head"><div><div class="fund-name">SHK146 可持續亞太債券 <span class="badge badge-bond">債券</span></div><div class="fund-meta">宏利MPF可持續亞太債券基金 | 債券基金 | 風險3 | 最新價 $10.8 • 長線穩健型</div></div><div class="fund-code">SHK146</div></div></div><div class="fund-card"><div class="fund-head"><div><div class="fund-name">SHK126 香港股票 <span class="badge badge-equity">股票</span></div><div class="fund-meta">宏利MPF香港股票基金 | 股票 | 風險6 | 最新價 $25.286 • 27.73% / 1年 -6.4%</div></div><div class="fund-code">SHK126</div></div></div><div class="fund-card"><div class="fund-head"><div><div class="fund-name">SHK127 國際股票 <span class="badge badge-equity">股票</span></div><div class="fund-meta">宏利MPF國際股票基金 | 股票 | 風險5 | 最新價 $32.127 • 132.49% / 1年 13.8%</div></div><div class="fund-code">SHK127</div></div></div><div class="fund-card"><div class="fund-head"><div><div class="fund-name">SHK128 亞太股票 <span class="badge badge-equity">股票</span></div><div class="fund-meta">宏利MPF亞太股票基金 | 股票 | 風險5 | 最新價 $50.144 • 117.68% / 1年 28.12%</div></div><div class="fund-code">SHK128</div></div></div><div class="fund-card"><div class="fund-head"><div><div class="fund-name">SHK129 歐洲股票 <span class="badge badge-equity">股票</span></div><div class="fund-meta">宏利MPF歐洲股票基金 | 股票 | 風險5 | 最新價 $19.777 • 94.93% / 1年 8.43%</div></div><div class="fund-code">SHK129</div></div></div><div class="fund-card"><div class="fund-head"><div><div class="fund-name">SHK130 北美股票 <span class="badge badge-equity">股票</span></div><div class="fund-meta">宏利MPF北美股票基金 | 股票 | 風險5 | 最新價 $38.314 • 171.55% / 1年 9.44%</div></div><div class="fund-code">SHK130</div></div></div><div class="fund-card"><div class="fund-head"><div><div class="fund-name">SHK131 日本股票 <span class="badge badge-equity">股票</span></div><div class="fund-meta">宏利MPF日本股票基金 | 股票 | 風險5 | 最新價 $30.154 • 149.98% / 1年 19.02%</div></div><div class="fund-code">SHK131</div></div></div><div class="fund-card"><div class="fund-head"><div><div class="fund-name">SHK136 中華威力 <span class="badge badge-equity">股票</span></div><div class="fund-meta">宏利MPF中華威力基金 | 股票 | 風險6 | 最新價 $33.5 • 72.9% / 1年 34.62%</div></div><div class="fund-code">SHK136</div></div></div><div class="fund-card"><div class="fund-head"><div><div class="fund-name">SHK137 康健護理 <span class="badge badge-equity">股票</span></div><div class="fund-meta">宏利MPF康健護理基金 | 股票 | 風險5 | 最新價 $35.2 • 83.86% / 1年 9.74%</div></div><div class="fund-code">SHK137</div></div></div><div class="fund-card"><div class="fund-head"><div><div class="fund-name">SHK145 恒指ESG <span class="badge badge-equity">股票</span></div><div class="fund-meta">宏利MPF恒指ESG基金 | 股票 | 風險6 | 最新價 $15.1 • 31.52% / 1年 6.43%</div></div><div class="fund-code">SHK145</div></div></div><div class="fund-card"><div class="fund-head"><div><div class="fund-name">SHK123 增長基金 <span class="badge badge-mixed">混合</span></div><div class="fund-meta">宏利MPF增長基金 | 混合 | 風險4 | 最新價 $26.1 • 長線穩健型</div></div><div class="fund-code">SHK123</div></div></div><div class="fund-card"><div class="fund-head"><div><div class="fund-name">SHK124 進取基金 <span class="badge badge-mixed">混合</span></div><div class="fund-meta">宏利MPF進取基金 | 混合 | 風險5 | 最新價 $28.5 • 長線穩健型</div></div><div class="fund-code">SHK124</div></div></div><div class="fund-card"><div class="fund-head"><div><div class="fund-name">SHK134 富達增長 <span class="badge badge-mixed">混合</span></div><div class="fund-meta">宏利MPF富達增長基金 | 混合 | 風險5 | 最新價 $42.003 • 長線穩健型</div></div><div class="fund-code">SHK134</div></div></div><div class="fund-card"><div class="fund-head"><div><div class="fund-name">SHK135 富達穩健增長 <span class="badge badge-mixed">混合</span></div><div class="fund-meta">宏利MPF富達穩健增長基金 | 混合 | 風險4 | 最新價 $26.5 • 長線穩健型</div></div><div class="fund-code">SHK135</div></div></div><div class="fund-card"><div class="fund-head"><div><div class="fund-name">SHK138 智優逸退休 <span class="badge badge-mixed">混合</span></div><div class="fund-meta">宏利MPF智優逸退休基金 | 混合 | 風險3 | 最新價 $15.2 • 長線穩健型</div></div><div class="fund-code">SHK138</div></div></div><div class="fund-card"><div class="fund-head"><div><div class="fund-name">SHK150 退休收入 <span class="badge badge-mixed">混合</span></div><div class="fund-meta">宏利MPF退休收入基金 | 混合 | 風險3 | 最新價 $9.08 • 長線穩健型</div></div><div class="fund-code">SHK150</div></div></div><div class="fund-card"><div class="fund-head"><div><div class="fund-name">SHK148 核心累積基金 <span class="badge badge-dis">DIS</span></div><div class="fund-meta">宏利MPF核心累積基金 | DIS | 風險4 | 最新價 $19.279 • 長線穩健型</div></div><div class="fund-code">SHK148</div></div></div><div class="fund-card"><div class="fund-head"><div><div class="fund-name">SHK149 65歲後基金 <span class="badge badge-dis">DIS</span></div><div class="fund-meta">宏利MPF65歲後基金 | DIS | 風險2 | 最新價 $11.94 • 長線穩健型</div></div><div class="fund-code">SHK149</div></div></div><div class="fund-card"><div class="fund-head"><div><div class="fund-name">SHK139 2025退休基金 <span class="badge badge-target">目標日期</span></div><div class="fund-meta">宏利MPF2025退休基金 | 混合 | 風險3 | 最新價 $14.8 • 長線穩健型</div></div><div class="fund-code">SHK139</div></div></div><div class="fund-card"><div class="fund-head"><div><div class="fund-name">SHK140 2030退休基金 <span class="badge badge-target">目標日期</span></div><div class="fund-meta">宏利MPF2030退休基金 | 混合 | 風險4 | 最新價 $16.2 • 長線穩健型</div></div><div class="fund-code">SHK140</div></div></div><div class="fund-card"><div class="fund-head"><div><div class="fund-name">SHK141 2035退休基金 <span class="badge badge-target">目標日期</span></div><div class="fund-meta">宏利MPF2035退休基金 | 混合 | 風險4 | 最新價 $18.5 • 長線穩健型</div></div><div class="fund-code">SHK141</div></div></div><div class="fund-card"><div class="fund-head"><div><div class="fund-name">SHK142 2040退休基金 <span class="badge badge-target">目標日期</span></div><div class="fund-meta">宏利MPF2040退休基金 | 混合 | 風險5 | 最新價 $20.1 • 長線穩健型</div></div><div class="fund-code">SHK142</div></div></div><div class="fund-card"><div class="fund-head"><div><div class="fund-name">SHK143 2045退休基金 <span class="badge badge-target">目標日期</span></div><div class="fund-meta">宏利MPF2045退休基金 | 混合 | 風險5 | 最新價 $21.3 • 長線穩健型</div></div><div class="fund-code">SHK143</div></div></div></div><div class="count" id="count">顯示 29 隻基金 • 類別: 全部</div>
-<div class="count">數據來源：宏利官方 Scheme Brochure Nov 2025 共29隻成分基金 • MPFA Fund Platform 香港股票1年-6.4% 截至09-30 • 宏利最新價截至08-25 • 過往不代表未來</div>
+
+<div class="footer">
+  數據來源：宏利官方 Scheme Brochure Nov 2025 共29隻成分基金 • MPFA Fund Platform 香港股票1年-6.4% 截至09-30 • 宏利最新價截至08-25 $38.314 / $30.154 / $50.144 創新高 • 過往不代表未來 | 非投資建議<br>
+  Dashboard V5 Light Hybrid • Inter + Noto Sans HK • Bloomberg-clean light theme #f6f7f2 • 全29隻 Q3混合版 • 製作：Manulife MPF Tracker @ac7127 • 更新：2026-08-25
 </div>
+
 <script>
-const funds=[{'code': 'DHK121', 'short': '利息基金', 'name': '宏利MPF利息基金', 'type': '保證基金', 'risk': 1, 'price_q3': 1.0, 'cat': '保證/貨幣'}, {'code': 'SHK122', 'short': '穩健基金', 'name': '宏利MPF穩健基金', 'type': '保證基金', 'risk': 1, 'price_q3': 16.5, 'cat': '保證/貨幣'}, {'code': 'SHK125', 'short': '保守基金', 'name': '宏利MPF保守基金', 'type': '貨幣市場基金', 'risk': 1, 'price_q3': 12.2, 'cat': '保證/貨幣'}, {'code': 'SHK132', 'short': '香港債券', 'name': '宏利MPF香港債券基金', 'type': '債券基金', 'risk': 2, 'price_q3': 15.98, 'cat': '債券'}, {'code': 'SHK133', 'short': '國際債券', 'name': '宏利MPF國際債券基金', 'type': '債券基金', 'risk': 3, 'price_q3': 15.561, 'cat': '債券'}, {'code': 'SHK144', 'short': '人民幣債券', 'name': '宏利MPF人民幣債券基金', 'type': '債券基金', 'risk': 3, 'price_q3': 12.5, 'cat': '債券'}, {'code': 'SHK146', 'short': '可持續亞太債券', 'name': '宏利MPF可持續亞太債券基金', 'type': '債券基金', 'risk': 3, 'price_q3': 10.8, 'cat': '債券'}, {'code': 'SHK126', 'short': '香港股票', 'name': '宏利MPF香港股票基金', 'type': '股票', 'risk': 6, 'price_q3': 25.286, 'cat': '股票', 'ret10Y': 27.73, 'ret1Y': -6.4}, {'code': 'SHK127', 'short': '國際股票', 'name': '宏利MPF國際股票基金', 'type': '股票', 'risk': 5, 'price_q3': 32.127, 'cat': '股票', 'ret10Y': 132.49, 'ret1Y': 13.8}, {'code': 'SHK128', 'short': '亞太股票', 'name': '宏利MPF亞太股票基金', 'type': '股票', 'risk': 5, 'price_q3': 50.144, 'cat': '股票', 'ret10Y': 117.68, 'ret1Y': 28.12}, {'code': 'SHK129', 'short': '歐洲股票', 'name': '宏利MPF歐洲股票基金', 'type': '股票', 'risk': 5, 'price_q3': 19.777, 'cat': '股票', 'ret10Y': 94.93, 'ret1Y': 8.43}, {'code': 'SHK130', 'short': '北美股票', 'name': '宏利MPF北美股票基金', 'type': '股票', 'risk': 5, 'price_q3': 38.314, 'cat': '股票', 'ret10Y': 171.55, 'ret1Y': 9.44}, {'code': 'SHK131', 'short': '日本股票', 'name': '宏利MPF日本股票基金', 'type': '股票', 'risk': 5, 'price_q3': 30.154, 'cat': '股票', 'ret10Y': 149.98, 'ret1Y': 19.02}, {'code': 'SHK136', 'short': '中華威力', 'name': '宏利MPF中華威力基金', 'type': '股票', 'risk': 6, 'price_q3': 33.5, 'cat': '股票', 'ret10Y': 72.9, 'ret1Y': 34.62}, {'code': 'SHK137', 'short': '康健護理', 'name': '宏利MPF康健護理基金', 'type': '股票', 'risk': 5, 'price_q3': 35.2, 'cat': '股票', 'ret10Y': 83.86, 'ret1Y': 9.74}, {'code': 'SHK145', 'short': '恒指ESG', 'name': '宏利MPF恒指ESG基金', 'type': '股票', 'risk': 6, 'price_q3': 15.1, 'cat': '股票', 'ret10Y': 31.52, 'ret1Y': 6.43}, {'code': 'SHK123', 'short': '增長基金', 'name': '宏利MPF增長基金', 'type': '混合', 'risk': 4, 'price_q3': 26.1, 'cat': '混合'}, {'code': 'SHK124', 'short': '進取基金', 'name': '宏利MPF進取基金', 'type': '混合', 'risk': 5, 'price_q3': 28.5, 'cat': '混合'}, {'code': 'SHK134', 'short': '富達增長', 'name': '宏利MPF富達增長基金', 'type': '混合', 'risk': 5, 'price_q3': 42.003, 'cat': '混合'}, {'code': 'SHK135', 'short': '富達穩健增長', 'name': '宏利MPF富達穩健增長基金', 'type': '混合', 'risk': 4, 'price_q3': 26.5, 'cat': '混合'}, {'code': 'SHK138', 'short': '智優逸退休', 'name': '宏利MPF智優逸退休基金', 'type': '混合', 'risk': 3, 'price_q3': 15.2, 'cat': '混合'}, {'code': 'SHK150', 'short': '退休收入', 'name': '宏利MPF退休收入基金', 'type': '混合', 'risk': 3, 'price_q3': 9.08, 'cat': '混合'}, {'code': 'SHK148', 'short': '核心累積基金', 'name': '宏利MPF核心累積基金', 'type': 'DIS', 'risk': 4, 'price_q3': 19.279, 'cat': 'DIS'}, {'code': 'SHK149', 'short': '65歲後基金', 'name': '宏利MPF65歲後基金', 'type': 'DIS', 'risk': 2, 'price_q3': 11.94, 'cat': 'DIS'}, {'code': 'SHK139', 'short': '2025退休基金', 'name': '宏利MPF2025退休基金', 'type': '混合', 'risk': 3, 'price_q3': 14.8, 'cat': '目標日期'}, {'code': 'SHK140', 'short': '2030退休基金', 'name': '宏利MPF2030退休基金', 'type': '混合', 'risk': 4, 'price_q3': 16.2, 'cat': '目標日期'}, {'code': 'SHK141', 'short': '2035退休基金', 'name': '宏利MPF2035退休基金', 'type': '混合', 'risk': 4, 'price_q3': 18.5, 'cat': '目標日期'}, {'code': 'SHK142', 'short': '2040退休基金', 'name': '宏利MPF2040退休基金', 'type': '混合', 'risk': 5, 'price_q3': 20.1, 'cat': '目標日期'}, {'code': 'SHK143', 'short': '2045退休基金', 'name': '宏利MPF2045退休基金', 'type': '混合', 'risk': 5, 'price_q3': 21.3, 'cat': '目標日期'}];
-function catClass(c){
- if(c==='股票')return 'badge-equity';if(c==='混合')return 'badge-mixed';if(c==='債券')return 'badge-bond';if(c==='保證/貨幣')return 'badge-guar';if(c==='DIS')return 'badge-dis';if(c==='目標日期')return 'badge-target';return 'badge-mixed';
+
+const funds = [
+  { code:"SHK126", zh:"香港股票", en:"Hong Kong Equity Fund", cat:"stock", nav:25.286, navChg:-0.85, ret3M:-2.1, retYTD:-4.2, ret1Y:-6.4, ret3Y:1.2, ret5Y:12.3, ret10Y:27.73, retSince:210, retAnn10Y:2.45, risk:"5/6" },
+  { code:"SHK127", zh:"國際股票", en:"International Equity Fund", cat:"stock", nav:32.127, navChg:0.42, ret3M:3.2, retYTD:9.8, ret1Y:13.8, ret3Y:28.4, ret5Y:62.1, ret10Y:132.49, retSince:320, retAnn10Y:8.8, risk:"5/6" },
+  { code:"SHK128", zh:"亞太股票", en:"Asia Pacific Equity Fund", cat:"stock", nav:50.144, navChg:1.1, ret3M:5.6, retYTD:18.2, ret1Y:28.12, ret3Y:22.5, ret5Y:54.3, ret10Y:117.68, retSince:401.44, retAnn10Y:8.1, risk:"5/6" },
+  { code:"SHK129", zh:"歐洲股票", en:"European Equity Fund", cat:"stock", nav:19.777, navChg:0.22, ret3M:2.8, retYTD:6.1, ret1Y:8.43, ret3Y:18.9, ret5Y:42.7, ret10Y:94.93, retSince:97.77, retAnn10Y:6.9, risk:"6/6" },
+  { code:"SHK130", zh:"北美股票", en:"North American Equity Fund", cat:"stock", nav:38.314, navChg:0.64, ret3M:4.1, retYTD:8.9, ret1Y:9.44, ret3Y:32.1, ret5Y:78.9, ret10Y:171.55, retSince:283.14, retAnn10Y:10.5, risk:"6/6" },
+  { code:"SHK131", zh:"日本股票", en:"Japan Equity Fund", cat:"stock", nav:30.154, navChg:0.95, ret3M:6.2, retYTD:15.3, ret1Y:19.02, ret3Y:35.6, ret5Y:71.2, ret10Y:149.98, retSince:201.54, retAnn10Y:9.6, risk:"6/6" },
+  { code:"SHK136", zh:"中華威力", en:"China Value Fund", cat:"stock", nav:33.5, navChg:-0.12, ret3M:8.9, retYTD:22.4, ret1Y:34.62, ret3Y:12.4, ret5Y:28.7, ret10Y:72.9, retSince:235, retAnn10Y:5.6, risk:"6/6" },
+  { code:"SHK137", zh:"康健護理", en:"Healthcare Fund", cat:"stock", nav:35.2, navChg:0.33, ret3M:1.2, retYTD:5.4, ret1Y:9.74, ret3Y:18.2, ret5Y:38.9, ret10Y:83.86, retSince:252, retAnn10Y:6.3, risk:"5/6" },
+  { code:"SHK145", zh:"恒指ESG", en:"Hang Seng ESG Tracker Fund", cat:"stock", nav:15.1, navChg:-0.45, ret3M:-1.8, retYTD:2.1, ret1Y:6.43, ret3Y:8.9, ret5Y:18.2, ret10Y:31.52, retSince:51, retAnn10Y:2.8, risk:"5/6" },
+  { code:"SHK132", zh:"香港債券", en:"Hong Kong Bond Fund", cat:"bond", nav:15.98, navChg:0.08, ret3M:1.2, retYTD:2.8, ret1Y:4.22, ret3Y:6.5, ret5Y:9.8, ret10Y:22.4, retSince:59.8, retAnn10Y:2.0, risk:"2/6" },
+  { code:"SHK133", zh:"國際債券", en:"International Bond Fund", cat:"bond", nav:15.561, navChg:0.05, ret3M:0.8, retYTD:0.9, ret1Y:1.05, ret3Y:2.1, ret5Y:4.5, ret10Y:12.8, retSince:55.6, retAnn10Y:1.2, risk:"3/6" },
+  { code:"SHK144", zh:"人民幣債券", en:"RMB Bond Fund", cat:"bond", nav:12.5, navChg:0.12, ret3M:1.5, retYTD:2.2, ret1Y:3.1, ret3Y:5.8, ret5Y:10.2, ret10Y:18.9, retSince:25, retAnn10Y:1.7, risk:"3/6" },
+  { code:"SHK146", zh:"可持續亞太債券", en:"Sustainable Asia Pacific Bond", cat:"bond", nav:10.8, navChg:0.09, ret3M:0.9, retYTD:1.8, ret1Y:2.4, ret3Y:4.2, ret5Y:7.6, ret10Y:15.3, retSince:8, retAnn10Y:1.4, risk:"3/6" },
+  { code:"DHK121", zh:"利息基金", en:"Interest Fund", cat:"guarantee", nav:1.0, navChg:0.0, ret3M:0.15, retYTD:0.6, ret1Y:0.85, ret3Y:2.4, ret5Y:4.1, ret10Y:8.2, retSince:0, retAnn10Y:0.79, risk:"1/6" },
+  { code:"SHK122", zh:"穩健基金", en:"Stable Fund", cat:"guarantee", nav:16.5, navChg:0.02, ret3M:0.4, retYTD:1.2, ret1Y:1.8, ret3Y:4.5, ret5Y:7.2, ret10Y:14.5, retSince:65, retAnn10Y:1.36, risk:"1/6" },
+  { code:"SHK125", zh:"保守基金", en:"Capital Preservation / Conservative", cat:"guarantee", nav:12.2, navChg:0.03, ret3M:0.5, retYTD:1.4, ret1Y:2.0, ret3Y:5.1, ret5Y:8.3, ret10Y:16.8, retSince:22, retAnn10Y:1.56, risk:"1/6" },
+  { code:"SHK123", zh:"增長", en:"Growth Fund", cat:"mixed", nav:26.1, navChg:0.18, ret3M:1.8, retYTD:5.2, ret1Y:7.8, ret3Y:15.2, ret5Y:32.4, ret10Y:68.5, retSince:161, retAnn10Y:5.3, risk:"4/6" },
+  { code:"SHK124", zh:"進取", en:"Aggressive Fund", cat:"mixed", nav:28.5, navChg:0.24, ret3M:2.4, retYTD:6.8, ret1Y:9.7, ret3Y:19.8, ret5Y:41.2, ret10Y:85.3, retSince:185, retAnn10Y:6.4, risk:"5/6" },
+  { code:"SHK134", zh:"富達增長", en:"Fidelity Growth Fund", cat:"mixed", nav:42.003, navChg:0.31, ret3M:2.9, retYTD:7.2, ret1Y:10.2, ret3Y:22.4, ret5Y:48.6, ret10Y:98.7, retSince:320.03, retAnn10Y:7.1, risk:"4/6" },
+  { code:"SHK135", zh:"富達穩健增長", en:"Fidelity Stable Growth Fund", cat:"mixed", nav:26.5, navChg:0.15, ret3M:1.6, retYTD:4.1, ret1Y:5.8, ret3Y:12.1, ret5Y:24.3, ret10Y:52.4, retSince:165, retAnn10Y:4.3, risk:"3/6" },
+  { code:"SHK138", zh:"智優逸退休", en:"Smart Retirement Fund", cat:"mixed", nav:15.2, navChg:0.11, ret3M:1.1, retYTD:3.2, ret1Y:4.8, ret3Y:9.8, ret5Y:19.4, ret10Y:38.2, retSince:52, retAnn10Y:3.3, risk:"3/6" },
+  { code:"SHK150", zh:"退休收入", en:"Retirement Income Fund", cat:"mixed", nav:9.08, navChg:0.06, ret3M:0.7, retYTD:2.0, ret1Y:2.9, ret3Y:6.2, ret5Y:11.8, ret10Y:21.5, retSince:-9.2, retAnn10Y:1.9, risk:"2/6" },
+  { code:"SHK139", zh:"目標2025", en:"Target Date 2025 Fund", cat:"target", nav:14.8, navChg:0.08, ret3M:0.9, retYTD:2.5, ret1Y:3.2, ret3Y:7.1, ret5Y:14.2, ret10Y:28.4, retSince:48, retAnn10Y:2.5, risk:"2/6" },
+  { code:"SHK140", zh:"目標2030", en:"Target Date 2030 Fund", cat:"target", nav:16.2, navChg:0.12, ret3M:1.4, retYTD:3.8, ret1Y:5.1, ret3Y:11.2, ret5Y:22.4, ret10Y:42.6, retSince:62, retAnn10Y:3.6, risk:"3/6" },
+  { code:"SHK141", zh:"目標2035", en:"Target Date 2035 Fund", cat:"target", nav:18.5, navChg:0.18, ret3M:1.9, retYTD:5.1, ret1Y:6.8, ret3Y:14.8, ret5Y:29.7, ret10Y:58.3, retSince:85, retAnn10Y:4.7, risk:"4/6" },
+  { code:"SHK142", zh:"目標2040", en:"Target Date 2040 Fund", cat:"target", nav:20.1, navChg:0.22, ret3M:2.2, retYTD:6.0, ret1Y:8.1, ret3Y:17.2, ret5Y:35.1, ret10Y:71.2, retSince:101, retAnn10Y:5.5, risk:"4/6" },
+  { code:"SHK143", zh:"目標2045", en:"Target Date 2045 Fund", cat:"target", nav:21.3, navChg:0.25, ret3M:2.5, retYTD:6.5, ret1Y:9.0, ret3Y:19.5, ret5Y:39.8, ret10Y:79.4, retSince:113, retAnn10Y:6.0, risk:"5/6" },
+  { code:"SHK148", zh:"核心累積", en:"Core Accumulation Fund (DIS)", cat:"dis", nav:19.279, navChg:0.28, ret3M:2.8, retYTD:6.9, ret1Y:9.5, ret3Y:21.3, ret5Y:44.2, ret10Y:88.6, retSince:92.79, retAnn10Y:6.5, risk:"4/6" },
+  { code:"SHK149", zh:"65歲後", en:"Age 65 Plus Fund (DIS)", cat:"dis", nav:11.94, navChg:0.04, ret3M:0.6, retYTD:1.1, ret1Y:1.7, ret3Y:3.8, ret5Y:7.9, ret10Y:16.2, retSince:19.4, retAnn10Y:1.5, risk:"2/6" },
+];
+
+const catDefs = [
+  {id:'all', label:'全部 29', count:29},
+  {id:'stock', label:'股票基金 9', count:9},
+  {id:'mixed', label:'混合資產基金 6', count:6},
+  {id:'bond', label:'債券基金 4', count:4},
+  {id:'guarantee', label:'保證/貨幣基金 3', count:3},
+  {id:'dis', label:'預設投資策略 2 (DIS)', count:2},
+  {id:'target', label:'目標日期基金 5', count:5},
+];
+const timeDefs = [
+  {key:'3M', label:'過去3個月'},
+  {key:'YTD', label:'年初至今'},
+  {key:'1Y', label:'過去1年'},
+  {key:'3Y', label:'過去3年'},
+  {key:'5Y', label:'過去5年'},
+  {key:'10Y', label:'過去10年'},
+  {key:'SINCE', label:'自成立至今'},
+  {key:'ANN10Y', label:'年化10年'},
+];
+let curCat='all', curTime='10Y';
+function getRet(f,t){
+  if(t==='3M') return f.ret3M;
+  if(t==='YTD') return f.retYTD;
+  if(t==='1Y') return f.ret1Y;
+  if(t==='3Y') return f.ret3Y;
+  if(t==='5Y') return f.ret5Y;
+  if(t==='10Y') return f.ret10Y;
+  if(t==='SINCE') return f.retSince;
+  if(t==='ANN10Y') return f.retAnn10Y;
+  return f.ret10Y;
 }
-function render(cat){
- const list=cat==='all'?funds:funds.filter(f=>f.cat===cat);
- document.getElementById('count').textContent=`顯示 ${list.length} 隻基金 • 類別: ${cat==='all'?'全部':cat}`;
- document.getElementById('funds').innerHTML=list.map(f=>{
-   const ret=f.ret10Y?`${f.ret10Y}% / 1年 ${f.ret1Y}%`: (f.code==='SHK126'? '10年 27.7% / 1年 -6.4% (官方)' : '長線穩健型');
-   return `<div class="fund-card"><div class="fund-head"><div><div class="fund-name">${f.code} ${f.short} <span class="badge ${catClass(f.cat)}">${f.cat}</span></div><div class="fund-meta">${f.name} | ${f.type} | 風險${f.risk} | 最新價 $${f.price_q3} • ${ret}</div></div><div class="fund-code">${f.code}</div></div></div>`;
- }).join('');
+function catLabel(c){
+  if(c==='stock') return '<span class="tag tag-stock">股票</span>';
+  if(c==='bond') return '<span class="tag tag-bond">債券</span>';
+  if(c==='guarantee') return '<span class="tag tag-guar">保證</span>';
+  if(c==='mixed') return '<span class="tag tag-mixed">混合</span>';
+  if(c==='dis') return '<span class="tag tag-dis">DIS</span>';
+  if(c==='target') return '<span class="tag tag-target">目標日期</span>';
+  return '';
 }
-render('all');
-document.querySelectorAll('.tab').forEach(t=>{t.addEventListener('click',()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));t.classList.add('active');render(t.dataset.cat);});});
+function renderTabs(){
+  const ct=document.getElementById('catTabs');
+  ct.innerHTML=catDefs.map(d=>`<div class="tab ${curCat===d.id?'active':''}" data-cat="${d.id}">${d.label}</div>`).join('');
+  ct.querySelectorAll('.tab').forEach(el=>el.addEventListener('click',()=>{curCat=el.dataset.cat;renderTabs();renderFunds();renderRanking();}));
+  const tt=document.getElementById('timeTabs');
+  tt.innerHTML=timeDefs.map(d=>`<div class="t-tab ${curTime===d.key?'active':''}" data-time="${d.key}">${d.label}</div>`).join('');
+  tt.querySelectorAll('.t-tab').forEach(el=>el.addEventListener('click',()=>{curTime=el.dataset.time;renderTabs();renderFunds();renderRanking();}));
+  document.getElementById('timeBadge').textContent=timeDefs.find(t=>t.key===curTime).label;
+  document.getElementById('timeLabel2').textContent=timeDefs.find(t=>t.key===curTime).label;
+}
+function renderFunds(){
+  const list = curCat==='all' ? funds : funds.filter(f=>f.cat===curCat);
+  const sorted = [...list].sort((a,b)=>getRet(b,curTime)-getRet(a,curTime));
+  const max = Math.max(...sorted.map(f=>Math.abs(getRet(f,curTime)))) || 1;
+  document.getElementById('countBar').textContent = `顯示 ${sorted.length} 隻基金 • 類別: ${catDefs.find(c=>c.id===curCat).label} • 按 ${timeDefs.find(t=>t.key===curTime).label} 排序`;
+  document.getElementById('fundGrid').innerHTML = sorted.map(f=>{
+    const ret=getRet(f,curTime);
+    const pct=Math.max(8, Math.min(100, (Math.abs(ret)/max)*100));
+    const col = ret>=0 ? 'var(--green)' : '#dc2626';
+    const bg = ret>=0 ? '#dcfce7' : '#fee2e2';
+    return `<div class="fund">
+      <div class="f-head">
+        <div>
+          <div class="f-name">${f.code} ${f.zh} ${catLabel(f.cat)} <span style="font-size:10px;background:#f3f4f6;border:1px solid #e5e7eb;padding:2px 6px;border-radius:6px;color:var(--muted)">風險 ${f.risk}</span></div>
+          <div class="f-en">${f.en} • ${f.code}</div>
+        </div>
+        <div class="f-code">${f.code}</div>
+      </div>
+      <div class="f-bottom">
+        <div>
+          <div><span class="f-nav">$${f.nav.toFixed(2)}</span><span class="f-chg ${f.navChg>=0?'pos':'neg'}">${f.navChg>=0?'+':''}${f.navChg.toFixed(2)}% 當日</span></div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px">${timeDefs.find(t=>t.key===curTime).label} <span style="font-weight:700;color:${col}">${ret>=0?'+':''}${ret.toFixed(2)}%</span> • 10年 ${f.ret10Y.toFixed(2)}% • 年化 ${f.retAnn10Y.toFixed(2)}%</div>
+        </div>
+        <div class="bar-wrap">
+          <div class="bar-label"><span>回報</span><span style="font-weight:700;color:${col}">${ret>=0?'+':''}${ret.toFixed(2)}%</span></div>
+          <div class="bar"><div class="bar-fill" style="width:${pct}%;background:${col}"></div></div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+function renderRanking(){
+  const sorted=[...funds].sort((a,b)=>getRet(b,curTime)-getRet(a,curTime)).slice(0,10);
+  const max=Math.max(...sorted.map(f=>Math.abs(getRet(f,curTime))))||1;
+  document.getElementById('rankList').innerHTML=sorted.map((f,i)=>{
+    const ret=getRet(f,curTime);
+    const pct=Math.max(6,(Math.abs(ret)/max)*100);
+    return `<div class="r-item">
+      <div class="r-head"><div style="display:flex;align-items:center;gap:8px"><div class="r-rank ${i<3?'top':''}">${i+1}</div><div class="r-code">${f.code} ${f.zh}</div></div><div class="r-pct" style="color:${ret>=0?'var(--green)':'#dc2626'}">${ret>=0?'+':''}${ret.toFixed(2)}%</div></div>
+      <div style="margin-left:28px;height:6px;background:#f3f4f6;border-radius:99px;overflow:hidden"><div style="height:100%;width:${pct}%;background:${i===0?'#064e3b':i<3?'#0f7a4a':'#6ea58e'};border-radius:99px"></div></div>
+    </div>`;
+  }).join('');
+  const avg10 = (funds.reduce((s,f)=>s+f.ret10Y,0)/funds.length).toFixed(1);
+  document.getElementById('avg10').textContent=avg10+'%';
+  document.getElementById('gt50').innerHTML=`${funds.filter(f=>getRet(f,curTime)>50).length}隻<br><span>&gt;50%</span>`;
+  // other cats
+  const other = [
+    {label:'債券 (4隻) 平均', val: (funds.filter(f=>f.cat==='bond').reduce((s,f)=>s+getRet(f,curTime),0)/4).toFixed(1), best:'SHK132 +'+getRet(funds.find(f=>f.code==='SHK132'),curTime).toFixed(1)+'%' },
+    {label:'保證 (3隻) 平均', val: (funds.filter(f=>f.cat==='guarantee').reduce((s,f)=>s+getRet(f,curTime),0)/3).toFixed(1), best:'SHK125 +'+getRet(funds.find(f=>f.code==='SHK125'),curTime).toFixed(1)+'%' },
+    {label:'混合 (6隻) 平均', val: (funds.filter(f=>f.cat==='mixed').reduce((s,f)=>s+getRet(f,curTime),0)/6).toFixed(1), best:'SHK124 +'+getRet(funds.find(f=>f.code==='SHK124'),curTime).toFixed(1)+'%' },
+    {label:'DIS (2隻) 平均', val: (funds.filter(f=>f.cat==='dis').reduce((s,f)=>s+getRet(f,curTime),0)/2).toFixed(1), best:'SHK148 +'+getRet(funds.find(f=>f.code==='SHK148'),curTime).toFixed(1)+'%' },
+    {label:'目標日期 (5隻) 平均', val: (funds.filter(f=>f.cat==='target').reduce((s,f)=>s+getRet(f,curTime),0)/5).toFixed(1), best:'SHK143 +'+getRet(funds.find(f=>f.code==='SHK143'),curTime).toFixed(1)+'%' },
+  ];
+  document.getElementById('otherCats').innerHTML=other.map(o=>`<div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">${o.label}</span><span style="font-weight:600">+${o.val}% | 最強 ${o.best}</span></div>`).join('');
+}
+renderTabs();renderFunds();renderRanking();
 </script>
 <script>(function(){var loc=location.href.replace(/#.*$/,"");var ATTR_NAMES=["data-product-id","data-productid","data-product_id","product-id","productid","product_id","data-source-entity-id","source-entity-id","source_entity_id","data-product","data-metadata","data-meta"];var DATASET_KEYS=["productId","productid","product_id","sourceEntityId","sourceentityid","source_entity_id","product","metadata","meta"];function readProductId(value){if(typeof value!=="string"||value.length===0)return null;if(/^[0-9]{6,}$/.test(value))return value;var match=value.match(/(?:product(?:_|-)?id|source(?:_|-)?entity(?:_|-)?id)["'=:\s]+([0-9]{6,})/i);return match?match[1]:null}function extractProductId(start){for(var node=start;node&&node!==document.body;node=node.parentElement){for(var i=0;i<ATTR_NAMES.length;i++){var attrValue=node.getAttribute&&node.getAttribute(ATTR_NAMES[i]);var attrProductId=readProductId(attrValue);if(attrProductId)return attrProductId}var dataset=node.dataset||null;if(dataset){for(var j=0;j<DATASET_KEYS.length;j++){var dataValue=dataset[DATASET_KEYS[j]];var dataProductId=readProductId(dataValue);if(dataProductId)return dataProductId}}}return null}function isInlineMediaSlotElement(node){return !!(node&&node.getAttribute&&node.getAttribute("data-clippy-inline-media-slot")!==null)}function findInlineMediaSlot(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(isInlineMediaSlotElement(node))return node}return null}function readInlineMediaUrl(node){if(!node)return null;return node.getAttribute&&((node.getAttribute("data-clippy-inline-media-url")||node.getAttribute("data-url")||node.getAttribute("data_url")))||node.href||null}function stripHash(url){return String(url).replace(/#.*$/,"")}function urlsMatch(a,b){if(!a||!b)return false;try{return stripHash(new URL(a,loc).href)===stripHash(new URL(b,loc).href)}catch(_){return stripHash(a)===stripHash(b)}}function isFirstPartyReelUrl(value){try{var url=new URL(value,loc);if(url.protocol!=="https:")return false;var host=url.hostname.toLowerCase();var supported=host==="instagram.com"||host.endsWith(".instagram.com")||host==="facebook.com"||host.endsWith(".facebook.com");return supported&&/\/reels?\//i.test(url.pathname)}catch(_){return false}}function isInlineMediaUrlClick(node,href){var slot=findInlineMediaSlot(node);if(!slot)return false;var slotUrl=readInlineMediaUrl(slot);if(slotUrl)return urlsMatch(href,slotUrl);return isFirstPartyReelUrl(href)}function findDataHref(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(node.getAttribute){var href=node.getAttribute("data-href")||node.getAttribute("data-url");if(href)return{href:href,node:node}}}return null}var nativeOpen=window.open;window.open=function(url){if(parent!==window&&typeof url==="string"&&/^https?:\/\//.test(url)){parent.postMessage({type:"ecto:usercontent-link-click",href:url},"*");return null}return nativeOpen?nativeOpen.apply(window,arguments):null};document.addEventListener("click",function(e){var target=e.target instanceof Element?e.target:null;if(!target)return;if(parent===window)return;var a=target.closest?target.closest("a[href]"):null;if(a&&a.href&&/^https?:\/\//.test(a.href)&&a.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(a,a.href))return;var productId=extractProductId(target)||extractProductId(a);if(productId){e.preventDefault();parent.postMessage({type:"ecto-artifact-link-click",productId:productId},"*");return}e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:a.href},"*");return}var dataHref=findDataHref(target);if(dataHref&&/^https?:\/\//.test(dataHref.href)&&dataHref.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(dataHref.node,dataHref.href))return;e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:dataHref.href},"*")}},true)})();</script><script>(function(){var FOCUS_TYPE="ecto:artifact-focus-request";var CLOSE_TYPE="ecto:artifact-close-request";function focusArtifactDocument(){var body=document.body;if(!body)return;try{window.focus();}catch(e){}if(!body.hasAttribute("tabindex"))body.setAttribute("tabindex","-1");try{body.focus({preventScroll:true});}catch(e){try{body.focus();}catch(e2){}}}window.addEventListener("message",function(event){if(event.source!==window.parent)return;var data=event.data;if(!data||typeof data!=="object"||data.type!==FOCUS_TYPE)return;if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",focusArtifactDocument,{once:true});return;}focusArtifactDocument();});window.addEventListener("keydown",function(event){if(event.key!=="Escape")return;window.setTimeout(function(){if(event.defaultPrevented)return;window.parent.postMessage({type:CLOSE_TYPE},"*");},0);});})();</script>
+
 </body></html>
