@@ -1,11 +1,10 @@
-name: 宏利強積金每日監控推送 V8全29隻
+name: 宏利強積金每日監控 V9旗艦優化版
 on:
   schedule:
     - cron: '30 1 * * *'  # 09:30 HKT
   workflow_dispatch:
-
 jobs:
-  mpf-daily:
+  mpf-daily-v9:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -17,10 +16,10 @@ jobs:
         env:
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
           CHAT_ID: ${{ secrets.CHAT_ID }}
-      - name: Commit prices.json
+      - name: Commit prices.json + history
         run: |
-          git config user.name "MPF Bot"
-          git config user.email "bot@mpf.local"
-          git add prices.json || true
-          git diff --staged --quiet || git commit -m "auto: update prices.json $(date +%Y-%m-%d)"
+          git config user.name "MPF Bot V9"
+          git config user.email "bot-v9@mpf.local"
+          git add prices.json prices_history.json || true
+          git diff --staged --quiet || git commit -m "auto V9: update prices + history $(date +%Y-%m-%d) - 3重數據源+歷史追蹤"
           git push || true
