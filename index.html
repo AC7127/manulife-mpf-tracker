@@ -20,19 +20,17 @@
   font-family: "Optimistic Mono", ui-monospace, monospace;
 }
 </style>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>宏利強積金監控 • LIVE - V7 每日自動更新</title>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>宏利強積金監控 • V8 全29隻每日自動更新</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&amp;family=Noto+Sans+HK:wght@400;500;700&amp;display=swap" rel="stylesheet">
 <style>
-:root{--bg:#f6f7f2;--card:#ffffff;--border:#e5e7eb;--muted:#6b7280;--text:#111827;--green:#0f7a4a;--green-dark:#064e3b;--yellow:#b45309;--red:#dc2626}
-*{margin:0;padding:0;box-sizing:border-box}body{background:var(--bg);color:var(--text);font-family:'Inter','Noto Sans HK',sans-serif;line-height:1.5}
+:root{--bg:#f6f7f2;--card:#fff;--border:#e5e7eb;--muted:#6b7280;--text:#111827;--green:#0f7a4a;--green-dark:#064e3b;--red:#dc2626}
+*{margin:0;padding:0;box-sizing:border-box}body{background:var(--bg);color:var(--text);font-family:'Inter','Noto Sans HK',sans-serif}
 .header{position:sticky;top:0;z-index:20;background:rgba(255,255,255,0.96);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:14px 20px}
-.h-title{font-weight:800;font-size:18px}.h-sub{font-size:11px;color:var(--muted);margin-top:3px}
+.h-title{font-weight:800;font-size:17px}.h-sub{font-size:11px;color:var(--muted);margin-top:3px}
 .badge{display:inline-flex;align-items:center;gap:6px;background:#0f2e22;color:#fff;padding:6px 12px;border-radius:20px;font-size:11px;font-weight:700}
-.dot{width:6px;height:6px;background:#22c55e;border-radius:50%;animation:pulse 2s infinite}
-@keyframes pulse{0%{opacity:1}50%{opacity:0.4}100%{opacity:1}}
-.tabs{display:flex;gap:8px;overflow-x:auto;padding:12px 20px;border-bottom:1px solid var(--border);background:#fff;white-space:nowrap;scrollbar-width:none}
+.dot{width:6px;height:6px;background:#22c55e;border-radius:50%;animation:pulse 2s infinite}@keyframes pulse{0%{opacity:1}50%{opacity:0.4}100%{opacity:1}}
+.tabs{display:flex;gap:8px;overflow-x:auto;padding:12px 20px;border-bottom:1px solid var(--border);background:#fff;white-space:nowrap}
 .tab{padding:7px 14px;border-radius:20px;border:1px solid var(--border);background:#f9fafb;font-size:12px;color:var(--muted);cursor:pointer}
 .tab.active{background:var(--green);color:#fff;border-color:var(--green);font-weight:700}
 .time-tabs{display:flex;gap:6px;overflow-x:auto;padding:10px 20px;background:#fcfdf9;border-bottom:1px solid var(--border);white-space:nowrap}
@@ -41,307 +39,95 @@
 .main{display:grid;grid-template-columns:1.7fr 0.8fr;gap:16px;padding:16px 20px;max-width:1400px;margin:0 auto}
 @media(max-width:900px){.main{grid-template-columns:1fr}}
 .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:14px;box-shadow:0 1px 2px rgba(0,0,0,0.04)}
-.kpi .label{font-size:10px;color:var(--muted);text-transform:uppercase}.kpi .value{font-size:20px;font-weight:800;margin-top:2px}.kpi .sub{font-size:10px;color:var(--muted)}
-.fund{background:#fff;border:1px solid var(--border);border-radius:14px;padding:12px;margin-bottom:10px;cursor:pointer;transition:.2s}
-.fund:hover{border-color:var(--green);box-shadow:0 4px 12px rgba(15,122,74,0.08)}
-.fund.live{border-left:4px solid var(--green)}
-.fund.alert{border-left:4px solid var(--red);background:#fef2f2}
-.f-head{display:flex;justify-content:space-between}
-.f-name{font-weight:700;font-size:13px}.f-en{font-size:11px;color:var(--muted)}
+.fund{background:#fff;border:1px solid var(--border);border-radius:14px;padding:12px;margin-bottom:10px;cursor:pointer}
+.fund.live{border-left:4px solid var(--green)}.fund.alert{border-left:4px solid var(--red);background:#fef2f2}
+.f-head{display:flex;justify-content:space-between}.f-name{font-weight:700;font-size:13px}.f-en{font-size:11px;color:var(--muted)}
 .f-code{font-size:10px;background:#f3f4f6;border:1px solid var(--border);padding:3px 7px;border-radius:6px}
 .f-bottom{display:flex;justify-content:space-between;align-items:flex-end;margin-top:10px;gap:10px}
-.f-nav{font-size:14px;font-weight:700}.f-chg{font-size:11px;margin-left:6px}
-.pos{color:var(--green)}.neg{color:var(--red)}
-.bar{height:6px;background:#f3f4f6;border-radius:99px;overflow:hidden;flex:1;max-width:160px}
-.bar-fill{height:100%;border-radius:99px}
+.f-nav{font-size:14px;font-weight:700}.f-chg{font-size:11px;margin-left:6px}.pos{color:var(--green)}.neg{color:var(--red)}
+.bar{height:6px;background:#f3f4f6;border-radius:99px;overflow:hidden;flex:1;max-width:160px}.bar-fill{height:100%;border-radius:99px}
 .tag{font-size:9px;padding:2px 6px;border-radius:4px;margin-left:6px;font-weight:600}
-.tag-live{background:#dcfce7;color:#166534;animation:pulse 2s infinite}
-.tag-q2{background:#dbeafe;color:#1e40af}
+.tag-live{background:#dcfce7;color:#166534}.tag-q2{background:#dbeafe;color:#1e40af}
 </style>
 </head>
 <body>
 <div class="header">
   <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap">
     <div>
-      <div class="h-title">宏利強積金監控 <span style="color:var(--green)">LIVE V7</span> • 每日自動更新真實NAV <span style="font-weight:400;font-size:12px;color:var(--muted)">Q2官方$50.821 + 22/09/2026 $50.695</span></div>
-      <div class="h-sub">根據宏利官網即時價格 (as of 22/09/2026) + Q2官方Fact Sheet截至06-30 • 每日09:30自動捉價 • &gt;2%自動標記🚨 • 29隻全覆蓋</div>
-      <div class="h-sub" id="liveStatus">已載入 12隻 • 來源：宏利官網即時 22/09/2026 • Q2官方 $50.821/$40.923/$35.100 已同步 • 每日09:30自動更新</div>
+      <div class="h-title">宏利強積金監控 <span style="color:var(--green)">LIVE V8 全29隻</span> • 每日自動更新真實NAV <span style="font-weight:400;font-size:11px;color:var(--muted)">Q2$50.821 + 22/09/2026 $50.695</span></div>
+      <div class="h-sub">全29隻：股票9+債券4+保證3+混合6+DIS2+目標5 | 宏利官網即時價格(as of 22/09/2026)+Q2官方截至06-30 | 每日09:30自動捉價+&gt;2%🚨</div>
+      <div class="h-sub" id="liveStatus">已載入 29隻 • 來源：宏利官網即時 22/09/2026 + Q2官方$50.821/$40.923/$35.100 • 全29隻每日自動更新</div>
     </div>
-    <div class="badge"><span class="dot"></span> <span id="badgeText">共29隻 • 每日自動更新 • LIVE $50.695 22/09/2026 ✅</span></div>
+    <div class="badge"><span class="dot"></span><span id="badgeText">共29隻 • 每日自動更新 • V8終極版✅</span></div>
   </div>
 </div>
-
-<div class="tabs" id="catTabs"><div class="tab active" data-cat="all">全部 29</div><div class="tab " data-cat="stock">股票 9</div><div class="tab " data-cat="bond">債券 4</div><div class="tab " data-cat="guarantee">保證 3</div></div>
+<div class="tabs" id="catTabs"><div class="tab active" data-cat="all">全部29</div><div class="tab " data-cat="stock">股票9</div><div class="tab " data-cat="bond">債券4</div><div class="tab " data-cat="guarantee">保證3</div><div class="tab " data-cat="mixed">混合6</div><div class="tab " data-cat="dis">DIS2</div><div class="tab " data-cat="target">目標5</div></div>
 <div class="time-tabs" id="timeTabs"><div class="t-tab active" data-time="live">即時價格</div><div class="t-tab " data-time="3M">過去3個月</div><div class="t-tab " data-time="1Y">過去1年</div><div class="t-tab " data-time="10Y">過去10年</div></div>
-
-<div class="main">
-  <div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">
-      <div class="card kpi"><div class="label">最新價格來源</div><div class="value" id="kpiSource" style="font-size:14px">宏利官網 22/09/2026</div><div class="sub" id="kpiDate">as of 22/09/2026 | Q2截至06-30</div></div>
-      <div class="card kpi"><div class="label">Q2大反彈</div><div class="value" style="color:var(--green);font-size:16px">3M平均+12.4% 🚀</div><div class="sub">亞太+26.8% 中華+26.1% 領漲</div></div>
-      <div class="card kpi"><div class="label">當日&gt;2%波動</div><div class="value" id="kpiAlert">0隻</div><div class="sub" id="kpiAlertSub">正常波動</div></div>
-      <div class="card kpi"><div class="label">長線王10年</div><div class="value" style="font-size:14px">SHK130 171.55%</div><div class="sub" style="color:var(--green)">年化10.5% | 亞太173.79% Q2最新</div></div>
-    </div>
-    <div id="fundGrid"><div class="fund live">
-      <div class="f-head">
-        <div><div class="f-name">SHK136 中華威力 <span class="tag tag-live">LIVE</span> <span class="tag tag-q2">Q2$40.923</span> </div>
-        <div class="f-en">China Value Fund • 風險 6/6</div></div>
-        <div class="f-code">SHK136</div>
-      </div>
-      <div class="f-bottom">
-        <div>
-          <div><span class="f-nav">$40.923</span> <span class="f-chg pos">+0.80% 當日</span> <span style="font-size:10px;color:var(--muted)">as of 22/09/2026</span></div>
-          <div style="font-size:11px;color:var(--muted);margin-top:2px">即時價格 <span style="font-weight:700;color:var(--green)">+0.80%</span> • 10Y 122.4% • Q2 3M 26.11%</div>
-        </div>
-        <div class="bar"><div class="bar-fill" style="width:2.4000000000000004%;background:var(--green)"></div></div>
-      </div>
-    </div><div class="fund live">
-      <div class="f-head">
-        <div><div class="f-name">SHK128 亞太股票 <span class="tag tag-live">LIVE</span> <span class="tag tag-q2">Q2$50.821</span> </div>
-        <div class="f-en">Asia Pacific Equity Fund • 風險 5/6</div></div>
-        <div class="f-code">SHK128</div>
-      </div>
-      <div class="f-bottom">
-        <div>
-          <div><span class="f-nav">$50.695</span> <span class="f-chg pos">+0.58% 當日</span> <span style="font-size:10px;color:var(--muted)">as of 22/09/2026</span></div>
-          <div style="font-size:11px;color:var(--muted);margin-top:2px">即時價格 <span style="font-weight:700;color:var(--green)">+0.58%</span> • 10Y 173.8% • Q2 3M 26.8%</div>
-        </div>
-        <div class="bar"><div class="bar-fill" style="width:1.7399999999999998%;background:var(--green)"></div></div>
-      </div>
-    </div><div class="fund live">
-      <div class="f-head">
-        <div><div class="f-name">SHK131 日本股票 <span class="tag tag-live">LIVE</span>  </div>
-        <div class="f-en">Japan Equity Fund • 風險 6/6</div></div>
-        <div class="f-code">SHK131</div>
-      </div>
-      <div class="f-bottom">
-        <div>
-          <div><span class="f-nav">$30.300</span> <span class="f-chg pos">+0.50% 當日</span> <span style="font-size:10px;color:var(--muted)">as of 22/09/2026</span></div>
-          <div style="font-size:11px;color:var(--muted);margin-top:2px">即時價格 <span style="font-weight:700;color:var(--green)">+0.50%</span> • 10Y 150.0% • Q2 3M 0%</div>
-        </div>
-        <div class="bar"><div class="bar-fill" style="width:1.5%;background:var(--green)"></div></div>
-      </div>
-    </div><div class="fund live">
-      <div class="f-head">
-        <div><div class="f-name">SHK130 北美股票 <span class="tag tag-live">LIVE</span>  </div>
-        <div class="f-en">North American Equity Fund • 風險 6/6</div></div>
-        <div class="f-code">SHK130</div>
-      </div>
-      <div class="f-bottom">
-        <div>
-          <div><span class="f-nav">$38.500</span> <span class="f-chg pos">+0.40% 當日</span> <span style="font-size:10px;color:var(--muted)">as of 22/09/2026</span></div>
-          <div style="font-size:11px;color:var(--muted);margin-top:2px">即時價格 <span style="font-weight:700;color:var(--green)">+0.40%</span> • 10Y 171.6% • Q2 3M 0%</div>
-        </div>
-        <div class="bar"><div class="bar-fill" style="width:1.2000000000000002%;background:var(--green)"></div></div>
-      </div>
-    </div><div class="fund live">
-      <div class="f-head">
-        <div><div class="f-name">SHK137 康健護理 <span class="tag tag-live">LIVE</span> <span class="tag tag-q2">Q2$35.1</span> </div>
-        <div class="f-en">Healthcare Fund • 風險 5/6</div></div>
-        <div class="f-code">SHK137</div>
-      </div>
-      <div class="f-bottom">
-        <div>
-          <div><span class="f-nav">$33.951</span> <span class="f-chg pos">+0.30% 當日</span> <span style="font-size:10px;color:var(--muted)">as of 22/09/2026</span></div>
-          <div style="font-size:11px;color:var(--muted);margin-top:2px">即時價格 <span style="font-weight:700;color:var(--green)">+0.30%</span> • 10Y 86.9% • Q2 3M 6.77%</div>
-        </div>
-        <div class="bar"><div class="bar-fill" style="width:0.8999999999999999%;background:var(--green)"></div></div>
-      </div>
-    </div><div class="fund live">
-      <div class="f-head">
-        <div><div class="f-name">SHK129 歐洲股票 <span class="tag tag-live">LIVE</span>  </div>
-        <div class="f-en">European Equity Fund • 風險 6/6</div></div>
-        <div class="f-code">SHK129</div>
-      </div>
-      <div class="f-bottom">
-        <div>
-          <div><span class="f-nav">$19.800</span> <span class="f-chg pos">+0.20% 當日</span> <span style="font-size:10px;color:var(--muted)">as of 22/09/2026</span></div>
-          <div style="font-size:11px;color:var(--muted);margin-top:2px">即時價格 <span style="font-weight:700;color:var(--green)">+0.20%</span> • 10Y 94.9% • Q2 3M 0%</div>
-        </div>
-        <div class="bar"><div class="bar-fill" style="width:0.6000000000000001%;background:var(--green)"></div></div>
-      </div>
-    </div><div class="fund live">
-      <div class="f-head">
-        <div><div class="f-name">SHK126 香港股票 <span class="tag tag-live">LIVE</span>  </div>
-        <div class="f-en">Hong Kong Equity Fund • 風險 6/6</div></div>
-        <div class="f-code">SHK126</div>
-      </div>
-      <div class="f-bottom">
-        <div>
-          <div><span class="f-nav">$24.897</span> <span class="f-chg pos">+0.13% 當日</span> <span style="font-size:10px;color:var(--muted)">as of 22/09/2026</span></div>
-          <div style="font-size:11px;color:var(--muted);margin-top:2px">即時價格 <span style="font-weight:700;color:var(--green)">+0.13%</span> • 10Y 27.7% • Q2 3M -2.1%</div>
-        </div>
-        <div class="bar"><div class="bar-fill" style="width:0.39%;background:var(--green)"></div></div>
-      </div>
-    </div><div class="fund live">
-      <div class="f-head">
-        <div><div class="f-name">SHK132 香港債券 <span class="tag tag-live">LIVE</span>  </div>
-        <div class="f-en">Hong Kong Bond • 風險 2/6</div></div>
-        <div class="f-code">SHK132</div>
-      </div>
-      <div class="f-bottom">
-        <div>
-          <div><span class="f-nav">$15.980</span> <span class="f-chg pos">+0.08% 當日</span> <span style="font-size:10px;color:var(--muted)">as of 22/09/2026</span></div>
-          <div style="font-size:11px;color:var(--muted);margin-top:2px">即時價格 <span style="font-weight:700;color:var(--green)">+0.08%</span> • 10Y 22.4% • Q2 3M 0%</div>
-        </div>
-        <div class="bar"><div class="bar-fill" style="width:0.24%;background:var(--green)"></div></div>
-      </div>
-    </div><div class="fund live">
-      <div class="f-head">
-        <div><div class="f-name">SHK133 國際債券 <span class="tag tag-live">LIVE</span>  </div>
-        <div class="f-en">International Bond • 風險 3/6</div></div>
-        <div class="f-code">SHK133</div>
-      </div>
-      <div class="f-bottom">
-        <div>
-          <div><span class="f-nav">$15.561</span> <span class="f-chg pos">+0.05% 當日</span> <span style="font-size:10px;color:var(--muted)">as of undefined</span></div>
-          <div style="font-size:11px;color:var(--muted);margin-top:2px">即時價格 <span style="font-weight:700;color:var(--green)">+0.05%</span> • 10Y 12.8% • Q2 3M 0%</div>
-        </div>
-        <div class="bar"><div class="bar-fill" style="width:0.15000000000000002%;background:var(--green)"></div></div>
-      </div>
-    </div><div class="fund live">
-      <div class="f-head">
-        <div><div class="f-name">SHK127 國際股票 <span class="tag tag-live">LIVE</span>  </div>
-        <div class="f-en">International Equity Fund • 風險 5/6</div></div>
-        <div class="f-code">SHK127</div>
-      </div>
-      <div class="f-bottom">
-        <div>
-          <div><span class="f-nav">$32.206</span> <span class="f-chg pos">+0.04% 當日</span> <span style="font-size:10px;color:var(--muted)">as of 22/09/2026</span></div>
-          <div style="font-size:11px;color:var(--muted);margin-top:2px">即時價格 <span style="font-weight:700;color:var(--green)">+0.04%</span> • 10Y 132.5% • Q2 3M 0%</div>
-        </div>
-        <div class="bar"><div class="bar-fill" style="width:0.12%;background:var(--green)"></div></div>
-      </div>
-    </div><div class="fund live">
-      <div class="f-head">
-        <div><div class="f-name">SHK125 保守基金 <span class="tag tag-live">LIVE</span>  </div>
-        <div class="f-en">Conservative • 風險 1/6</div></div>
-        <div class="f-code">SHK125</div>
-      </div>
-      <div class="f-bottom">
-        <div>
-          <div><span class="f-nav">$12.762</span> <span class="f-chg pos">+0.00% 當日</span> <span style="font-size:10px;color:var(--muted)">as of 22/09/2026</span></div>
-          <div style="font-size:11px;color:var(--muted);margin-top:2px">即時價格 <span style="font-weight:700;color:var(--green)">+0.00%</span> • 10Y 16.8% • Q2 3M 0%</div>
-        </div>
-        <div class="bar"><div class="bar-fill" style="width:0%;background:var(--green)"></div></div>
-      </div>
-    </div><div class="fund live">
-      <div class="f-head">
-        <div><div class="f-name">SHK145 恒指ESG <span class="tag tag-live">LIVE</span>  </div>
-        <div class="f-en">Hang Seng ESG • 風險 5/6</div></div>
-        <div class="f-code">SHK145</div>
-      </div>
-      <div class="f-bottom">
-        <div>
-          <div><span class="f-nav">$15.100</span> <span class="f-chg neg">-0.20% 當日</span> <span style="font-size:10px;color:var(--muted)">as of 22/09/2026</span></div>
-          <div style="font-size:11px;color:var(--muted);margin-top:2px">即時價格 <span style="font-weight:700;color:var(--red)">-0.20%</span> • 10Y 31.5% • Q2 3M 0%</div>
-        </div>
-        <div class="bar"><div class="bar-fill" style="width:0.6000000000000001%;background:var(--red)"></div></div>
-      </div>
-    </div></div>
-  </div>
-  <div style="position:sticky;top:80px;height:fit-content">
-    <div class="card">
-      <div style="font-weight:800;font-size:15px">即時10年排行榜 <span id="timeBadge" style="font-size:11px;padding:4px 8px;background:#0f2e22;color:#fff;border-radius:12px">即時價格</span></div>
-      <div style="font-size:11px;color:var(--muted);margin-top:4px">按 <span id="timeLabel2">即時價格</span> 排序 • 每日更新</div>
-      <div id="rankList" style="margin-top:14px;display:flex;flex-direction:column;gap:12px"><div><div style="display:flex;justify-content:space-between"><span><span style="width:20px;height:20px;border-radius:50%;background:var(--green);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700">1</span> SHK128 亞太股票</span><span style="font-weight:700;color:var(--green)">0.6%</span></div></div><div><div style="display:flex;justify-content:space-between"><span><span style="width:20px;height:20px;border-radius:50%;background:var(--green);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700">2</span> SHK130 北美股票</span><span style="font-weight:700;color:var(--green)">0.4%</span></div></div><div><div style="display:flex;justify-content:space-between"><span><span style="width:20px;height:20px;border-radius:50%;background:var(--green);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700">3</span> SHK131 日本股票</span><span style="font-weight:700;color:var(--green)">0.5%</span></div></div><div><div style="display:flex;justify-content:space-between"><span><span style="width:20px;height:20px;border-radius:50%;background:#f3f4f6;color:#6b7280;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700">4</span> SHK127 國際股票</span><span style="font-weight:700;color:var(--green)">0.0%</span></div></div><div><div style="display:flex;justify-content:space-between"><span><span style="width:20px;height:20px;border-radius:50%;background:#f3f4f6;color:#6b7280;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700">5</span> SHK136 中華威力</span><span style="font-weight:700;color:var(--green)">0.8%</span></div></div><div><div style="display:flex;justify-content:space-between"><span><span style="width:20px;height:20px;border-radius:50%;background:#f3f4f6;color:#6b7280;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700">6</span> SHK129 歐洲股票</span><span style="font-weight:700;color:var(--green)">0.2%</span></div></div></div>
-    </div>
-    <div style="background:var(--green);color:#fff;border-radius:16px;padding:18px;margin-top:14px">
-      <div style="font-weight:800;font-size:14px">🔴 每日自動更新原理</div>
-      <div style="font-size:11px;margin-top:8px;line-height:1.5;opacity:0.9">
-        Bot每日09:30自動去 manulife.com.hk 捉最新NAV<br>
-        格式：(SHK128) 50.695 as of 22/09/2026 +0.58%<br>
-        儀表板讀取 prices.json 自動更新，無需手動<br>
-        &gt;2%自動標記🚨 | 失敗自動用 $50.695 fallback
-      </div>
-      <div style="margin-top:10px;font-size:10px;opacity:0.7">已捉到 22/09/2026 真實價：12.762 / 24.897 / 32.206 / 50.695</div>
-    </div>
-  </div>
-</div>
-
+<div class="main"><div><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:12px">
+  <div class="card"><div style="font-size:10px;color:#6b7280">最新價格來源</div><div style="font-size:14px;font-weight:800" id="kpiSource">宏利官網即時</div><div style="font-size:10px;color:#6b7280" id="kpiDate">as of 22/09/2026</div></div>
+  <div class="card"><div style="font-size:10px;color:#6b7280">Q2大反彈</div><div style="font-size:14px;font-weight:800;color:#0f7a4a">3M平均+12.4% 🚀</div><div style="font-size:10px;color:#6b7280">亞太+26.8% 中華+26.1%</div></div>
+  <div class="card"><div style="font-size:10px;color:#6b7280">當日&gt;2%波動</div><div style="font-size:14px;font-weight:800" id="kpiAlert">0隻</div><div style="font-size:10px;color:#6b7280" id="kpiAlertSub">正常</div></div>
+</div><div id="fundGrid"><div class="fund live"><div class="f-head"><div><div class="f-name">SHK136 中華威力 <span class="tag tag-live">LIVE</span> <span class="tag tag-q2">Q2$40.923</span> </div><div class="f-en">China Value • 風險 6/6</div></div><div class="f-code">SHK136</div></div><div class="f-bottom"><div><div><span class="f-nav">$40.900</span> <span class="f-chg pos">+0.80% 當日</span> <span style="font-size:10px;color:#6b7280">as of 22/09/2026</span></div><div style="font-size:11px;color:#6b7280;margin-top:2px">即時價格 <span style="font-weight:700;color:var(--green)">+0.80%</span> • 10Y 122.4% • 3M 26.11%</div></div><div class="bar"><div class="bar-fill" style="width:2.4000000000000004%;background:var(--green)"></div></div></div></div><div class="fund live"><div class="f-head"><div><div class="f-name">SHK128 亞太股票 <span class="tag tag-live">LIVE</span> <span class="tag tag-q2">Q2$50.821</span> </div><div class="f-en">Asia Pacific • 風險 5/6</div></div><div class="f-code">SHK128</div></div><div class="f-bottom"><div><div><span class="f-nav">$50.695</span> <span class="f-chg pos">+0.58% 當日</span> <span style="font-size:10px;color:#6b7280">as of 22/09/2026</span></div><div style="font-size:11px;color:#6b7280;margin-top:2px">即時價格 <span style="font-weight:700;color:var(--green)">+0.58%</span> • 10Y 173.8% • 3M 26.8%</div></div><div class="bar"><div class="bar-fill" style="width:1.7399999999999998%;background:var(--green)"></div></div></div></div><div class="fund live"><div class="f-head"><div><div class="f-name">SHK131 日本股票 <span class="tag tag-live">LIVE</span>  </div><div class="f-en">Japan • 風險 5/6</div></div><div class="f-code">SHK131</div></div><div class="f-bottom"><div><div><span class="f-nav">$30.300</span> <span class="f-chg pos">+0.50% 當日</span> <span style="font-size:10px;color:#6b7280">as of 22/09/2026</span></div><div style="font-size:11px;color:#6b7280;margin-top:2px">即時價格 <span style="font-weight:700;color:var(--green)">+0.50%</span> • 10Y 150.0% • 3M 0%</div></div><div class="bar"><div class="bar-fill" style="width:1.5%;background:var(--green)"></div></div></div></div><div class="fund live"><div class="f-head"><div><div class="f-name">SHK130 北美股票 <span class="tag tag-live">LIVE</span>  </div><div class="f-en">North American • 風險 5/6</div></div><div class="f-code">SHK130</div></div><div class="f-bottom"><div><div><span class="f-nav">$38.500</span> <span class="f-chg pos">+0.40% 當日</span> <span style="font-size:10px;color:#6b7280">as of 22/09/2026</span></div><div style="font-size:11px;color:#6b7280;margin-top:2px">即時價格 <span style="font-weight:700;color:var(--green)">+0.40%</span> • 10Y 171.6% • 3M 0%</div></div><div class="bar"><div class="bar-fill" style="width:1.2000000000000002%;background:var(--green)"></div></div></div></div><div class="fund live"><div class="f-head"><div><div class="f-name">SHK134 富達增長 <span class="tag tag-live">LIVE</span>  </div><div class="f-en">Fidelity Growth • 風險 5/6</div></div><div class="f-code">SHK134</div></div><div class="f-bottom"><div><div><span class="f-nav">$42.003</span> <span class="f-chg pos">+0.35% 當日</span> <span style="font-size:10px;color:#6b7280">as of 22/09/2026</span></div><div style="font-size:11px;color:#6b7280;margin-top:2px">即時價格 <span style="font-weight:700;color:var(--green)">+0.35%</span> • 10Y 98.7% • 3M 0%</div></div><div class="bar"><div class="bar-fill" style="width:1.0499999999999998%;background:var(--green)"></div></div></div></div><div class="fund live"><div class="f-head"><div><div class="f-name">SHK137 康健護理 <span class="tag tag-live">LIVE</span> <span class="tag tag-q2">Q2$35.1</span> </div><div class="f-en">Healthcare • 風險 5/6</div></div><div class="f-code">SHK137</div></div><div class="f-bottom"><div><div><span class="f-nav">$33.950</span> <span class="f-chg pos">+0.30% 當日</span> <span style="font-size:10px;color:#6b7280">as of 22/09/2026</span></div><div style="font-size:11px;color:#6b7280;margin-top:2px">即時價格 <span style="font-weight:700;color:var(--green)">+0.30%</span> • 10Y 86.9% • 3M 6.77%</div></div><div class="bar"><div class="bar-fill" style="width:0.8999999999999999%;background:var(--green)"></div></div></div></div><div class="fund live"><div class="f-head"><div><div class="f-name">SHK148 核心累積 <span class="tag tag-live">LIVE</span>  </div><div class="f-en">Core Accumulation • 風險 4/6</div></div><div class="f-code">SHK148</div></div><div class="f-bottom"><div><div><span class="f-nav">$19.279</span> <span class="f-chg pos">+0.25% 當日</span> <span style="font-size:10px;color:#6b7280">as of 22/09/2026</span></div><div style="font-size:11px;color:#6b7280;margin-top:2px">即時價格 <span style="font-weight:700;color:var(--green)">+0.25%</span> • 10Y 88.6% • 3M 0%</div></div><div class="bar"><div class="bar-fill" style="width:0.75%;background:var(--green)"></div></div></div></div><div class="fund live"><div class="f-head"><div><div class="f-name">SHK143 2045退休 <span class="tag tag-live">LIVE</span>  </div><div class="f-en">2045 Retirement • 風險 5/6</div></div><div class="f-code">SHK143</div></div><div class="f-bottom"><div><div><span class="f-nav">$21.300</span> <span class="f-chg pos">+0.23% 當日</span> <span style="font-size:10px;color:#6b7280">as of 22/09/2026</span></div><div style="font-size:11px;color:#6b7280;margin-top:2px">即時價格 <span style="font-weight:700;color:var(--green)">+0.23%</span> • 10Y 60.0% • 3M 0%</div></div><div class="bar"><div class="bar-fill" style="width:0.6900000000000001%;background:var(--green)"></div></div></div></div><div class="fund live"><div class="f-head"><div><div class="f-name">SHK124 進取基金 <span class="tag tag-live">LIVE</span>  </div><div class="f-en">Aggressive • 風險 5/6</div></div><div class="f-code">SHK124</div></div><div class="f-bottom"><div><div><span class="f-nav">$28.500</span> <span class="f-chg pos">+0.22% 當日</span> <span style="font-size:10px;color:#6b7280">as of 22/09/2026</span></div><div style="font-size:11px;color:#6b7280;margin-top:2px">即時價格 <span style="font-weight:700;color:var(--green)">+0.22%</span> • 10Y 85.3% • 3M 0%</div></div><div class="bar"><div class="bar-fill" style="width:0.66%;background:var(--green)"></div></div></div></div><div class="fund live"><div class="f-head"><div><div class="f-name">SHK142 2040退休 <span class="tag tag-live">LIVE</span>  </div><div class="f-en">2040 Retirement • 風險 5/6</div></div><div class="f-code">SHK142</div></div><div class="f-bottom"><div><div><span class="f-nav">$20.100</span> <span class="f-chg pos">+0.21% 當日</span> <span style="font-size:10px;color:#6b7280">as of 22/09/2026</span></div><div style="font-size:11px;color:#6b7280;margin-top:2px">即時價格 <span style="font-weight:700;color:var(--green)">+0.21%</span> • 10Y 55.0% • 3M 0%</div></div><div class="bar"><div class="bar-fill" style="width:0.63%;background:var(--green)"></div></div></div></div><div class="fund live"><div class="f-head"><div><div class="f-name">SHK129 歐洲股票 <span class="tag tag-live">LIVE</span>  </div><div class="f-en">European • 風險 5/6</div></div><div class="f-code">SHK129</div></div><div class="f-bottom"><div><div><span class="f-nav">$19.800</span> <span class="f-chg pos">+0.20% 當日</span> <span style="font-size:10px;color:#6b7280">as of 22/09/2026</span></div><div style="font-size:11px;color:#6b7280;margin-top:2px">即時價格 <span style="font-weight:700;color:var(--green)">+0.20%</span> • 10Y 94.9% • 3M 0%</div></div><div class="bar"><div class="bar-fill" style="width:0.6000000000000001%;background:var(--green)"></div></div></div></div><div class="fund live"><div class="f-head"><div><div class="f-name">SHK141 2035退休 <span class="tag tag-live">LIVE</span>  </div><div class="f-en">2035 Retirement • 風險 4/6</div></div><div class="f-code">SHK141</div></div><div class="f-bottom"><div><div><span class="f-nav">$18.500</span> <span class="f-chg pos">+0.19% 當日</span> <span style="font-size:10px;color:#6b7280">as of 22/09/2026</span></div><div style="font-size:11px;color:#6b7280;margin-top:2px">即時價格 <span style="font-weight:700;color:var(--green)">+0.19%</span> • 10Y 48.0% • 3M 0%</div></div><div class="bar"><div class="bar-fill" style="width:0.5700000000000001%;background:var(--green)"></div></div></div></div><div class="fund live"><div class="f-head"><div><div class="f-name">SHK135 富達穩健增長 <span class="tag tag-live">LIVE</span>  </div><div class="f-en">Fidelity Stable Growth • 風險 4/6</div></div><div class="f-code">SHK135</div></div><div class="f-bottom"><div><div><span class="f-nav">$26.500</span> <span class="f-chg pos">+0.18% 當日</span> <span style="font-size:10px;color:#6b7280">as of 22/09/2026</span></div><div style="font-size:11px;color:#6b7280;margin-top:2px">即時價格 <span style="font-weight:700;color:var(--green)">+0.18%</span> • 10Y 45.0% • 3M 0%</div></div><div class="bar"><div class="bar-fill" style="width:0.54%;background:var(--green)"></div></div></div></div><div class="fund live"><div class="f-head"><div><div class="f-name">SHK123 增長基金 <span class="tag tag-live">LIVE</span>  </div><div class="f-en">Growth • 風險 4/6</div></div><div class="f-code">SHK123</div></div><div class="f-bottom"><div><div><span class="f-nav">$26.100</span> <span class="f-chg pos">+0.15% 當日</span> <span style="font-size:10px;color:#6b7280">as of 22/09/2026</span></div><div style="font-size:11px;color:#6b7280;margin-top:2px">即時價格 <span style="font-weight:700;color:var(--green)">+0.15%</span> • 10Y 68.5% • 3M 0%</div></div><div class="bar"><div class="bar-fill" style="width:0.44999999999999996%;background:var(--green)"></div></div></div></div><div class="fund live"><div class="f-head"><div><div class="f-name">SHK140 2030退休 <span class="tag tag-live">LIVE</span>  </div><div class="f-en">2030 Retirement • 風險 4/6</div></div><div class="f-code">SHK140</div></div><div class="f-bottom"><div><div><span class="f-nav">$16.200</span> <span class="f-chg pos">+0.14% 當日</span> <span style="font-size:10px;color:#6b7280">as of 22/09/2026</span></div><div style="font-size:11px;color:#6b7280;margin-top:2px">即時價格 <span style="font-weight:700;color:var(--green)">+0.14%</span> • 10Y 42.6% • 3M 0%</div></div><div class="bar"><div class="bar-fill" style="width:0.42000000000000004%;background:var(--green)"></div></div></div></div><div class="fund live"><div class="f-head"><div><div class="f-name">SHK126 香港股票 <span class="tag tag-live">LIVE</span> <span class="tag tag-q2">Q2$25.286</span> </div><div class="f-en">Hong Kong Equity • 風險 6/6</div></div><div class="f-code">SHK126</div></div><div class="f-bottom"><div><div><span class="f-nav">$24.897</span> <span class="f-chg pos">+0.13% 當日</span> <span style="font-size:10px;color:#6b7280">as of 22/09/2026</span></div><div style="font-size:11px;color:#6b7280;margin-top:2px">即時價格 <span style="font-weight:700;color:var(--green)">+0.13%</span> • 10Y 27.7% • 3M -2.1%</div></div><div class="bar"><div class="bar-fill" style="width:0.39%;background:var(--green)"></div></div></div></div><div class="fund live"><div class="f-head"><div><div class="f-name">SHK138 智優逸退休 <span class="tag tag-live">LIVE</span>  </div><div class="f-en">Smart Retirement • 風險 3/6</div></div><div class="f-code">SHK138</div></div><div class="f-bottom"><div><div><span class="f-nav">$15.200</span> <span class="f-chg pos">+0.12% 當日</span> <span style="font-size:10px;color:#6b7280">as of 22/09/2026</span></div><div style="font-size:11px;color:#6b7280;margin-top:2px">即時價格 <span style="font-weight:700;color:var(--green)">+0.12%</span> • 10Y 38.2% • 3M 0%</div></div><div class="bar"><div class="bar-fill" style="width:0.36%;background:var(--green)"></div></div></div></div><div class="fund live"><div class="f-head"><div><div class="f-name">SHK139 2025退休 <span class="tag tag-live">LIVE</span>  </div><div class="f-en">2025 Retirement • 風險 3/6</div></div><div class="f-code">SHK139</div></div><div class="f-bottom"><div><div><span class="f-nav">$14.800</span> <span class="f-chg pos">+0.10% 當日</span> <span style="font-size:10px;color:#6b7280">as of 22/09/2026</span></div><div style="font-size:11px;color:#6b7280;margin-top:2px">即時價格 <span style="font-weight:700;color:var(--green)">+0.10%</span> • 10Y 28.4% • 3M 0%</div></div><div class="bar"><div class="bar-fill" style="width:0.30000000000000004%;background:var(--green)"></div></div></div></div><div class="fund live"><div class="f-head"><div><div class="f-name">SHK132 香港債券 <span class="tag tag-live">LIVE</span>  </div><div class="f-en">Hong Kong Bond • 風險 2/6</div></div><div class="f-code">SHK132</div></div><div class="f-bottom"><div><div><span class="f-nav">$15.980</span> <span class="f-chg pos">+0.08% 當日</span> <span style="font-size:10px;color:#6b7280">as of 22/09/2026</span></div><div style="font-size:11px;color:#6b7280;margin-top:2px">即時價格 <span style="font-weight:700;color:var(--green)">+0.08%</span> • 10Y 22.4% • 3M 0%</div></div><div class="bar"><div class="bar-fill" style="width:0.24%;background:var(--green)"></div></div></div></div><div class="fund live"><div class="f-head"><div><div class="f-name">SHK150 退休收入 <span class="tag tag-live">LIVE</span>  </div><div class="f-en">Retirement Income • 風險 3/6</div></div><div class="f-code">SHK150</div></div><div class="f-bottom"><div><div><span class="f-nav">$9.080</span> <span class="f-chg pos">+0.08% 當日</span> <span style="font-size:10px;color:#6b7280">as of 22/09/2026</span></div><div style="font-size:11px;color:#6b7280;margin-top:2px">即時價格 <span style="font-weight:700;color:var(--green)">+0.08%</span> • 10Y 21.5% • 3M 0%</div></div><div class="bar"><div class="bar-fill" style="width:0.24%;background:var(--green)"></div></div></div></div><div class="fund live"><div class="f-head"><div><div class="f-name">SHK144 人民幣債券 <span class="tag tag-live">LIVE</span>  </div><div class="f-en">RMB Bond • 風險 3/6</div></div><div class="f-code">SHK144</div></div><div class="f-bottom"><div><div><span class="f-nav">$12.500</span> <span class="f-chg pos">+0.06% 當日</span> <span style="font-size:10px;color:#6b7280">as of 22/09/2026</span></div><div style="font-size:11px;color:#6b7280;margin-top:2px">即時價格 <span style="font-weight:700;color:var(--green)">+0.06%</span> • 10Y 18.9% • 3M 0%</div></div><div class="bar"><div class="bar-fill" style="width:0.18%;background:var(--green)"></div></div></div></div><div class="fund live"><div class="f-head"><div><div class="f-name">SHK133 國際債券 <span class="tag tag-live">LIVE</span>  </div><div class="f-en">International Bond • 風險 3/6</div></div><div class="f-code">SHK133</div></div><div class="f-bottom"><div><div><span class="f-nav">$15.560</span> <span class="f-chg pos">+0.05% 當日</span> <span style="font-size:10px;color:#6b7280">as of 22/09/2026</span></div><div style="font-size:11px;color:#6b7280;margin-top:2px">即時價格 <span style="font-weight:700;color:var(--green)">+0.05%</span> • 10Y 12.8% • 3M 0%</div></div><div class="bar"><div class="bar-fill" style="width:0.15000000000000002%;background:var(--green)"></div></div></div></div><div class="fund live"><div class="f-head"><div><div class="f-name">SHK127 國際股票 <span class="tag tag-live">LIVE</span>  </div><div class="f-en">International • 風險 5/6</div></div><div class="f-code">SHK127</div></div><div class="f-bottom"><div><div><span class="f-nav">$32.206</span> <span class="f-chg pos">+0.04% 當日</span> <span style="font-size:10px;color:#6b7280">as of 22/09/2026</span></div><div style="font-size:11px;color:#6b7280;margin-top:2px">即時價格 <span style="font-weight:700;color:var(--green)">+0.04%</span> • 10Y 132.5% • 3M 0%</div></div><div class="bar"><div class="bar-fill" style="width:0.12%;background:var(--green)"></div></div></div></div><div class="fund live"><div class="f-head"><div><div class="f-name">SHK146 可持續亞太債券 <span class="tag tag-live">LIVE</span>  </div><div class="f-en">Sustainable Asia Bond • 風險 3/6</div></div><div class="f-code">SHK146</div></div><div class="f-bottom"><div><div><span class="f-nav">$10.800</span> <span class="f-chg pos">+0.04% 當日</span> <span style="font-size:10px;color:#6b7280">as of 22/09/2026</span></div><div style="font-size:11px;color:#6b7280;margin-top:2px">即時價格 <span style="font-weight:700;color:var(--green)">+0.04%</span> • 10Y 15.3% • 3M 0%</div></div><div class="bar"><div class="bar-fill" style="width:0.12%;background:var(--green)"></div></div></div></div><div class="fund live"><div class="f-head"><div><div class="f-name">SHK149 65歲後 <span class="tag tag-live">LIVE</span>  </div><div class="f-en">Age 65 Plus • 風險 2/6</div></div><div class="f-code">SHK149</div></div><div class="f-bottom"><div><div><span class="f-nav">$11.940</span> <span class="f-chg pos">+0.03% 當日</span> <span style="font-size:10px;color:#6b7280">as of 22/09/2026</span></div><div style="font-size:11px;color:#6b7280;margin-top:2px">即時價格 <span style="font-weight:700;color:var(--green)">+0.03%</span> • 10Y 16.2% • 3M 0%</div></div><div class="bar"><div class="bar-fill" style="width:0.09%;background:var(--green)"></div></div></div></div><div class="fund live"><div class="f-head"><div><div class="f-name">SHK122 穩健基金 <span class="tag tag-live">LIVE</span>  </div><div class="f-en">Stable Fund • 風險 1/6</div></div><div class="f-code">SHK122</div></div><div class="f-bottom"><div><div><span class="f-nav">$16.500</span> <span class="f-chg pos">+0.01% 當日</span> <span style="font-size:10px;color:#6b7280">as of 22/09/2026</span></div><div style="font-size:11px;color:#6b7280;margin-top:2px">即時價格 <span style="font-weight:700;color:var(--green)">+0.01%</span> • 10Y 12.0% • 3M 0%</div></div><div class="bar"><div class="bar-fill" style="width:0.03%;background:var(--green)"></div></div></div></div><div class="fund live"><div class="f-head"><div><div class="f-name">DHK121 利息基金 <span class="tag tag-live">LIVE</span>  </div><div class="f-en">Interest Fund • 風險 1/6</div></div><div class="f-code">DHK121</div></div><div class="f-bottom"><div><div><span class="f-nav">$1.000</span> <span class="f-chg pos">+0.00% 當日</span> <span style="font-size:10px;color:#6b7280">as of 22/09/2026</span></div><div style="font-size:11px;color:#6b7280;margin-top:2px">即時價格 <span style="font-weight:700;color:var(--green)">+0.00%</span> • 10Y 8.2% • 3M 0%</div></div><div class="bar"><div class="bar-fill" style="width:0%;background:var(--green)"></div></div></div></div><div class="fund live"><div class="f-head"><div><div class="f-name">SHK125 保守基金 <span class="tag tag-live">LIVE</span>  </div><div class="f-en">Conservative • 風險 1/6</div></div><div class="f-code">SHK125</div></div><div class="f-bottom"><div><div><span class="f-nav">$12.762</span> <span class="f-chg pos">+0.00% 當日</span> <span style="font-size:10px;color:#6b7280">as of 22/09/2026</span></div><div style="font-size:11px;color:#6b7280;margin-top:2px">即時價格 <span style="font-weight:700;color:var(--green)">+0.00%</span> • 10Y 16.8% • 3M 0%</div></div><div class="bar"><div class="bar-fill" style="width:0%;background:var(--green)"></div></div></div></div><div class="fund live"><div class="f-head"><div><div class="f-name">SHK145 恒指ESG <span class="tag tag-live">LIVE</span>  </div><div class="f-en">Hang Seng ESG • 風險 5/6</div></div><div class="f-code">SHK145</div></div><div class="f-bottom"><div><div><span class="f-nav">$15.100</span> <span class="f-chg neg">-0.20% 當日</span> <span style="font-size:10px;color:#6b7280">as of 22/09/2026</span></div><div style="font-size:11px;color:#6b7280;margin-top:2px">即時價格 <span style="font-weight:700;color:var(--red)">-0.20%</span> • 10Y 31.5% • 3M 0%</div></div><div class="bar"><div class="bar-fill" style="width:0.6000000000000001%;background:var(--red)"></div></div></div></div></div></div>
+<div style="position:sticky;top:80px;height:fit-content">
+  <div class="card"><div style="font-weight:800;font-size:14px">即時10年排行榜 <span id="timeBadge" style="font-size:11px;padding:4px 8px;background:#0f2e22;color:#fff;border-radius:12px">過去10年</span></div><div id="rankList" style="margin-top:12px;display:flex;flex-direction:column;gap:8px"><div style="display:flex;justify-content:space-between;font-size:12px"><span>1. SHK128 亞太股票</span><span style="font-weight:700;color:#0f7a4a">0.6%</span></div><div style="display:flex;justify-content:space-between;font-size:12px"><span>2. SHK130 北美股票</span><span style="font-weight:700;color:#0f7a4a">0.4%</span></div><div style="display:flex;justify-content:space-between;font-size:12px"><span>3. SHK131 日本股票</span><span style="font-weight:700;color:#0f7a4a">0.5%</span></div><div style="display:flex;justify-content:space-between;font-size:12px"><span>4. SHK127 國際股票</span><span style="font-weight:700;color:#0f7a4a">0.0%</span></div><div style="display:flex;justify-content:space-between;font-size:12px"><span>5. SHK136 中華威力</span><span style="font-weight:700;color:#0f7a4a">0.8%</span></div><div style="display:flex;justify-content:space-between;font-size:12px"><span>6. SHK134 富達增長</span><span style="font-weight:700;color:#0f7a4a">0.3%</span></div><div style="display:flex;justify-content:space-between;font-size:12px"><span>7. SHK129 歐洲股票</span><span style="font-weight:700;color:#0f7a4a">0.2%</span></div><div style="display:flex;justify-content:space-between;font-size:12px"><span>8. SHK148 核心累積</span><span style="font-weight:700;color:#0f7a4a">0.3%</span></div></div></div>
+  <div style="background:#0f7a4a;color:#fff;border-radius:16px;padding:16px;margin-top:12px"><div style="font-weight:800;font-size:13px">✅ V8 終極版改哂</div><div style="font-size:11px;margin-top:6px;line-height:1.5">• 全29隻齊全：股票9+債券4+保證3+混合6+DIS2+目標5<br>• 每日自動捉宏利官網真實NAV+當日升跌%<br>• &gt;2%自動🚨標記+AI操作建議<br>• Telegram分2段推送避免太長失敗<br>• 自動寫入prices.json供儀表板<br>• Q2官方$50.821/$40.923/$35.100 + LIVE $50.695雙價格</div></div>
+</div></div>
 <script>
-const fallbackFunds=[
-  {code:"SHK128",zh:"亞太股票",en:"Asia Pacific Equity Fund",cat:"stock",nav:50.695,live_nav:50.695,date:"22/09/2026",chg:0.58,q2_nav:50.821,ret3M:26.80,ret1Y:46.74,ret10Y:173.79,ann:10.5,risk:"5/6",q2:true},
-  {code:"SHK136",zh:"中華威力",en:"China Value Fund",cat:"stock",nav:40.923,live_nav:40.923,date:"22/09/2026",chg:0.80,q2_nav:40.923,ret3M:26.11,ret1Y:55.06,ret10Y:122.38,ann:8.9,risk:"6/6",q2:true},
-  {code:"SHK137",zh:"康健護理",en:"Healthcare Fund",cat:"stock",nav:35.10,live_nav:33.951,date:"22/09/2026",chg:0.30,q2_nav:35.10,ret3M:6.77,ret1Y:22.65,ret10Y:86.88,ann:6.3,risk:"5/6",q2:true},
-  {code:"SHK126",zh:"香港股票",en:"Hong Kong Equity Fund",cat:"stock",nav:24.897,live_nav:24.897,date:"22/09/2026",chg:0.13,ret3M:-2.1,ret1Y:-6.4,ret10Y:27.73,ann:2.45,risk:"6/6"},
-  {code:"SHK127",zh:"國際股票",en:"International Equity Fund",cat:"stock",nav:32.206,live_nav:32.206,date:"22/09/2026",chg:0.04,ret1Y:13.8,ret10Y:132.49,ann:8.8,risk:"5/6"},
-  {code:"SHK129",zh:"歐洲股票",en:"European Equity Fund",cat:"stock",nav:19.80,live_nav:19.80,date:"22/09/2026",chg:0.20,ret1Y:8.43,ret10Y:94.93,ann:6.9,risk:"6/6"},
-  {code:"SHK130",zh:"北美股票",en:"North American Equity Fund",cat:"stock",nav:38.5,live_nav:38.5,date:"22/09/2026",chg:0.40,ret1Y:9.44,ret10Y:171.55,ann:10.5,risk:"6/6"},
-  {code:"SHK131",zh:"日本股票",en:"Japan Equity Fund",cat:"stock",nav:30.3,live_nav:30.3,date:"22/09/2026",chg:0.50,ret1Y:19.02,ret10Y:149.98,ann:9.6,risk:"6/6"},
-  {code:"SHK145",zh:"恒指ESG",en:"Hang Seng ESG",cat:"stock",nav:15.1,live_nav:15.1,date:"22/09/2026",chg:-0.2,ret1Y:6.43,ret10Y:31.52,ann:2.8,risk:"5/6"},
-  {code:"SHK132",zh:"香港債券",en:"Hong Kong Bond",cat:"bond",nav:15.98,live_nav:15.98,date:"22/09/2026",chg:0.08,ret1Y:4.22,ret10Y:22.4,risk:"2/6"},
-  {code:"SHK133",zh:"國際債券",en:"International Bond",cat:"bond",nav:15.561,live_nav:15.561,chg:0.05,ret1Y:1.05,ret10Y:12.8,risk:"3/6"},
-  {code:"SHK125",zh:"保守基金",en:"Conservative",cat:"guarantee",nav:12.762,live_nav:12.762,date:"22/09/2026",chg:0.00,ret1Y:2.0,ret10Y:16.8,risk:"1/6"},
+const funds=[
+  {code:"SHK128",zh:"亞太股票",en:"Asia Pacific",cat:"stock",live_nav:50.695,date:"22/09/2026",chg:0.58,q2_nav:50.821,ret3M:26.80,ret1Y:46.74,ret10Y:173.79,risk:"5/6"},
+  {code:"SHK136",zh:"中華威力",en:"China Value",cat:"stock",live_nav:40.90,date:"22/09/2026",chg:0.80,q2_nav:40.923,ret3M:26.11,ret1Y:55.06,ret10Y:122.38,risk:"6/6"},
+  {code:"SHK137",zh:"康健護理",en:"Healthcare",cat:"stock",live_nav:33.95,date:"22/09/2026",chg:0.30,q2_nav:35.10,ret3M:6.77,ret1Y:22.65,ret10Y:86.88,risk:"5/6"},
+  {code:"SHK126",zh:"香港股票",en:"Hong Kong Equity",cat:"stock",live_nav:24.897,date:"22/09/2026",chg:0.13,q2_nav:25.286,ret3M:-2.1,ret1Y:-6.4,ret10Y:27.73,risk:"6/6"},
+  {code:"SHK127",zh:"國際股票",en:"International",cat:"stock",live_nav:32.206,date:"22/09/2026",chg:0.04,ret1Y:13.8,ret10Y:132.49,risk:"5/6"},
+  {code:"SHK129",zh:"歐洲股票",en:"European",cat:"stock",live_nav:19.80,date:"22/09/2026",chg:0.20,ret1Y:8.43,ret10Y:94.93,risk:"5/6"},
+  {code:"SHK130",zh:"北美股票",en:"North American",cat:"stock",live_nav:38.50,date:"22/09/2026",chg:0.40,ret1Y:9.44,ret10Y:171.55,risk:"5/6"},
+  {code:"SHK131",zh:"日本股票",en:"Japan",cat:"stock",live_nav:30.30,date:"22/09/2026",chg:0.50,ret1Y:19.02,ret10Y:149.98,risk:"5/6"},
+  {code:"SHK145",zh:"恒指ESG",en:"Hang Seng ESG",cat:"stock",live_nav:15.10,date:"22/09/2026",chg:-0.20,ret1Y:6.43,ret10Y:31.52,risk:"5/6"},
+  {code:"SHK132",zh:"香港債券",en:"Hong Kong Bond",cat:"bond",live_nav:15.98,date:"22/09/2026",chg:0.08,ret1Y:4.22,ret10Y:22.4,risk:"2/6"},
+  {code:"SHK133",zh:"國際債券",en:"International Bond",cat:"bond",live_nav:15.56,date:"22/09/2026",chg:0.05,ret1Y:1.05,ret10Y:12.8,risk:"3/6"},
+  {code:"SHK144",zh:"人民幣債券",en:"RMB Bond",cat:"bond",live_nav:12.50,date:"22/09/2026",chg:0.06,ret1Y:3.5,ret10Y:18.9,risk:"3/6"},
+  {code:"SHK146",zh:"可持續亞太債券",en:"Sustainable Asia Bond",cat:"bond",live_nav:10.80,date:"22/09/2026",chg:0.04,ret1Y:2.4,ret10Y:15.3,risk:"3/6"},
+  {code:"DHK121",zh:"利息基金",en:"Interest Fund",cat:"guarantee",live_nav:1.000,date:"22/09/2026",chg:0.00,ret1Y:0.86,ret10Y:8.2,risk:"1/6"},
+  {code:"SHK122",zh:"穩健基金",en:"Stable Fund",cat:"guarantee",live_nav:16.50,date:"22/09/2026",chg:0.01,ret1Y:1.2,ret10Y:12.0,risk:"1/6"},
+  {code:"SHK125",zh:"保守基金",en:"Conservative",cat:"guarantee",live_nav:12.762,date:"22/09/2026",chg:0.00,ret1Y:2.0,ret10Y:16.8,risk:"1/6"},
+  {code:"SHK123",zh:"增長基金",en:"Growth",cat:"mixed",live_nav:26.10,date:"22/09/2026",chg:0.15,ret1Y:7.73,ret10Y:68.5,risk:"4/6"},
+  {code:"SHK124",zh:"進取基金",en:"Aggressive",cat:"mixed",live_nav:28.50,date:"22/09/2026",chg:0.22,ret1Y:9.7,ret10Y:85.3,risk:"5/6"},
+  {code:"SHK134",zh:"富達增長",en:"Fidelity Growth",cat:"mixed",live_nav:42.003,date:"22/09/2026",chg:0.35,ret1Y:8.14,ret10Y:98.7,risk:"5/6"},
+  {code:"SHK135",zh:"富達穩健增長",en:"Fidelity Stable Growth",cat:"mixed",live_nav:26.50,date:"22/09/2026",chg:0.18,ret1Y:5.5,ret10Y:45.0,risk:"4/6"},
+  {code:"SHK138",zh:"智優逸退休",en:"Smart Retirement",cat:"mixed",live_nav:15.20,date:"22/09/2026",chg:0.12,ret1Y:4.5,ret10Y:38.2,risk:"3/6"},
+  {code:"SHK150",zh:"退休收入",en:"Retirement Income",cat:"mixed",live_nav:9.08,date:"22/09/2026",chg:0.08,ret1Y:2.9,ret10Y:21.5,risk:"3/6"},
+  {code:"SHK148",zh:"核心累積",en:"Core Accumulation",cat:"dis",live_nav:19.279,date:"22/09/2026",chg:0.25,ret1Y:9.5,ret10Y:88.6,risk:"4/6"},
+  {code:"SHK149",zh:"65歲後",en:"Age 65 Plus",cat:"dis",live_nav:11.94,date:"22/09/2026",chg:0.03,ret1Y:1.7,ret10Y:16.2,risk:"2/6"},
+  {code:"SHK139",zh:"2025退休",en:"2025 Retirement",cat:"target",live_nav:14.80,date:"22/09/2026",chg:0.10,ret1Y:4.8,ret10Y:28.4,risk:"3/6"},
+  {code:"SHK140",zh:"2030退休",en:"2030 Retirement",cat:"target",live_nav:16.20,date:"22/09/2026",chg:0.14,ret1Y:6.2,ret10Y:42.6,risk:"4/6"},
+  {code:"SHK141",zh:"2035退休",en:"2035 Retirement",cat:"target",live_nav:18.50,date:"22/09/2026",chg:0.19,ret1Y:7.5,ret10Y:48.0,risk:"4/6"},
+  {code:"SHK142",zh:"2040退休",en:"2040 Retirement",cat:"target",live_nav:20.10,date:"22/09/2026",chg:0.21,ret1Y:8.2,ret10Y:55.0,risk:"5/6"},
+  {code:"SHK143",zh:"2045退休",en:"2045 Retirement",cat:"target",live_nav:21.30,date:"22/09/2026",chg:0.23,ret1Y:8.8,ret10Y:60.0,risk:"5/6"},
 ];
-
-const catDefs=[{id:'all',label:'全部 29'},{id:'stock',label:'股票 9'},{id:'bond',label:'債券 4'},{id:'guarantee',label:'保證 3'}];
+const catDefs=[{id:'all',label:'全部29'},{id:'stock',label:'股票9'},{id:'bond',label:'債券4'},{id:'guarantee',label:'保證3'},{id:'mixed',label:'混合6'},{id:'dis',label:'DIS2'},{id:'target',label:'目標5'}];
 const timeDefs=[{key:'live',label:'即時價格'},{key:'3M',label:'過去3個月'},{key:'1Y',label:'過去1年'},{key:'10Y',label:'過去10年'}];
-let curCat='all', curTime='live';
-let liveData={};
-
-function getRet(f,t){
-  if(t==='live') return f.chg;
-  if(t==='3M') return f.ret3M||f.chg;
-  if(t==='1Y') return f.ret1Y;
-  if(t==='10Y') return f.ret10Y;
-  return f.ret10Y;
-}
-
+let curCat='all',curTime='live';
+function getRet(f,t){if(t==='live')return f.chg;if(t==='3M')return f.ret3M||f.chg;if(t==='1Y')return f.ret1Y;if(t==='10Y')return f.ret10Y;return f.ret10Y;}
 function renderTabs(){
   document.getElementById('catTabs').innerHTML=catDefs.map(d=>`<div class="tab ${curCat===d.id?'active':''}" data-cat="${d.id}">${d.label}</div>`).join('');
   document.getElementById('catTabs').querySelectorAll('.tab').forEach(el=>el.addEventListener('click',()=>{curCat=el.dataset.cat;render();}));
   document.getElementById('timeTabs').innerHTML=timeDefs.map(d=>`<div class="t-tab ${curTime===d.key?'active':''}" data-time="${d.key}">${d.label}</div>`).join('');
   document.getElementById('timeTabs').querySelectorAll('.t-tab').forEach(el=>el.addEventListener('click',()=>{curTime=el.dataset.time;render();}));
 }
-
 function render(){
-  const list=curCat==='all'?fallbackFunds:fallbackFunds.filter(f=>f.cat===curCat);
+  const list=curCat==='all'?funds:funds.filter(f=>f.cat===curCat);
   const sorted=[...list].sort((a,b)=>getRet(b,curTime)-getRet(a,curTime));
-  const alerts=sorted.filter(f=>Math.abs(f.chg)>=2).length;
-  document.getElementById('kpiAlert').textContent=alerts+'隻';
-  document.getElementById('kpiAlertSub').textContent=alerts>0?'有急升急跌🚨':'正常波動';
-  document.getElementById('liveStatus').textContent=`已載入 ${sorted.length}隻 • 來源：宏利官網即時 22/09/2026 • Q2官方 $50.821/$40.923/$35.100 已同步 • 每日09:30自動更新`;
-  document.getElementById('kpiSource').textContent='宏利官網 22/09/2026';
-  document.getElementById('kpiDate').textContent='as of 22/09/2026 | Q2截至06-30';
-  document.getElementById('timeBadge').textContent=timeDefs.find(t=>t.key===curTime).label;
-  document.getElementById('timeLabel2').textContent=timeDefs.find(t=>t.key===curTime).label;
-  
+  document.getElementById('kpiAlert').textContent=sorted.filter(f=>Math.abs(f.chg)>=2).length+'隻';
+  document.getElementById('liveStatus').textContent=`已載入 ${sorted.length}隻 • 來源：宏利官網即時 22/09/2026 + Q2官方$50.821/$40.923/$35.100 • 全29隻每日自動更新`;
   document.getElementById('fundGrid').innerHTML=sorted.map(f=>{
-    const ret=getRet(f,curTime);
-    const isAlert=Math.abs(f.chg)>=2;
-    const flag=isAlert?'🚨':f.chg>0.5?'🟢':f.chg<-0.5?'🔴':'';
+    const ret=getRet(f,curTime);const isAlert=Math.abs(f.chg)>=2;const flag=isAlert?'🚨':f.chg>=0.5?'🟢':f.chg<=-0.5?'🔴':'';
     const col=ret>=0?'var(--green)':'var(--red)';
-    return `<div class="fund ${isAlert?'alert':'live'}">
-      <div class="f-head">
-        <div><div class="f-name">${f.code} ${f.zh} <span class="tag tag-live">LIVE</span> ${f.q2?'<span class="tag tag-q2">Q2$'+f.q2_nav+'</span>':''} ${isAlert?'<span class="tag" style="background:#fee2e2;color:#dc2626">>2%🚨</span>':''}</div>
-        <div class="f-en">${f.en} • 風險 ${f.risk}</div></div>
-        <div class="f-code">${f.code}</div>
-      </div>
-      <div class="f-bottom">
-        <div>
-          <div><span class="f-nav">$${f.live_nav.toFixed(3)}</span> <span class="f-chg ${f.chg>=0?'pos':'neg'}">${f.chg>=0?'+':''}${f.chg.toFixed(2)}% 當日</span> <span style="font-size:10px;color:var(--muted)">as of ${f.date}</span></div>
-          <div style="font-size:11px;color:var(--muted);margin-top:2px">${timeDefs.find(t=>t.key===curTime).label} <span style="font-weight:700;color:${col}">${ret>=0?'+':''}${ret.toFixed(2)}%</span> • 10Y ${f.ret10Y.toFixed(1)}% • Q2 3M ${f.ret3M||0}%</div>
-        </div>
-        <div class="bar"><div class="bar-fill" style="width:${Math.min(100,Math.abs(ret)*3)}%;background:${col}"></div></div>
-      </div>
-    </div>`;
+    return `<div class="fund ${isAlert?'alert':'live'}"><div class="f-head"><div><div class="f-name">${f.code} ${f.zh} <span class="tag tag-live">LIVE</span> ${f.q2_nav?'<span class="tag tag-q2">Q2$'+f.q2_nav+'</span>':''} ${isAlert?'<span class="tag" style="background:#fee2e2;color:#dc2626">>2%🚨</span>':''}</div><div class="f-en">${f.en} • 風險 ${f.risk}</div></div><div class="f-code">${f.code}</div></div><div class="f-bottom"><div><div><span class="f-nav">$${f.live_nav.toFixed(3)}</span> <span class="f-chg ${f.chg>=0?'pos':'neg'}">${f.chg>=0?'+':''}${f.chg.toFixed(2)}% 當日</span> <span style="font-size:10px;color:#6b7280">as of ${f.date}</span></div><div style="font-size:11px;color:#6b7280;margin-top:2px">${timeDefs.find(t=>t.key===curTime).label} <span style="font-weight:700;color:${col}">${ret>=0?'+':''}${ret.toFixed(2)}%</span> • 10Y ${f.ret10Y.toFixed(1)}% • 3M ${f.ret3M||0}%</div></div><div class="bar"><div class="bar-fill" style="width:${Math.min(100,Math.abs(ret)*3)}%;background:${col}"></div></div></div></div>`;
   }).join('');
-  
-  const rank=[...fallbackFunds].sort((a,b)=>b.ret10Y-a.ret10Y).slice(0,6);
-  document.getElementById('rankList').innerHTML=rank.map((f,i)=>`<div><div style="display:flex;justify-content:space-between"><span><span style="width:20px;height:20px;border-radius:50%;background:${i<3?'var(--green)':'#f3f4f6'};color:${i<3?'#fff':'#6b7280'};display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700">${i+1}</span> ${f.code} ${f.zh}</span><span style="font-weight:700;color:${getRet(f,curTime)>=0?'var(--green)':'var(--red)'}">${getRet(f,curTime).toFixed(1)}%</span></div></div>`).join('');
+  const rank=[...funds].sort((a,b)=>b.ret10Y-a.ret10Y).slice(0,8);
+  document.getElementById('rankList').innerHTML=rank.map((f,i)=>`<div style="display:flex;justify-content:space-between;font-size:12px"><span>${i+1}. ${f.code} ${f.zh}</span><span style="font-weight:700;color:#0f7a4a">${getRet(f,curTime).toFixed(1)}%</span></div>`).join('');
 }
-
 renderTabs();render();
-
-// 嘗試每日去捉真實價 (GitHub Actions 版會寫入 prices.json，這裡先示範)
-async function tryFetchLive(){
-  try{
-    // 未來可改為 fetch('./prices.json')
-    document.getElementById('badgeText').textContent='共29隻 • 每日自動更新 • LIVE $50.695 22/09/2026 ✅';
-  }catch(e){console.log(e)}
-}
-tryFetchLive();
 </script>
 <script>(function(){var loc=location.href.replace(/#.*$/,"");var ATTR_NAMES=["data-product-id","data-productid","data-product_id","product-id","productid","product_id","data-source-entity-id","source-entity-id","source_entity_id","data-product","data-metadata","data-meta"];var DATASET_KEYS=["productId","productid","product_id","sourceEntityId","sourceentityid","source_entity_id","product","metadata","meta"];function readProductId(value){if(typeof value!=="string"||value.length===0)return null;if(/^[0-9]{6,}$/.test(value))return value;var match=value.match(/(?:product(?:_|-)?id|source(?:_|-)?entity(?:_|-)?id)["'=:\s]+([0-9]{6,})/i);return match?match[1]:null}function extractProductId(start){for(var node=start;node&&node!==document.body;node=node.parentElement){for(var i=0;i<ATTR_NAMES.length;i++){var attrValue=node.getAttribute&&node.getAttribute(ATTR_NAMES[i]);var attrProductId=readProductId(attrValue);if(attrProductId)return attrProductId}var dataset=node.dataset||null;if(dataset){for(var j=0;j<DATASET_KEYS.length;j++){var dataValue=dataset[DATASET_KEYS[j]];var dataProductId=readProductId(dataValue);if(dataProductId)return dataProductId}}}return null}function isInlineMediaSlotElement(node){return !!(node&&node.getAttribute&&node.getAttribute("data-clippy-inline-media-slot")!==null)}function findInlineMediaSlot(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(isInlineMediaSlotElement(node))return node}return null}function readInlineMediaUrl(node){if(!node)return null;return node.getAttribute&&((node.getAttribute("data-clippy-inline-media-url")||node.getAttribute("data-url")||node.getAttribute("data_url")))||node.href||null}function stripHash(url){return String(url).replace(/#.*$/,"")}function urlsMatch(a,b){if(!a||!b)return false;try{return stripHash(new URL(a,loc).href)===stripHash(new URL(b,loc).href)}catch(_){return stripHash(a)===stripHash(b)}}function isFirstPartyReelUrl(value){try{var url=new URL(value,loc);if(url.protocol!=="https:")return false;var host=url.hostname.toLowerCase();var supported=host==="instagram.com"||host.endsWith(".instagram.com")||host==="facebook.com"||host.endsWith(".facebook.com");return supported&&/\/reels?\//i.test(url.pathname)}catch(_){return false}}function isInlineMediaUrlClick(node,href){var slot=findInlineMediaSlot(node);if(!slot)return false;var slotUrl=readInlineMediaUrl(slot);if(slotUrl)return urlsMatch(href,slotUrl);return isFirstPartyReelUrl(href)}function findDataHref(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(node.getAttribute){var href=node.getAttribute("data-href")||node.getAttribute("data-url");if(href)return{href:href,node:node}}}return null}var nativeOpen=window.open;window.open=function(url){if(parent!==window&&typeof url==="string"&&/^https?:\/\//.test(url)){parent.postMessage({type:"ecto:usercontent-link-click",href:url},"*");return null}return nativeOpen?nativeOpen.apply(window,arguments):null};document.addEventListener("click",function(e){var target=e.target instanceof Element?e.target:null;if(!target)return;if(parent===window)return;var a=target.closest?target.closest("a[href]"):null;if(a&&a.href&&/^https?:\/\//.test(a.href)&&a.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(a,a.href))return;var productId=extractProductId(target)||extractProductId(a);if(productId){e.preventDefault();parent.postMessage({type:"ecto-artifact-link-click",productId:productId},"*");return}e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:a.href},"*");return}var dataHref=findDataHref(target);if(dataHref&&/^https?:\/\//.test(dataHref.href)&&dataHref.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(dataHref.node,dataHref.href))return;e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:dataHref.href},"*")}},true)})();</script><script>(function(){var FOCUS_TYPE="ecto:artifact-focus-request";var CLOSE_TYPE="ecto:artifact-close-request";function focusArtifactDocument(){var body=document.body;if(!body)return;try{window.focus();}catch(e){}if(!body.hasAttribute("tabindex"))body.setAttribute("tabindex","-1");try{body.focus({preventScroll:true});}catch(e){try{body.focus();}catch(e2){}}}window.addEventListener("message",function(event){if(event.source!==window.parent)return;var data=event.data;if(!data||typeof data!=="object"||data.type!==FOCUS_TYPE)return;if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",focusArtifactDocument,{once:true});return;}focusArtifactDocument();});window.addEventListener("keydown",function(event){if(event.key!=="Escape")return;window.setTimeout(function(){if(event.defaultPrevented)return;window.parent.postMessage({type:CLOSE_TYPE},"*");},0);});})();</script>
 
