@@ -714,5 +714,184 @@
         "source": "fallback"
       }
     }
+  },
+  "2026-10-27": {
+    "date": "2026-10-27",
+    "funds": {
+      "SHK125": {
+        "price": 12.762,
+        "date": "22/09/2026",
+        "chg": 0.0,
+        "source": "fallback"
+      },
+      "DHK121": {
+        "price": 1.0,
+        "date": "22/09/2026",
+        "chg": 0.0,
+        "source": "fallback"
+      },
+      "SHK122": {
+        "price": 16.5,
+        "date": "22/09/2026",
+        "chg": 0.01,
+        "source": "fallback"
+      },
+      "SHK126": {
+        "price": 24.897,
+        "date": "22/09/2026",
+        "chg": 0.13,
+        "source": "fallback"
+      },
+      "SHK127": {
+        "price": 32.206,
+        "date": "22/09/2026",
+        "chg": 0.04,
+        "source": "fallback"
+      },
+      "SHK128": {
+        "price": 50.695,
+        "date": "22/09/2026",
+        "chg": 0.58,
+        "source": "fallback"
+      },
+      "SHK129": {
+        "price": 19.8,
+        "date": "22/09/2026",
+        "chg": 0.2,
+        "source": "fallback"
+      },
+      "SHK130": {
+        "price": 38.5,
+        "date": "22/09/2026",
+        "chg": 0.4,
+        "source": "fallback"
+      },
+      "SHK131": {
+        "price": 30.3,
+        "date": "22/09/2026",
+        "chg": 0.5,
+        "source": "fallback"
+      },
+      "SHK136": {
+        "price": 40.9,
+        "date": "22/09/2026",
+        "chg": 0.8,
+        "source": "fallback"
+      },
+      "SHK137": {
+        "price": 33.95,
+        "date": "22/09/2026",
+        "chg": 0.3,
+        "source": "fallback"
+      },
+      "SHK145": {
+        "price": 15.1,
+        "date": "22/09/2026",
+        "chg": -0.2,
+        "source": "fallback"
+      },
+      "SHK132": {
+        "price": 15.98,
+        "date": "22/09/2026",
+        "chg": 0.08,
+        "source": "fallback"
+      },
+      "SHK133": {
+        "price": 15.56,
+        "date": "22/09/2026",
+        "chg": 0.05,
+        "source": "fallback"
+      },
+      "SHK144": {
+        "price": 12.5,
+        "date": "22/09/2026",
+        "chg": 0.06,
+        "source": "fallback"
+      },
+      "SHK146": {
+        "price": 10.8,
+        "date": "22/09/2026",
+        "chg": 0.04,
+        "source": "fallback"
+      },
+      "SHK123": {
+        "price": 26.1,
+        "date": "22/09/2026",
+        "chg": 0.15,
+        "source": "fallback"
+      },
+      "SHK124": {
+        "price": 28.5,
+        "date": "22/09/2026",
+        "chg": 0.22,
+        "source": "fallback"
+      },
+      "SHK134": {
+        "price": 42.003,
+        "date": "22/09/2026",
+        "chg": 0.35,
+        "source": "fallback"
+      },
+      "SHK135": {
+        "price": 26.5,
+        "date": "22/09/2026",
+        "chg": 0.18,
+        "source": "fallback"
+      },
+      "SHK138": {
+        "price": 15.2,
+        "date": "22/09/2026",
+        "chg": 0.12,
+        "source": "fallback"
+      },
+      "SHK150": {
+        "price": 9.08,
+        "date": "22/09/2026",
+        "chg": 0.08,
+        "source": "fallback"
+      },
+      "SHK148": {
+        "price": 19.279,
+        "date": "22/09/2026",
+        "chg": 0.25,
+        "source": "fallback"
+      },
+      "SHK149": {
+        "price": 11.94,
+        "date": "22/09/2026",
+        "chg": 0.03,
+        "source": "fallback"
+      },
+      "SHK139": {
+        "price": 14.8,
+        "date": "22/09/2026",
+        "chg": 0.1,
+        "source": "fallback"
+      },
+      "SHK140": {
+        "price": 16.2,
+        "date": "22/09/2026",
+        "chg": 0.14,
+        "source": "fallback"
+      },
+      "SHK141": {
+        "price": 18.5,
+        "date": "22/09/2026",
+        "chg": 0.19,
+        "source": "fallback"
+      },
+      "SHK142": {
+        "price": 20.1,
+        "date": "22/09/2026",
+        "chg": 0.21,
+        "source": "fallback"
+      },
+      "SHK143": {
+        "price": 21.3,
+        "date": "22/09/2026",
+        "chg": 0.23,
+        "source": "fallback"
+      }
+    }
   }
 }
