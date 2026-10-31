@@ -123,3 +123,4 @@ if __name__ == "__main__":
         print(f"Mode: HOURLY at {now_str}")
         send_hourly()
 
+
