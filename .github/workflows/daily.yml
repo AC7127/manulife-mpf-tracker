@@ -1,9 +1,9 @@
-name: 宏利強積金每日監控 + NBA完整板 (單檔版 - 已修復)
+name: 宏利強積金每日監控 + NBA完整板 (單檔版 - 修復2)
 
 on:
   schedule:
-    - cron: '30 1 * * *' # 每日 09:30 HKT - 詳細戰績榜+詳細新聞
-    - cron: '0 * * * *'  # 每小時 - 每場戰況
+    - cron: '30 1 * * *'
+    - cron: '0 * * * *'
   workflow_dispatch:
 
 jobs:
@@ -13,8 +13,6 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
@@ -36,19 +34,32 @@ jobs:
           python-version: '3.11'
       - name: Install deps
         run: pip install requests
-      - name: Run NBA Complete Bot - 單檔版 (自動判斷每日/每小時)
+      - name: Debug files
         run: |
-          ls -lh *.py
+          pwd
+          ls -lh
+          ls -lh *.py || echo "no py in root"
+          find . -maxdepth 2 -name "*.py" -ls
+      - name: Run NBA Complete Bot - 單檔版
+        run: |
           echo "Event: ${{ github.event_name }} Schedule: '${{ github.event.schedule }}'"
+          FILE="nba_complete_bot.py"
+          if [ ! -f "$FILE" ]; then
+            echo "File $FILE not found in root, searching..."
+            FOUND=$(find . -name "nba_complete_bot.py" | head -1)
+            echo "Found: $FOUND"
+            FILE="$FOUND"
+          fi
+          echo "Using file: $FILE"
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            echo "Manual -> DAILY mode (完整榜+詳細新聞)"
-            NBA_MODE=daily python nba_complete_bot.py daily
+            echo "Manual -> DAILY"
+            NBA_MODE=daily python3 "$FILE" daily
           elif [ "${{ github.event.schedule }}" = "30 1 * * *" ]; then
-            echo "Daily cron -> DAILY mode"
-            NBA_MODE=daily python nba_complete_bot.py daily
+            echo "Daily cron -> DAILY"
+            NBA_MODE=daily python3 "$FILE" daily
           else
-            echo "Hourly cron -> HOURLY mode (即時戰況)"
-            NBA_MODE=hourly python nba_complete_bot.py hourly
+            echo "Hourly cron -> HOURLY"
+            NBA_MODE=hourly python3 "$FILE" hourly
           fi
         env:
           NBA_BOT_TOKEN: ${{ secrets.NBA_BOT_TOKEN }}
