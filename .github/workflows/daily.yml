@@ -1,4 +1,4 @@
-name: 宏利強積金每日監控 + NBA完整板 (單檔版)
+name: 宏利強積金每日監控 + NBA完整板 (單檔版 - 已修復)
 
 on:
   schedule:
@@ -20,8 +20,8 @@ jobs:
           python-version: '3.11'
       - name: Install deps
         run: pip install requests
-      - name: Run MPF Bot (只在 09:30)
-        if: github.event.schedule == '30 1 * * *' || github.event_name == 'workflow_dispatch'
+      - name: Run MPF Bot (只在 09:30 / 手動)
+        if: github.event_name == 'workflow_dispatch' || github.event.schedule == '30 1 * * *'
         run: python mpf_x5f_bot.py
         env:
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
@@ -36,11 +36,18 @@ jobs:
           python-version: '3.11'
       - name: Install deps
         run: pip install requests
-      - name: Run NBA Complete Bot - 每日09:30詳細榜+新聞 / 每小時戰況 (單檔)
+      - name: Run NBA Complete Bot - 單檔版 (自動判斷每日/每小時)
         run: |
-          if [ "${{ github.event.schedule }}" = "30 1 * * *" ]; then
+          ls -lh *.py
+          echo "Event: ${{ github.event_name }} Schedule: '${{ github.event.schedule }}'"
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "Manual -> DAILY mode (完整榜+詳細新聞)"
+            NBA_MODE=daily python nba_complete_bot.py daily
+          elif [ "${{ github.event.schedule }}" = "30 1 * * *" ]; then
+            echo "Daily cron -> DAILY mode"
             NBA_MODE=daily python nba_complete_bot.py daily
           else
+            echo "Hourly cron -> HOURLY mode (即時戰況)"
             NBA_MODE=hourly python nba_complete_bot.py hourly
           fi
         env:
