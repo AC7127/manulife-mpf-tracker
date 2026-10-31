@@ -1,8 +1,9 @@
-name: 宏利強積金每日監控 V9.1修復版 + NBA雷霆版 (每小時推送)
+name: 宏利強積金每日監控 V9.1修復版 + NBA (09:30日榜+每小時即時)
+
 on:
   schedule:
-    - cron: '30 1 * * *' # 每日 09:30 HKT - MPF + NBA 日報
-    - cron: '0 * * * *'  # 每小時 - NBA 即時戰況同步 Meta AI
+    - cron: '30 1 * * *' # 每日 09:30 HKT - MPF + NBA 完整榜+詳細新聞
+    - cron: '0 * * * *'  # 每小時 - NBA 即時戰況
   workflow_dispatch:
 
 jobs:
@@ -25,12 +26,13 @@ jobs:
         env:
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
           CHAT_ID: ${{ secrets.CHAT_ID }}
-      - name: Run NBA Thunder Bot (每小時 + 每日)
+      - name: Run NBA Daily - 完整30隊榜+詳細新聞 (只在 09:30 跑)
+        if: github.event.schedule == '30 1 * * *' || github.event_name == 'workflow_dispatch'
         run: python nba_thunder_bot.py
         env:
           NBA_BOT_TOKEN: ${{ secrets.NBA_BOT_TOKEN }}
           NBA_CHAT_ID: ${{ secrets.NBA_CHAT_ID }}
-      - name: Commit json (allow fail)
+      - name: Commit json (只在 09:30)
         if: github.event.schedule == '30 1 * * *' || github.event_name == 'workflow_dispatch'
         run: |
           git config user.name "MPF Bot V9.1 + NBA Bot"
@@ -38,4 +40,20 @@ jobs:
           git add prices.json price_history.json || echo "no json"
           git diff --staged --quiet && echo "no changes" && exit 0
           git commit -m "auto V9.1: $(date +%Y-%m-%d)" || echo "commit fail"
-          git push || echo "push fail - maybe no permission, but bot already sent"
+          git push || echo "push fail"
+
+  nba-live-hourly:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch' || github.event.schedule == '0 * * * *' || github.event.schedule == '30 1 * * *'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install deps
+        run: pip install requests
+      - name: Run NBA Live - 即時戰況 (每小時)
+        run: python nba_live_bot.py
+        env:
+          NBA_BOT_TOKEN: ${{ secrets.NBA_BOT_TOKEN }}
+          NBA_CHAT_ID: ${{ secrets.NBA_CHAT_ID }}
