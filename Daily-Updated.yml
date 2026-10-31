@@ -1,0 +1,38 @@
+name: 宏利強積金每日監控 V9.1修復版 + NBA雷霆版
+on:
+  schedule:
+    - cron: '30 1 * * *' # Runs at 01:30 -> 09:30 HKT
+  workflow_dispatch:
+
+jobs:
+  mpf-daily:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install deps
+        run: pip install requests
+      - name: Run bot
+        run: python mpf_x5f_bot.py
+        env:
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+          CHAT_ID: ${{ secrets.CHAT_ID }}
+      - name: Run NBA Thunder Bot
+        run: python nba_thunder_bot.py
+        env:
+          NBA_BOT_TOKEN: ${{ secrets.NBA_BOT_TOKEN }}
+          NBA_CHAT_ID: ${{ secrets.NBA_CHAT_ID }}
+      - name: Commit json (allow fail)
+        run: |
+          git config user.name "MPF Bot V9.1 + NBA Bot"
+          git config user.email "bot-v91@mpf.local"
+          git add prices.json price_history.json || echo "no json"
+          git diff --staged --quiet && echo "no changes" && exit 0
+          git commit -m "auto V9.1: $(date +%Y-%m-%d)" || echo "commit fail"
+          git push || echo "push fail - maybe no permission, but bot already sent"
