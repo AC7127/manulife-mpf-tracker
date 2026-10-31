@@ -1,4 +1,3 @@
-import os
 import sys
 import requests
 from datetime import datetime, timezone, timedelta
@@ -123,3 +122,4 @@ if __name__ == "__main__":
     else:
         print(f"Mode: HOURLY at {now_str}")
         send_hourly()
+
