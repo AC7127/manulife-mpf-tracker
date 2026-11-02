@@ -1,9 +1,8 @@
-name: 宏利強積金每日監控 + NBA完整板 (單檔版 - 修復3)
+name: 宏利強積金每日監控 + NBA完整板 (已暫停每小時)
 
 on:
   schedule:
-    - cron: '30 1 * * *' # 每日 09:30 HKT - 詳細戰績榜+詳細新聞
-    - cron: '0 * * * *'  # 每小時 - 每場戰況
+    - cron: '30 1 * * *' # 每日 09:30 HKT - 詳細戰績榜+詳細新聞 (已暫停每小時)
   workflow_dispatch:
 
 jobs:
@@ -20,8 +19,7 @@ jobs:
           python-version: '3.11'
       - name: Install deps
         run: pip install requests
-      - name: Run MPF Bot (只在 09:30 或手動)
-        if: github.event_name == 'workflow_dispatch' || github.event.schedule == '30 1 * * *'
+      - name: Run MPF Bot (09:30 或手動)
         run: python mpf_x5f_bot.py
         env:
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
@@ -36,22 +34,10 @@ jobs:
           python-version: '3.11'
       - name: Install deps
         run: pip install requests
-      - name: Debug files and time
+      - name: Run NBA Complete Bot - 每日09:30完整版 (已暫停每小時)
         run: |
-          pwd
-          ls -lh *.py || true
-          echo "Event: ${{ github.event_name }} Schedule: '${{ github.event.schedule }}' Time UTC: $(date -u) HKT: $(TZ='Asia/Hong_Kong' date)"
-      - name: Run NBA Complete Bot - 09:30完整版 / 每小時即時 (單檔)
-        run: |
-          # 每日 09:30 或 手動觸發 = DAILY (完整榜+詳細新聞)
-          # 每小時 0分 = HOURLY (即時戰況)
-          if [ "${{ github.event_name }}" = "workflow_dispatch" ] || [ "${{ github.event.schedule }}" = "30 1 * * *" ]; then
-            echo ">>> DAILY mode - 09:30 完整30隊榜+詳細新聞"
-            NBA_MODE=daily python3 nba_complete_bot.py daily
-          else
-            echo ">>> HOURLY mode - 每小時即時戰況"
-            NBA_MODE=hourly python3 nba_complete_bot.py hourly
-          fi
+          echo ">>> DAILY mode - 09:30 完整30隊榜+詳細新聞 (每小時已暫停)"
+          NBA_MODE=daily python3 nba_complete_bot.py daily
         env:
           NBA_BOT_TOKEN: ${{ secrets.NBA_BOT_TOKEN }}
           NBA_CHAT_ID: ${{ secrets.NBA_CHAT_ID }}
