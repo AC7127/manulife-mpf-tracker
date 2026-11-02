@@ -25,7 +25,7 @@ HKT = timezone(timedelta(hours=8))
 now_hkt = datetime.now(HKT)
 now_str = now_hkt.strftime('%Y-%m-%d %H:%M HKT')
 
-# ===== 詳細戰績榜 =====
+# ===== 詳細戰績榜 - 全繁體 =====
 STANDINGS = f"""
 🏀 *2026-27 NBA 完整30隊詳細戰績榜 (7-15詳細)* - {now_str}
 
@@ -49,50 +49,50 @@ STANDINGS = f"""
 *西岸 1-15詳細:*
 1. Houston Rockets 5-0 1.000 GB0 H2-0 A3-0 L10 5-0 W5
 2. Memphis Grizzlies 5-0 1.000 GB0 H1-0 A4-0 L10 5-0 W5 | 西南第1 5場5-0 100% W5
-3. OKC Thunder 4-1 .800 GB1 H3-0 A1-1 L10 4-1 L1 | 西北組第1 5場4-1 80% L1 | 西岸第3
-4. LA Lakers 4-1 .800 GB1 H2-1 A2-0 L10 4-1 W1 | 6場4-2 66.7% L1
-5. Portland Trail Blazers 3-1 .750 GB1.5 H1-1 A2-0 L10 3-1 L1 | 4場3-1 75% L1
-6. San Antonio Spurs 3-2 .600 GB2 H1-2 A2-0 L10 3-2 W3 | 5場3-2 60% W3
-7. Dallas Mavericks 3-2 .600 GB2 H1-1 A2-1 L10 3-2 W2 | 6場4-2 66.7% W3
-8. Minnesota Timberwolves 3-2 .600 GB2 H1-1 A2-1 L10 3-2 L2 | 6場4-2 66.7% W1
-9. Denver Nuggets 2-2 .500 GB2.5 H1-1 A1-1 L10 2-2 W1 | 5場3-2 60% W2
-10. Golden State Warriors 2-3 .400 GB3 H0-1 A2-2 L10 2-3 W2 | 6場3-3 50% W3
-11. Phoenix Suns 1-2 .333 GB3 H1-0 A0-2 L10 1-2 L1 | 4場1-3 25% L2
-12. LA Clippers 1-3 .250 GB3.5 H1-1 A0-2 L10 1-3 L3 | 5場1-4 20% L4
-13. Utah Jazz 1-4 .200 GB4 H1-3 A0-1 L10 1-4 L3 | 5場1-4 20% L3
-14. New Orleans Pelicans 1-4 .200 GB4 H1-2 A0-2 L10 1-4 W1 | 5場1-4 20% W1
-15. Sacramento Kings 0-5 .000 GB5 H0-2 A0-3 L10 0-5 L5 | 5場0-5 0% L5
+3. OKC Thunder 4-2 .667 GB1 H3-0 A1-2 L10 4-2 L2 | 西北組第2 6場4-2 66.7% L2 | 西岸第7
+4. LA Lakers 5-2 .714 GB1 H3-1 A2-1 L10 5-2 W1 | 7場5-2 71.4% W1
+5. Portland Trail Blazers 4-1 .800 GB1 H2-1 A2-0 L10 4-1 W1 | 5場4-1 80% W1
+6. San Antonio Spurs 4-2 .667 GB1.5 H2-2 A2-0 L10 4-2 W1 | 6場4-2 66.7% W1
+7. Golden State Warriors 4-3 .571 GB2 H1-1 A3-2 L10 4-3 W4 | 7場4-3 57.1%
+8. Dallas Mavericks 4-2 .667 GB1.5 H2-1 A2-1 L10 4-2 W1 | 6場4-2 66.7% W1
+9. Denver Nuggets 3-2 .600 GB2 H1-1 A2-1 L10 3-2 W1 | 5場3-2 60% W1
+10. Minnesota Timberwolves 4-3 .571 GB2 H2-1 A2-2 L10 4-3 L1 | 7場4-3 57.1%
+11. Phoenix Suns 2-3 .400 GB3 H1-0 A1-3 L10 2-3 L1 | 5場2-3 40% L1
+12. LA Clippers 1-4 .200 GB4 H1-1 A0-3 L10 1-4 L1 | 5場1-4 20% L1
+13. Utah Jazz 1-5 .167 GB4.5 H1-3 A0-2 L10 1-5 L4 | 6場1-5 16.7% L4
+14. New Orleans Pelicans 2-4 .333 GB3.5 H2-2 A0-2 L10 2-4 W1 | 6場2-4 33.3% W1
+15. Sacramento Kings 0-6 .000 GB5.5 H0-2 A0-4 L10 0-6 L6 | 6場0-6 0% L6
 """
 
 NEWS = f"""
-📰 *NBA 30隊詳細新聞報道 + 每日戰果* - {now_str}
+📰 *NBA 30隊詳細新聞報導 + 每日戰果* - {now_str}
 
-📊 *昨日戰果 10/30-31*:
-Miami 145-125 Pacers | GSW 112-95 Lakers | Denver 127-120 Suns | Minnesota 127-101 Clippers | Washington 95-79 Hornets | Boston 125-111 Bulls | Detroit 110-94 Nets | 76ers 98-93 Knicks (LeBron 20/9/8) | Magic 121-114 Raptors | Dallas 116-111 Rockets | Jazz vs Blazers Live
+📊 *昨日戰果 11/01-11/02*:
+火箭 119-98 雷霆 (火箭6-0大勝) | 灰熊 136-105 國王 (灰熊6-0) | 拓荒者 112-90 爵士 | 76人 109-104 黃蜂 (Maxey 38分) | 鵜鶘 121-99 鷹隊 | 馬刺 121-111 灰狼 (Wemby 43分6阻攻) | 騎士 136-111 公鹿 | 賽爾提克 108-97 魔術 (綠軍5-1) | 籃網 98-90 溜馬 (籃網首勝) | 勇士 124-112 快艇 (新秀Lendeborg 37分) | 湖人 131-125 暴龍 (Doncic 45分15籃板)
 
-⚡ *雷霆重點 4-1*:
-• Jalen Williams 左腓骨骨折+脫臼手術成功賽季報銷25歲
+⚡ *雷霆重點 4-2*:
+• Jalen Williams 左腓骨骨折+腳踝脫臼手術成功賽季報銷25歲
 • Cason Wallace 左肩盂唇撕裂待手術
-• Chet Holmgren 右膝髕腱小撕裂生物治療缺8-10週
-• 已簽 Ochai Agbaji，傳目標 Herb Jones / Trey Murphy III
+• Chet Holmgren 右膝髕腱小撕裂生物治療缺席8-10週
+• 已簽下 Ochai Agbaji，傳目標 Herb Jones / Trey Murphy III
+• 昨日作客火箭大敗吞下2連敗，SGA 26分領軍
 
-*東岸詳細*: 76ers Brown 左髕腱病變缺陣；Hawks Gueye 腳骨折3-4月，Veesaar ACL報銷，Daniels 3.0抄截領先；Cavs Tyson 右踝扭傷；Knicks Towns 13.8板；Wizards Young 61助攻領先；Heat Giannis加盟後1-4；Nets 0-4。
+*東岸詳細*: 76人 Brown 左髕腱病變缺陣，Maxey得分王；鷹隊 Gueye 腳部骨折3-4個月，Veesaar ACL報銷，Daniels 3.0抄截領先聯盟；騎士 Tyson 右踝扭傷；尼克 Towns 13.8籃板；巫師 Young 61助攻領先；熱火 Giannis加盟後1-4掙扎；籃網1-5首勝。
 
-*西岸詳細*: Rockets 5-0無傷；Grizzlies 5-0挑戰6-0對Kings；Blazers Morant 二級拉傷缺4週；Jazz Markkanen 右腕成疑；Spurs Wembanyama 19阻攻聯盟第1場均3.8；Wolves Edwards缺陣Gobert 12.2板；Lakers Doncic 36分領先5.2三分；Pelicans Zion 3.2抄截第1但1-4；Kings Sabonis 16.2板但0-5；傷病潮108人84人缺陣。
+*西岸詳細*: 火箭6-0無傷病，Jabari Smith 30分+Smart 24分大勝雷霆；灰熊6-0挑戰7連勝對鵜鶘；拓荒者 Morant 二級拉傷缺陣4週；爵士 Markkanen 右腕成疑；馬刺 Wembanyama 19阻攻聯盟第1場均3.8阻攻；灰狼 Edwards缺陣Gobert 12.2籃板；湖人 Doncic 36分領先得分榜5.2三分；鵜鶘 Zion 3.2抄截聯盟第1但1-4；國王 Sabonis 16.2籃板但0-6墊底；聯盟傷病潮108人84人缺陣。
 """
 
 HOURLY = f"""
 ⚡ *NBA 每小時戰況更新* - {now_str}
 
-• 雷霆: 4-1 .800 西北組第1 西岸第3 | 下場 Rockets vs Thunder 今日 08:30 HKT @ Toyota Center | SGA 場均約26分領軍 | 暫無進行中，賽前準備
-• 今早7場: Jazz vs Blazers Live, Hornets vs 76ers 06:00, Pelicans vs Hawks 07:00, Grizzlies vs Kings 08:00, Bucks vs Cavs 08:00, Spurs vs Wolves 08:00, Rockets vs Thunder 08:30
-• 昨日最終: GSW 112-95 Lakers, Denver 127-120 Suns, Dallas 116-111 Rockets, Miami 145-125 Pacers等
+• 雷霆: 4-2 .667 西北組第2 西岸第7 | 下場 Cavs vs Thunder 明早 08:00 HKT @ Rocket Arena | SGA 場均約26分領軍 | 昨日98-119大敗火箭吞2連敗
+• 今晚焦點: Magic @ Celtics 已完 97-108，Nets @ Pacers 已完 98-90，Warriors @ Clippers 已完 124-112，Lakers @ Raptors 已完 131-125
+• 明早焦點: 雷霆 @ 騎士 08:00 HKT 爭取止連敗
 
 完整30隊詳細榜+詳細新聞 每日 09:30 HKT 推送
 """
 
 def send_daily():
-    # Requirement 1: 每日 0930 詳細戰績榜+詳細新聞 (分兩次)
     push1 = f"🏀 *NBA 每日 09:30 - Push 1/2 - 完整30隊詳細戰績榜 (7-15詳細)* - {now_str}\n{STANDINGS}"
     send_split(push1, "完整戰績榜")
     time.sleep(2)
@@ -103,23 +103,20 @@ def send_daily():
     except:
         pass
     send_split(push2, "詳細新聞")
-    print("Daily done")
+    print("Daily done - 全繁體")
 
 def send_hourly():
-    # Requirement 2: 每小時 每場戰況更新
     send_split(HOURLY, "每小時戰況")
-    print("Hourly done")
+    print("Hourly done - 全繁體")
 
 if __name__ == "__main__":
-    mode = os.getenv("NBA_MODE", "").lower()  # daily / hourly
+    mode = os.getenv("NBA_MODE", "").lower()
     arg = sys.argv[1].lower() if len(sys.argv) > 1 else ""
-
-    # 判斷: 如果係 09:30 HKT 或 mode=daily 就推詳細榜+新聞，否則推每小時戰況
     is_daily_time = (now_hkt.hour == 9 and 25 <= now_hkt.minute <= 40)
-
     if mode == "daily" or arg == "daily" or is_daily_time:
-        print(f"Mode: DAILY at {now_str}")
+        print(f"Mode: DAILY at {now_str} - 全繁體版")
         send_daily()
     else:
-        print(f"Mode: HOURLY at {now_str}")
+        print(f"Mode: HOURLY at {now_str} - 全繁體版")
         send_hourly()
+
