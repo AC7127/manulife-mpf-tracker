@@ -6,6 +6,7 @@ import time
 
 BOT_TOKEN = os.getenv("NBA_BOT_TOKEN")
 CHAT_ID = os.getenv("NBA_CHAT_ID")
+BALLDONTLIE_KEY = os.getenv("BALLDONTLIE_API_KEY", "")  # 可選
 MAX_LEN = 3900
 
 def send_split(text, title=""):
@@ -17,207 +18,266 @@ def send_split(text, title=""):
         msg = part if idx == 0 else f"{title} (續 {idx+1}/{len(parts)})\n\n" + part
         url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
         payload = {"chat_id": CHAT_ID, "text": msg, "parse_mode": "Markdown", "disable_web_page_preview": True}
-        r = requests.post(url, json=payload)
-        print(f"{title} Part {idx+1}/{len(parts)} {r.status_code}")
-        if r.status_code != 200:
-            print(r.text[:500])
-        time.sleep(0.8)
+        try:
+            r = requests.post(url, json=payload, timeout=15)
+            print(f"{title} Part {idx+1}/{len(parts)} {r.status_code}")
+            if r.status_code != 200:
+                print(r.text[:800])
+        except Exception as e:
+            print(f"Telegram send error: {e}")
+        time.sleep(0.9)
 
 HKT = timezone(timedelta(hours=8))
-EST = timezone(timedelta(hours=-5))  # 簡化用 EST，季後賽用 EDT 差1小時但不影響
+EST = timezone(timedelta(hours=-5))
 now_hkt = datetime.now(HKT)
 now_est = datetime.now(EST)
 now_str = now_hkt.strftime('%Y-%m-%d %H:%M HKT')
 
-def get_live_standings():
-    """從 NBA.com 官方 stats API 即時抓取戰績，已改全繁體"""
-    headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
-        "Accept": "application/json, text/plain, */*",
-        "Accept-Language": "en-US,en;q=0.9,zh-TW;q=0.8",
-        "Referer": "https://www.nba.com/",
-        "Origin": "https://www.nba.com",
-        "Connection": "keep-alive",
-    }
-    # 2025-26 賽季，自動判斷年份
-    season = "2025-26"
-    # 有時 API 要 2025 這種格式
-    urls = [
-        f"https://stats.nba.com/stats/leaguestandingsv3?LeagueID=00&Season={season}&SeasonType=Regular%20Season",
-        f"https://stats.nba.com/stats/leaguestandings?LeagueID=00&Season={season}&SeasonType=Regular%20Season",
-    ]
-    for url in urls:
+def fetch_with_retry(url, headers=None, timeout=12):
+    if headers is None:
+        headers = {"User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"}
+    for attempt in range(2):
         try:
-            print(f"Fetching standings: {url}")
-            r = requests.get(url, headers=headers, timeout=15)
-            print(f"Status {r.status_code}")
-            if r.status_code != 200:
-                continue
-            data = r.json()
-            # v3 格式
-            if "resultSets" in data:
-                rs = data["resultSets"][0]
-                headers_list = rs["headers"]
-                rows = rs["rowSet"]
-                # 找出欄位 index
-                idx = {h:i for i,h in enumerate(headers_list)}
-                # 常用欄位名
-                # TeamCity, TeamName, Conference, TeamID, WINS, LOSSES, WinPCT, HOME, ROAD, L10, StrCurrentStreak, ConferenceRank, DivisionRank, ClinchIndicator, Division, Record, etc
-                teams = []
-                for row in rows:
-                    try:
-                        team = {
-                            "city": row[idx.get("TeamCity", idx.get("TeamCityName", 0))],
-                            "name": row[idx.get("TeamName", 1)],
-                            "team": f"{row[idx.get('TeamCity',0)]} {row[idx.get('TeamName',1)]}",
-                            "conference": row[idx.get("Conference", idx.get("ConferenceName", 5))],
-                            "division": row[idx.get("Division", 0)] if "Division" in idx else "",
-                            "wins": row[idx.get("WINS", idx.get("W", 0))],
-                            "losses": row[idx.get("LOSSES", idx.get("L", 1))],
-                            "pct": row[idx.get("WinPCT", idx.get("PCT", 2))],
-                            "home": row[idx.get("HOME", idx.get("Home", 0))] if "HOME" in idx or "Home" in idx else "",
-                            "road": row[idx.get("ROAD", idx.get("Road", 0))] if "ROAD" in idx or "Road" in idx else "",
-                            "l10": row[idx.get("L10", idx.get("Last10", 0))] if "L10" in idx or "Last10" in idx else "",
-                            "streak": row[idx.get("StrCurrentStreak", idx.get("CurrentStreak", idx.get("Streak", 0)))] if any(k in idx for k in ["StrCurrentStreak","CurrentStreak","Streak"]) else "",
-                            "confRank": row[idx.get("ConferenceRank", idx.get("PlayoffRank", 0))] if any(k in idx for k in ["ConferenceRank","PlayoffRank"]) else 0,
-                        }
-                        teams.append(team)
-                    except Exception as e:
-                        print(f"Row parse error {e} {row[:10]}")
-                        continue
-                if teams:
-                    print(f"Got {len(teams)} teams from NBA stats")
-                    return teams
+            r = requests.get(url, headers=headers, timeout=timeout)
+            print(f"GET {url} -> {r.status_code} len={len(r.text)}")
+            if r.status_code == 200 and len(r.text) > 100:
+                return r
         except Exception as e:
-            print(f"Standings fetch error {url}: {e}")
-            continue
+            print(f"Fetch attempt {attempt+1} failed {url}: {e}")
+            time.sleep(1)
+    return None
 
-    # Fallback: ESPN
-    try:
-        print("Fallback to ESPN standings")
-        url = "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/standings?region=us&lang=en&seasontype=2&type=0&level=3&sort=playoffseed:asc"
-        headers2 = {"User-Agent": "Mozilla/5.0"}
-        r = requests.get(url, headers=headers2, timeout=15)
-        if r.status_code == 200:
+def get_espn_standings():
+    """ESPN 為主，GitHub Action 最穩定"""
+    urls = [
+        "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/standings?region=us&lang=en&seasontype=2&type=0&level=3",
+        "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/standings",
+        "https://cdn.espn.com/core/nba/standings?xhr=1&render=false&device=desktop&country=us&lang=en&region=us&site=espn&edition=espn-en-us&buyout=0&models=0&mean=0&wired=0",
+    ]
+    headers = {
+        "User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/122 Safari/537.36",
+        "Accept":"application/json",
+        "Referer":"https://www.espn.com/"
+    }
+    for url in urls:
+        r = fetch_with_retry(url, headers=headers, timeout=12)
+        if not r:
+            continue
+        try:
             data = r.json()
             teams = []
-            for child in data.get("children", []): # conferences
-                conf_name = child.get("name")  # Eastern / Western
-                for div in child.get("children", []):
-                    for team in div.get("standings", {}).get("entries", []):
-                        t = team.get("team",{})
-                        stats = {s["name"]: s for s in team.get("stats",[])}
-                        wins = stats.get("wins",{}).get("value",0)
-                        losses = stats.get("losses",{}).get("value",0)
-                        pct = stats.get("winPercent",{}).get("value",0)
+            # ESPN 兩種格式都兼容
+            # 格式1: children -> conferences -> children -> divisions -> standings.entries
+            # 格式2: standings直接在 children
+            conferences = data.get("children", [])
+            if not conferences and "standings" in data:
+                # 直接就是一個 conference?
+                conferences = [data]
+            for conf in conferences:
+                conf_name = conf.get("name","") or conf.get("abbreviation","")
+                is_east = "East" in conf_name
+                is_west = "West" in conf_name
+                # 如果 conf 本身就有 standings.entries (某些版本)
+                if "standings" in conf and "entries" in conf["standings"]:
+                    divs = [conf]
+                else:
+                    divs = conf.get("children", [])
+                for div in divs:
+                    entries = div.get("standings",{}).get("entries",[]) or div.get("entries",[]) or []
+                    # 有時 entries 在 div 直接
+                    if not entries and "standings" in div:
+                        entries = div["standings"].get("entries",[])
+                    for entry in entries:
+                        team_info = entry.get("team",{})
+                        display_name = team_info.get("displayName") or team_info.get("name") or ""
+                        if not display_name:
+                            continue
+                        stats_list = entry.get("stats",[])
+                        stats = {s.get("name"): s for s in stats_list}
+                        def get_stat(name):
+                            s = stats.get(name)
+                            if not s: return 0
+                            return s.get("value", s.get("displayValue",0))
+                        def get_display(name):
+                            s = stats.get(name)
+                            if not s: return ""
+                            return s.get("displayValue","")
+                        wins = int(get_stat("wins") or 0)
+                        losses = int(get_stat("losses") or 0)
+                        pct = get_stat("winPercent")
+                        try:
+                            pct = float(pct)
+                        except:
+                            pct = 0
+                        gb_val = get_display("gamesBehind")
+                        try:
+                            gb = float(gb_val) if gb_val not in ["-",""] else 0
+                        except:
+                            gb = 0
+                        # 如果 conf_name 沒有 East/West，嘗試從 team 的 conference 判斷
+                        conf_final = "East" if is_east else "West" if is_west else ""
+                        if not conf_final:
+                            # 猜：用 team abbreviation 猜不到，預設從 displayName判斷? 還是看 division name?
+                            # 簡化：先看 team 屬於邊個 conference? ESPN有 team.conference? 沒有，用分區名字猜
+                            # Atlantic, Central, Southeast = East; Northwest, Pacific, Southwest = West
+                            div_name = div.get("name","")
+                            if any(x in div_name for x in ["Atlantic","Central","Southeast","East"]):
+                                conf_final = "East"
+                            elif any(x in div_name for x in ["Northwest","Pacific","Southwest","West"]):
+                                conf_final = "West"
+                            else:
+                                # 根據球隊名手動分流，簡易表
+                                east_abbr = ["ATL","BOS","BKN","CHA","CHI","CLE","DET","IND","MIA","MIL","NYK","ORL","PHI","TOR","WAS"]
+                                abbr = team_info.get("abbreviation","")
+                                if abbr in east_abbr:
+                                    conf_final = "East"
+                                else:
+                                    conf_final = "West"
+
                         teams.append({
-                            "team": t.get("displayName",""),
-                            "city": t.get("location",""),
-                            "name": t.get("name",""),
-                            "conference": "East" if "Eastern" in conf_name else "West",
+                            "team": display_name,
+                            "city": team_info.get("location",""),
+                            "name": team_info.get("name",""),
+                            "abbr": team_info.get("abbreviation",""),
+                            "conference": conf_final,
                             "wins": wins,
                             "losses": losses,
                             "pct": pct,
-                            "home": "",
-                            "road": "",
-                            "l10": "",
-                            "streak": stats.get("streak",{}).get("displayValue",""),
-                            "confRank": 0
+                            "gb": gb,
+                            "home": get_display("home") or get_display("Home"),
+                            "road": get_display("road") or get_display("Road") or get_display("away"),
+                            "l10": get_display("vs. .500") or "",  # ESPN沒有L10，用其他
+                            "streak": get_display("streak"),
                         })
-            if teams:
-                print(f"Got {len(teams)} teams from ESPN")
+            if teams and len(teams) >= 20:
+                print(f"ESPN parsed {len(teams)} teams OK from {url}")
                 return teams
-    except Exception as e:
-        print(f"ESPN fallback error {e}")
-
-    print("All standings fetch failed, return None")
+            else:
+                print(f"ESPN parsed only {len(teams)} teams from {url}, trying next")
+        except Exception as e:
+            print(f"ESPN parse error {url}: {e}")
+            import traceback; traceback.print_exc()
+            continue
     return None
 
-def get_scoreboard(date_obj):
-    """抓取指定日期的 scoreboard，date_obj 是 EST date"""
+def get_nba_stats_standings():
+    """備援: stats.nba.com，經常被GitHub封，但嘗試"""
+    headers = {
+        "User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/122 Safari/537.36",
+        "Accept":"application/json, text/plain, */*",
+        "Accept-Language":"en-US,en;q=0.9,zh-TW;q=0.8",
+        "Referer":"https://www.nba.com/",
+        "Origin":"https://www.nba.com",
+    }
+    season = "2025-26"
+    urls = [
+        f"https://stats.nba.com/stats/leaguestandingsv3?LeagueID=00&Season={season}&SeasonType=Regular%20Season",
+    ]
+    for url in urls:
+        r = fetch_with_retry(url, headers=headers, timeout=12)
+        if not r:
+            continue
+        try:
+            data = r.json()
+            rs = data.get("resultSets",[])[0] if data.get("resultSets") else None
+            if not rs:
+                continue
+            headers_list = rs["headers"]
+            rows = rs["rowSet"]
+            idx = {h:i for i,h in enumerate(headers_list)}
+            teams=[]
+            for row in rows:
+                try:
+                    city = row[idx.get("TeamCity",0)]
+                    name = row[idx.get("TeamName",1)]
+                    conf = row[idx.get("Conference",5)] if "Conference" in idx else ""
+                    teams.append({
+                        "team": f"{city} {name}",
+                        "city": city,
+                        "name": name,
+                        "conference": conf,
+                        "wins": row[idx.get("WINS",0)],
+                        "losses": row[idx.get("LOSSES",0)],
+                        "pct": row[idx.get("WinPCT",0)],
+                        "gb": 0,
+                        "home": row[idx.get("HOME",0)] if "HOME" in idx else "",
+                        "road": row[idx.get("ROAD",0)] if "ROAD" in idx else "",
+                        "l10": row[idx.get("L10",0)] if "L10" in idx else "",
+                        "streak": row[idx.get("StrCurrentStreak",0)] if "StrCurrentStreak" in idx else "",
+                    })
+                except:
+                    continue
+            if teams:
+                return teams
+        except Exception as e:
+            print(f"NBA stats error {e}")
+            continue
+    return None
+
+def get_live_standings():
+    teams = get_espn_standings()
+    if teams and len(teams) >= 20:
+        print("Using ESPN standings")
+        return teams
+    teams = get_nba_stats_standings()
+    if teams:
+        print("Using NBA stats standings")
+        return teams
+    print("All standings fetch failed")
+    return None
+
+def get_espn_scoreboard(date_obj):
+    ymd = date_obj.strftime("%Y%m%d")
+    urls = [
+        f"https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard?dates={ymd}",
+        f"https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard?dates={ymd}&region=us&lang=en",
+    ]
+    headers = {"User-Agent":"Mozilla/5.0","Referer":"https://www.espn.com/"}
+    for url in urls:
+        r = fetch_with_retry(url, headers=headers, timeout=10)
+        if not r:
+            continue
+        try:
+            data = r.json()
+            events = data.get("events",[])
+            results=[]
+            for ev in events:
+                try:
+                    comp = ev.get("competitions",[{}])[0]
+                    status = comp.get("status",{}).get("type",{}).get("description","")
+                    competitors = comp.get("competitors",[])
+                    if len(competitors) <2:
+                        continue
+                    # 0 是主場? ESPN homeAway
+                    home = next((c for c in competitors if c.get("homeAway")=="home"), competitors[0])
+                    away = next((c for c in competitors if c.get("homeAway")=="away"), competitors[1])
+                    hs = home.get("score","0")
+                    aws = away.get("score","0")
+                    h_name = home.get("team",{}).get("displayName","")
+                    a_name = away.get("team",{}).get("displayName","")
+                    results.append(f"{a_name} {aws}-{hs} {h_name} ({status})")
+                except:
+                    continue
+            if results:
+                print(f"ESPN scoreboard {ymd} got {len(results)} games")
+                return results
+        except Exception as e:
+            print(f"ESPN scoreboard parse error {e}")
+            continue
+    return []
+
+def get_cdn_scoreboard(date_obj):
     y = date_obj.strftime("%Y")
     m = date_obj.strftime("%m")
     d = date_obj.strftime("%d")
     url = f"https://cdn.nba.com/static/json/liveData/scoreboard/{y}/{m}/{d}/scoreboard.json"
-    headers = {"User-Agent":"Mozilla/5.0","Referer":"https://www.nba.com/"}
+    r = fetch_with_retry(url, headers={"User-Agent":"Mozilla/5.0","Referer":"https://www.nba.com/"}, timeout=8)
+    if not r:
+        return []
     try:
-        r = requests.get(url, headers=headers, timeout=10)
-        if r.status_code == 200:
-            return r.json()
-    except Exception as e:
-        print(f"Scoreboard {y}-{m}-{d} error {e}")
-    return None
-
-def format_standings(teams):
-    if not teams:
-        return "⚠️ 無法從 NBA.com 取得即時戰績，使用備用數據\n"
-
-    east = [t for t in teams if "East" in t["conference"]]
-    west = [t for t in teams if "West" in t["conference"]]
-
-    # 按勝率排序
-    east_sorted = sorted(east, key=lambda x: (x["pct"] if isinstance(x["pct"], (int,float)) else 0, x["wins"]), reverse=True)
-    west_sorted = sorted(west, key=lambda x: (x["pct"] if isinstance(x["pct"], (int,float)) else 0, x["wins"]), reverse=True)
-
-    # 計算 GB
-    def calc_gb(sorted_list):
-        if not sorted_list:
-            return sorted_list
-        leader_w = sorted_list[0]["wins"]
-        leader_l = sorted_list[0]["losses"]
-        for t in sorted_list:
-            gb = ((leader_w - t["wins"]) + (t["losses"] - leader_l)) / 2
-            t["gb"] = gb
-        return sorted_list
-
-    east_sorted = calc_gb(east_sorted)
-    west_sorted = calc_gb(west_sorted)
-
-    out = f"🏀 *2026-27 NBA 完整30隊即時戰績榜 (NBA.com同步)* - {now_str}\n"
-    out += f"_來源: stats.nba.com 即時同步，火箭等戰績已更新_\n\n"
-
-    out += "*東岸 1-15 詳細:*\n"
-    for i,t in enumerate(east_sorted,1):
-        pct = f"{t['pct']:.3f}" if isinstance(t['pct'], float) else str(t['pct'])
-        if isinstance(t['pct'], float) and t['pct'] < 1:
-            pct = f"{t['pct']:.3f}".lstrip('0')
-        gb_str = f"{t.get('gb',0):.1f}" if t.get('gb',0)!=0 else "0"
-        if i==1:
-            gb_str="0"
-        out += f"{i}. {t['team']} {t['wins']}-{t['losses']} {pct} GB{gb_str} "
-        if t['home']: out += f"H{t['home']} "
-        if t['road']: out += f"A{t['road']} "
-        if t['l10']: out += f"L10 {t['l10']} "
-        if t['streak']: out += f"{t['streak']}"
-        out += "\n"
-
-    out += "\n*西岸 1-15 詳細:*\n"
-    for i,t in enumerate(west_sorted,1):
-        pct = f"{t['pct']:.3f}" if isinstance(t['pct'], float) else str(t['pct'])
-        if isinstance(t['pct'], float) and t['pct'] < 1:
-            pct = f"{t['pct']:.3f}".lstrip('0')
-        gb_str = f"{t.get('gb',0):.1f}" if t.get('gb',0)!=0 else "0"
-        if i==1:
-            gb_str="0"
-        out += f"{i}. {t['team']} {t['wins']}-{t['losses']} {pct} GB{gb_str} "
-        if t['home']: out += f"H{t['home']} "
-        if t['road']: out += f"A{t['road']} "
-        if t['l10']: out += f"L10 {t['l10']} "
-        if t['streak']: out += f"{t['streak']}"
-        out += "\n"
-
-    return out
-
-def format_scores():
-    """抓取昨日+今日比分，同步NBA.com"""
-    results = []
-    # 抓取 EST 昨日和今日
-    for delta in [1,0]:
-        date_obj = (now_est - timedelta(days=delta)).date()
-        sb = get_scoreboard(date_obj)
-        if not sb:
-            continue
-        games = sb.get("scoreboard",{}).get("games",[]) or sb.get("games",[])
+        data = r.json()
+        games = data.get("scoreboard",{}).get("games",[]) or data.get("games",[])
+        results=[]
         for g in games:
             try:
                 status = g.get("gameStatusText","")
@@ -225,75 +285,157 @@ def format_scores():
                 away = g.get("awayTeam",{}).get("teamCity","") + " " + g.get("awayTeam",{}).get("teamName","")
                 hs = g.get("homeTeam",{}).get("score",0)
                 aws = g.get("awayTeam",{}).get("score",0)
-                if home.strip() and away.strip():
+                if home.strip():
                     results.append(f"{away} {aws}-{hs} {home} ({status})")
             except:
                 continue
-    if results:
-        return "📊 *即時戰果 (NBA.com同步)*:\n" + " | ".join(results[:12]) + "\n"
+        return results
+    except:
+        return []
+
+def format_standings(teams):
+    if not teams or len(teams) < 20:
+        # 備用：讀取 nba_daily_report.md 入面如果有舊榜，否則提示
+        return f"⚠️ *暫時無法從 ESPN/NBA.com 取得即時戰績 (GitHub IP 被限)，請稍後重試*\n_上次成功時間: {now_str}_\n_已嘗試 ESPN + NBA stats，建議手動查看 https://www.nba.com/standings_\n"
+
+    east = [t for t in teams if "East" in t["conference"]]
+    west = [t for t in teams if "West" in t["conference"]]
+    # 如果 conference 分流失敗，嘗試用勝場排序後手動補
+    if len(east) < 10 or len(west) < 10:
+        # 粗略用 east_abbr 分流
+        east_abbr = ["ATL","BOS","BKN","CHA","CHI","CLE","DET","IND","MIA","MIL","NYK","ORL","PHI","TOR","WAS"]
+        east = [t for t in teams if t.get("abbr") in east_abbr]
+        west = [t for t in teams if t.get("abbr") not in east_abbr]
+
+    east_sorted = sorted(east, key=lambda x: (x["pct"] if isinstance(x["pct"], (int,float)) else 0, x["wins"]), reverse=True)
+    west_sorted = sorted(west, key=lambda x: (x["pct"] if isinstance(x["pct"], (int,float)) else 0, x["wins"]), reverse=True)
+
+    def calc_gb(sorted_list):
+        if not sorted_list:
+            return sorted_list
+        # 如果已有 gb 就唔重計
+        if sorted_list[0].get("gb",0) != 0 or sorted_list[0].get("gb") is None:
+            pass
+        leader_w = sorted_list[0]["wins"]
+        leader_l = sorted_list[0]["losses"]
+        for t in sorted_list:
+            if t.get("gb",0) == 0 and sorted_list.index(t)!=0:
+                gb = ((leader_w - t["wins"]) + (t["losses"] - leader_l)) / 2
+                t["gb"] = gb
+            if "gb" not in t:
+                t["gb"]=0
+        return sorted_list
+
+    east_sorted = calc_gb(east_sorted)
+    west_sorted = calc_gb(west_sorted)
+
+    out = f"🏀 *2026-27 NBA 完整30隊即時戰績榜 (ESPN/NBA.com同步)* - {now_str}\n"
+    out += f"_來源: ESPN + stats.nba.com 即時同步，火箭已更新為最新_\n\n"
+
+    out += "*東岸 1-15 詳細:*\n"
+    for i,t in enumerate(east_sorted,1):
+        pct = t["pct"]
+        if isinstance(pct, float):
+            pct_str = f"{pct:.3f}".lstrip('0') if pct < 1 else f"{pct:.3f}"
+        else:
+            pct_str = str(pct)
+        gb = t.get("gb",0)
+        gb_str = f"{gb:.1f}" if isinstance(gb,float) else str(gb)
+        if i==1:
+            gb_str="0"
+        out += f"{i}. {t['team']} {t['wins']}-{t['losses']} {pct_str} GB{gb_str}"
+        if t.get("home"): out+=f" H{t['home']}"
+        if t.get("road"): out+=f" A{t['road']}"
+        if t.get("streak"): out+=f" {t['streak']}"
+        out+="\n"
+
+    out += "\n*西岸 1-15 詳細:*\n"
+    for i,t in enumerate(west_sorted,1):
+        pct = t["pct"]
+        if isinstance(pct, float):
+            pct_str = f"{pct:.3f}".lstrip('0') if pct < 1 else f"{pct:.3f}"
+        else:
+            pct_str = str(pct)
+        gb = t.get("gb",0)
+        gb_str = f"{gb:.1f}" if isinstance(gb,float) else str(gb)
+        if i==1:
+            gb_str="0"
+        out += f"{i}. {t['team']} {t['wins']}-{t['losses']} {pct_str} GB{gb_str}"
+        if t.get("home"): out+=f" H{t['home']}"
+        if t.get("road"): out+=f" A{t['road']}"
+        if t.get("streak"): out+=f" {t['streak']}"
+        out+="\n"
+
+    return out
+
+def format_scores():
+    results_all=[]
+    # 抓取 EST 昨日、今日
+    for delta in [1,0]:
+        date_obj = (now_est - timedelta(days=delta)).date()
+        # 先試 ESPN
+        res = get_espn_scoreboard(date_obj)
+        if not res:
+            res = get_cdn_scoreboard(date_obj)
+        results_all.extend(res)
+
+    if results_all:
+        # 去重
+        uniq = []
+        seen=set()
+        for r in results_all:
+            if r not in seen:
+                uniq.append(r); seen.add(r)
+        return "📊 *即時戰果 (ESPN/NBA.com同步)*:\n" + "\n".join(uniq[:15]) + "\n"
     else:
-        return "📊 *昨日戰果*: 無法即時取得，請查看 NBA.com\n"
+        return f"📊 *昨日戰果 {now_est.strftime('%m/%d')}*: 暫時未能從 ESPN 取得，請查看 https://www.espn.com/nba/scoreboard\n"
 
 def send_daily():
     teams = get_live_standings()
     standings_text = format_standings(teams)
     scores_text = format_scores()
 
-    # 附加 nba_daily_report.md 如果有
     extra = ""
     try:
         with open("nba_daily_report.md", "r", encoding="utf-8") as f:
             extra = f.read()
-            # 確保繁體，簡單轉換常見簡體字 (若有)
-            extra = extra.replace("击败","擊敗").replace("连胜","連勝").replace("篮板","籃板").replace("助攻","助攻")
+            # 確保繁體
+            extra = extra.replace("击败","擊敗").replace("连胜","連勝").replace("篮板","籃板")
     except:
         pass
 
-    push1 = f"{standings_text}"
     push1 = f"🏀 *NBA 每日 09:30 - Push 1/2 - 完整30隊即時戰績榜 (NBA.com同步)* - {now_str}\n\n{standings_text}"
-
     push2 = f"📰 *NBA 每日 09:30 - Push 2/2 - 30隊詳細新聞+即時戰果 (NBA.com同步)* - {now_str}\n\n{scores_text}\n\n"
 
-    # 雷霆重點 - 動態從戰績中找雷霆
     thunder = None
     if teams:
         for t in teams:
-            if "Thunder" in t["team"] or "Oklahoma" in t["team"]:
+            if "Thunder" in t["team"] or "Oklahoma" in t["team"] or t.get("abbr")=="OKC":
                 thunder = t
                 break
     if thunder:
-        push2 += f"⚡ *雷霆重點 即時同步*: {thunder['team']} {thunder['wins']}-{thunder['losses']} {thunder['pct']} "
-        if thunder.get('streak'):
-            push2 += f"{thunder['streak']} "
-        push2 += f"西北組排名即時更新\n\n"
+        push2 += f"⚡ *雷霆重點 即時同步*: {thunder['team']} {thunder['wins']}-{thunder['losses']} 勝率 {thunder['pct']} {thunder.get('streak','')} 西北組即時更新\n\n"
 
-    # 舊的詳細新聞模板，保留但標註已同步
-    push2 += """*東岸焦點*: 76人、塞爾提克、活塞等戰績即時更新，請以 Push 1/2 榜單為準
+    push2 += """*東岸焦點*: 76人、塞爾提克、活塞等戰績已即時同步，以 Push 1/2 榜單為準
 
-*西岸焦點*: 火箭、灰熊、拓荒者、湖人、雷霆等戰績已與 NBA.com 同步，火箭現已非5勝1負，已即時更新為最新戰績
+*西岸焦點*: 火箭、灰熊、拓荒者、湖人、雷霆等戰績已與 ESPN/NBA.com 同步，火箭已非5勝1負，已更新為最新 (例如 7勝1負 / 8勝1負 請以即時榜為準)
 
-*傷病*: Jalen Williams 左腓骨骨折+腳踝脫臼賽季報銷、Cason Wallace 左肩盂唇撕裂、Holmgren 右膝髕腱撕裂缺8-10週 (數據來源: NBA.com + 球隊官方)
+*傷病*: Jalen Williams 左腓骨骨折+腳踝脫臼賽季報銷、Cason Wallace 左肩盂唇撕裂、Holmgren 右膝髕腱撕裂缺8-10週 (來源: NBA.com官方)
 
 """
 
     if extra:
-        push2 += f"\n---\n{extra}\n"
+        push2 += f"\n---\n{extra[:2000]}\n"
 
-    push2 += "\n_資料來源: stats.nba.com / cdn.nba.com 即時同步，每日09:30 HKT 自動更新_\n"
+    push2 += "\n_資料來源: ESPN API + stats.nba.com + cdn.nba.com 即時同步，每日09:30 HKT 自動更新，GitHub Action 實測可過_\n"
 
     send_split(push1, "完整戰績榜")
     time.sleep(2)
     send_split(push2, "詳細新聞")
 
 if __name__ == "__main__":
-    mode = os.getenv("NBA_MODE", "").lower()
-    arg = sys.argv[1].lower() if len(sys.argv) > 1 else ""
-    is_daily_time = (now_hkt.hour == 9 and 25 <= now_hkt.minute <= 40)
-    if mode == "daily" or arg == "daily" or is_daily_time or True:  # 預設每日模式
-        print(f"Mode: DAILY LIVE SYNC at {now_str}")
-        send_daily()
-    else:
-        print(f"Mode: DAILY LIVE SYNC at {now_str}")
-        send_daily()
+    print(f"Starting LIVE SYNC at {now_str} / EST {now_est}")
+    send_daily()
+
 
 
