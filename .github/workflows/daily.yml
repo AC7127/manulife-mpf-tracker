@@ -1,12 +1,10 @@
-name: 宏利強積金每日監控 + NBA完整板 (已暫停每小時)
-
+name: 宏利強積金每日監控 V11.1真每日+AI旗艦
 on:
   schedule:
-    - cron: '30 1 * * *' # 每日 09:30 HKT - 詳細戰績榜+詳細新聞 (已暫停每小時)
+    - cron: '30 1 * * *'  # 09:30 HKT
   workflow_dispatch:
-
 jobs:
-  mpf-daily:
+  mpf-daily-v11-1:
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -17,27 +15,20 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - name: Install deps
-        run: pip install requests
-      - name: Run MPF Bot (09:30 或手動)
+      - name: Install deps + Playwright (真每日同步)
+        run: |
+          pip install requests playwright
+          playwright install chromium --with-deps
+      - name: Run V11.1 Bot - 真每日同步 + AI + Telegram推送
         run: python mpf_x5f_bot.py
         env:
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
           CHAT_ID: ${{ secrets.CHAT_ID }}
-
-  nba-complete:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-      - name: Install deps
-        run: pip install requests
-      - name: Run NBA Complete Bot - 每日09:30完整版 (已暫停每小時)
+      - name: Commit prices.json + history
         run: |
-          echo ">>> DAILY mode - 09:30 完整30隊榜+詳細新聞 (每小時已暫停)"
-          NBA_MODE=daily python3 nba_complete_bot.py daily
-        env:
-          NBA_BOT_TOKEN: ${{ secrets.NBA_BOT_TOKEN }}
-          NBA_CHAT_ID: ${{ secrets.NBA_CHAT_ID }}
+          git config user.name "MPF Bot V11.1"
+          git config user.email "bot-v11-1@mpf.local"
+          git add prices.json prices_history.json || echo "no json"
+          git diff --staged --quiet && echo "no changes" && exit 0
+          git commit -m "auto V11.1 $(date +%Y-%m-%d) - 真每日同步 + AI 5維度 + Telegram推送" || echo "commit fail"
+          git push || echo "push fail but telegram already sent"
