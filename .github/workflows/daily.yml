@@ -1,34 +1,43 @@
-name: 宏利強積金每日監控 V12真每日截至昨日版
+name: MPF Daily V12 Yesterday Sync
 on:
   schedule:
-    - cron: '30 1 * * *'  # 09:30 HKT = 01:30 UTC - 捉昨日收市價
+    - cron: '30 1 * * *'
   workflow_dispatch:
+
 jobs:
-  mpf-daily-v12:
+  mpf-daily:
     runs-on: ubuntu-latest
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-      - uses: actions/setup-python@v5
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - name: Install deps + Playwright 真每日截至昨日
+
+      - name: Install deps
         run: |
           pip install requests playwright
-          playwright install chromium --with-deps
-      - name: Run V12 Bot - 真每日截至昨日 + AI + Telegram
+          playwright install chromium
+          playwright install --with-deps chromium || true
+
+      - name: Run bot
         run: python mpf_x5f_bot.py
         env:
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
           CHAT_ID: ${{ secrets.CHAT_ID }}
-      - name: Commit prices.json
+
+      - name: Commit JSON
         run: |
           git config user.name "MPF Bot V12"
-          git config user.email "bot-v12@mpf.local"
+          git config user.email "bot@mpf.local"
           git add prices.json prices_history.json || echo "no json"
           git diff --staged --quiet && echo "no changes" && exit 0
-          git commit -m "auto V12 $(date +%Y-%m-%d) - 真每日截至昨日 $(date -d yesterday +%d/%m/%Y) + AI + Telegram" || echo "commit fail"
+          git commit -m "auto V12 $(date +%Y-%m-%d)"
           git push || echo "push fail but telegram sent"
