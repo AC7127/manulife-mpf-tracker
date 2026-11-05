@@ -1,10 +1,10 @@
-name: 宏利強積金每日監控 V11.1真每日+AI旗艦
+name: 宏利強積金每日監控 V12真每日截至昨日版
 on:
   schedule:
-    - cron: '30 1 * * *'  # 09:30 HKT
+    - cron: '30 1 * * *'  # 09:30 HKT = 01:30 UTC - 捉昨日收市價
   workflow_dispatch:
 jobs:
-  mpf-daily-v11-1:
+  mpf-daily-v12:
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -15,20 +15,20 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - name: Install deps + Playwright (真每日同步)
+      - name: Install deps + Playwright 真每日截至昨日
         run: |
           pip install requests playwright
           playwright install chromium --with-deps
-      - name: Run V11.1 Bot - 真每日同步 + AI + Telegram推送
+      - name: Run V12 Bot - 真每日截至昨日 + AI + Telegram
         run: python mpf_x5f_bot.py
         env:
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
           CHAT_ID: ${{ secrets.CHAT_ID }}
-      - name: Commit prices.json + history
+      - name: Commit prices.json
         run: |
-          git config user.name "MPF Bot V11.1"
-          git config user.email "bot-v11-1@mpf.local"
+          git config user.name "MPF Bot V12"
+          git config user.email "bot-v12@mpf.local"
           git add prices.json prices_history.json || echo "no json"
           git diff --staged --quiet && echo "no changes" && exit 0
-          git commit -m "auto V11.1 $(date +%Y-%m-%d) - 真每日同步 + AI 5維度 + Telegram推送" || echo "commit fail"
-          git push || echo "push fail but telegram already sent"
+          git commit -m "auto V12 $(date +%Y-%m-%d) - 真每日截至昨日 $(date -d yesterday +%d/%m/%Y) + AI + Telegram" || echo "commit fail"
+          git push || echo "push fail but telegram sent"
