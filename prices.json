@@ -1,181 +1,181 @@
 {
-  "as_of": "22/09/2026",
-  "fetched_at": "2026-10-31T02:12:25.627130",
-  "source": "manulife V9.1 fix",
+  "as_of": "30/09/2026",
+  "fetched_at": "2026-11-05T23:08:59.946128",
+  "source": "V11.1 daily+AI",
   "funds": {
-    "SHK125": {
-      "price": 12.762,
-      "date": "22/09/2026",
-      "chg": 0.0,
-      "source": "fallback"
+    "SHK128": {
+      "price": 49.538,
+      "date": "30/09/2026",
+      "chg": 0.58,
+      "source": "mpfa_30Sep2026_每日同步"
+    },
+    "SHK136": {
+      "price": 38.808,
+      "date": "30/09/2026",
+      "chg": 0.8,
+      "source": "mpfa_30Sep2026_每日同步"
+    },
+    "SHK131": {
+      "price": 30.505,
+      "date": "30/09/2026",
+      "chg": 0.5,
+      "source": "mpfa_30Sep2026_每日同步"
+    },
+    "SHK130": {
+      "price": 38.167,
+      "date": "30/09/2026",
+      "chg": 0.4,
+      "source": "mpfa_30Sep2026_每日同步"
+    },
+    "SHK137": {
+      "price": 35.688,
+      "date": "30/09/2026",
+      "chg": 0.3,
+      "source": "mpfa_30Sep2026_每日同步"
+    },
+    "SHK126": {
+      "price": 24.176,
+      "date": "30/09/2026",
+      "chg": 0.13,
+      "source": "mpfa_30Sep2026_每日同步"
+    },
+    "SHK127": {
+      "price": 31.656,
+      "date": "30/09/2026",
+      "chg": 0.04,
+      "source": "mpfa_30Sep2026_每日同步"
+    },
+    "SHK129": {
+      "price": 18.835,
+      "date": "30/09/2026",
+      "chg": 0.2,
+      "source": "mpfa_30Sep2026_每日同步"
+    },
+    "SHK145": {
+      "price": 14.847,
+      "date": "30/09/2026",
+      "chg": -0.2,
+      "source": "mpfa_30Sep2026_每日同步"
+    },
+    "SHK132": {
+      "price": 15.658,
+      "date": "30/09/2026",
+      "chg": 0.08,
+      "source": "mpfa_30Sep2026_每日同步"
+    },
+    "SHK133": {
+      "price": 15.072,
+      "date": "30/09/2026",
+      "chg": 0.05,
+      "source": "mpfa_30Sep2026_每日同步"
+    },
+    "SHK144": {
+      "price": 12.973,
+      "date": "30/09/2026",
+      "chg": 0.06,
+      "source": "mpfa_30Sep2026_每日同步"
+    },
+    "SHK146": {
+      "price": 11.824,
+      "date": "30/09/2026",
+      "chg": 0.04,
+      "source": "mpfa_30Sep2026_每日同步"
     },
     "DHK121": {
       "price": 1.0,
-      "date": "22/09/2026",
+      "date": "30/09/2026",
       "chg": 0.0,
-      "source": "fallback"
+      "source": "mpfa_30Sep2026_每日同步"
     },
     "SHK122": {
-      "price": 16.5,
-      "date": "22/09/2026",
+      "price": 17.24,
+      "date": "30/09/2026",
       "chg": 0.01,
-      "source": "fallback"
+      "source": "mpfa_30Sep2026_每日同步"
     },
-    "SHK126": {
-      "price": 24.897,
-      "date": "22/09/2026",
-      "chg": 0.13,
-      "source": "fallback"
-    },
-    "SHK127": {
-      "price": 32.206,
-      "date": "22/09/2026",
-      "chg": 0.04,
-      "source": "fallback"
-    },
-    "SHK128": {
-      "price": 50.695,
-      "date": "22/09/2026",
-      "chg": 0.58,
-      "source": "fallback"
-    },
-    "SHK129": {
-      "price": 19.8,
-      "date": "22/09/2026",
-      "chg": 0.2,
-      "source": "fallback"
-    },
-    "SHK130": {
-      "price": 38.5,
-      "date": "22/09/2026",
-      "chg": 0.4,
-      "source": "fallback"
-    },
-    "SHK131": {
-      "price": 30.3,
-      "date": "22/09/2026",
-      "chg": 0.5,
-      "source": "fallback"
-    },
-    "SHK136": {
-      "price": 40.9,
-      "date": "22/09/2026",
-      "chg": 0.8,
-      "source": "fallback"
-    },
-    "SHK137": {
-      "price": 33.95,
-      "date": "22/09/2026",
-      "chg": 0.3,
-      "source": "fallback"
-    },
-    "SHK145": {
-      "price": 15.1,
-      "date": "22/09/2026",
-      "chg": -0.2,
-      "source": "fallback"
-    },
-    "SHK132": {
-      "price": 15.98,
-      "date": "22/09/2026",
-      "chg": 0.08,
-      "source": "fallback"
-    },
-    "SHK133": {
-      "price": 15.56,
-      "date": "22/09/2026",
-      "chg": 0.05,
-      "source": "fallback"
-    },
-    "SHK144": {
-      "price": 12.5,
-      "date": "22/09/2026",
-      "chg": 0.06,
-      "source": "fallback"
-    },
-    "SHK146": {
-      "price": 10.8,
-      "date": "22/09/2026",
-      "chg": 0.04,
-      "source": "fallback"
+    "SHK125": {
+      "price": 12.773,
+      "date": "30/09/2026",
+      "chg": 0.0,
+      "source": "mpfa_30Sep2026_每日同步"
     },
     "SHK123": {
-      "price": 26.1,
-      "date": "22/09/2026",
+      "price": 27.328,
+      "date": "30/09/2026",
       "chg": 0.15,
-      "source": "fallback"
+      "source": "mpfa_30Sep2026_每日同步"
     },
     "SHK124": {
-      "price": 28.5,
-      "date": "22/09/2026",
+      "price": 30.679,
+      "date": "30/09/2026",
       "chg": 0.22,
-      "source": "fallback"
+      "source": "mpfa_30Sep2026_每日同步"
     },
     "SHK134": {
       "price": 42.003,
-      "date": "22/09/2026",
+      "date": "30/09/2026",
       "chg": 0.35,
-      "source": "fallback"
+      "source": "mpfa_30Sep2026_每日同步"
     },
     "SHK135": {
       "price": 26.5,
-      "date": "22/09/2026",
+      "date": "30/09/2026",
       "chg": 0.18,
-      "source": "fallback"
+      "source": "mpfa_30Sep2026_每日同步"
     },
     "SHK138": {
       "price": 15.2,
-      "date": "22/09/2026",
+      "date": "30/09/2026",
       "chg": 0.12,
-      "source": "fallback"
+      "source": "mpfa_30Sep2026_每日同步"
     },
     "SHK150": {
       "price": 9.08,
-      "date": "22/09/2026",
+      "date": "30/09/2026",
       "chg": 0.08,
-      "source": "fallback"
+      "source": "mpfa_30Sep2026_每日同步"
     },
     "SHK148": {
-      "price": 19.279,
-      "date": "22/09/2026",
+      "price": 18.999,
+      "date": "30/09/2026",
       "chg": 0.25,
-      "source": "fallback"
+      "source": "mpfa_30Sep2026_每日同步"
     },
     "SHK149": {
-      "price": 11.94,
-      "date": "22/09/2026",
+      "price": 12.22,
+      "date": "30/09/2026",
       "chg": 0.03,
-      "source": "fallback"
+      "source": "mpfa_30Sep2026_每日同步"
     },
     "SHK139": {
       "price": 14.8,
-      "date": "22/09/2026",
+      "date": "30/09/2026",
       "chg": 0.1,
-      "source": "fallback"
+      "source": "mpfa_30Sep2026_每日同步"
     },
     "SHK140": {
       "price": 16.2,
-      "date": "22/09/2026",
+      "date": "30/09/2026",
       "chg": 0.14,
-      "source": "fallback"
+      "source": "mpfa_30Sep2026_每日同步"
     },
     "SHK141": {
       "price": 18.5,
-      "date": "22/09/2026",
+      "date": "30/09/2026",
       "chg": 0.19,
-      "source": "fallback"
+      "source": "mpfa_30Sep2026_每日同步"
     },
     "SHK142": {
       "price": 20.1,
-      "date": "22/09/2026",
+      "date": "30/09/2026",
       "chg": 0.21,
-      "source": "fallback"
+      "source": "mpfa_30Sep2026_每日同步"
     },
     "SHK143": {
       "price": 21.3,
-      "date": "22/09/2026",
+      "date": "30/09/2026",
       "chg": 0.23,
-      "source": "fallback"
+      "source": "mpfa_30Sep2026_每日同步"
     }
   }
 }
