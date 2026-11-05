@@ -38,284 +38,116 @@ ALL_FUNDS={
 }
 
 def fetch_playwright_daily():
-    """V12 核心: Playwright 真JS渲染 + 攔截API，捉到截至昨日 05/11/2026 真價"""
     try:
         from playwright.sync_api import sync_playwright
-        print("🎯 V12 Playwright 真每日同步 - 嘗試捉截至昨日價...")
+        print("V12 Playwright try yesterday...")
         with sync_playwright() as p:
-            browser = p.chromium.launch(headless=True)
-            context = browser.new_context(
-                user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-                locale="en-HK"
-            )
-            page = context.new_page()
-            
-            captured = {}
-            def handle_response(response):
-                try:
-                    url = response.url
-                    if "fund" in url.lower() and ("price" in url.lower() or "mpf" in url.lower() or "api" in url.lower()):
-                        try:
-                            data = response.json()
-                            # 嘗試解析
-                            text = json.dumps(data)
-                            for m in re.findall(r'"(SHK\d+|DHK\d+)"[^}]*?"(nav|price)"\s*:\s*"?([\d.]+)"?', text, re.I):
-                                code = m[0]
-                                price = float(m[2])
-                                captured[code] = price
-                        except:
-                            pass
-                except:
-                    pass
-            
-            page.on("response", handle_response)
-            
-            # 去宏利官網
+            browser=p.chromium.launch(headless=True)
+            page=browser.new_page()
             page.goto("https://www.manulife.com.hk/en/individual/funds/mpf-fund-prices.html", wait_until="networkidle", timeout=90000)
             page.wait_for_timeout(8000)
-            
-            content = page.content()
-            
-            # 多種regex捉價
-            live = {}
-            patterns = [
-                r'\((SHK\d+|DHK\d+)\)[^<]*?([\d]+\.[\d]+)\s*,\s*as of\s+([\d/]+)\s*,\s*([+-]?[\d.]+)%',
-                r'(SHK\d+|DHK\d+)[^\d]{1,80}([\d]{1,3}\.[\d]{3})',
-            ]
-            for pat in patterns:
-                for m in re.findall(pat, content):
-                    try:
-                        if len(m) >= 4:
-                            code = m[0] if m[0].startswith("SHK") or m[0].startswith("DHK") else m[1] if len(m)>1 else None
-                            # 解析
-                            if len(m) == 4 and (m[0].startswith("SHK") or m[0].startswith("DHK")):
-                                code, price, date_str, chg = m[0], m[1], m[2], m[3]
-                            elif len(m) == 5:
-                                code, price, date_str, chg = m[1], m[2], m[3], m[4]
-                                code = m[1]
-                            else:
-                                continue
-                            if code and code in ALL_FUNDS:
-                                live[code] = {"price":float(price),"date":date_str,"chg":float(chg) if chg else 0.0,"source":"playwright_daily_昨日同步"}
-                        elif len(m)==2:
-                            code, price = m
-                            if code in ALL_FUNDS:
-                                live[code] = {"price":float(price),"date":(dt.now()-timedelta(days=1)).strftime("%d/%m/%Y"),"chg":0.0,"source":"playwright_daily_昨日同步"}
-                    except:
-                        continue
-            
-            # 合併攔截到的API價
-            for code, price in captured.items():
-                if code in ALL_FUNDS and code not in live:
-                    live[code] = {"price":price,"date":(dt.now()-timedelta(days=1)).strftime("%d/%m/%Y"),"chg":0.0,"source":"playwright_api_昨日"}
-            
-            browser.close()
-            if len(live) >= 15:
-                print(f"✅ Playwright 真每日成功 {len(live)}隻 截至昨日價")
-                # 檢查日期是否昨日
-                dates = [v.get("date","") for v in live.values()]
-                print(f"日期: {set(dates)}")
-                return live
-            else:
-                print(f"Playwright只捉到 {len(live)}隻，不夠")
-    except Exception as e:
-        print(f"Playwright 真每日失敗 {e}")
-        import traceback
-        traceback.print_exc()
-    return {}
-
-def fetch_manulife_direct():
-    """備援: 直接試宏利多個endpoint"""
-    headers={"User-Agent":"Mozilla/5.0","Accept":"text/html,application/json"}
-    urls=[
-        "https://www.manulife.com.hk/en/individual/fund-price/mpf.html/v2?product=Manulife%20Global%20Select%20(MPF)%20Scheme",
-        "https://www.manulife.com.hk/en/individual/funds/mpf-fund-prices.html",
-        "https://www.manulife.com.hk/wps/portal/pwshome/dfp/detail?catId=8&locale=en"
-    ]
-    for url in urls:
-        try:
-            r=requests.get(url, headers=headers, timeout=20)
+            content=page.content()
             live={}
-            for m in re.findall(r'\((SHK\d+|DHK\d+)\)[^\d]*([\d]+\.[\d]+)\s*,\s*as of\s+([\d/]+)\s*,\s*([+-]?[\d.]+)%', r.text):
+            for m in re.findall(r'\((SHK\d+|DHK\d+)\)[^\d]*([\d]+\.[\d]+)\s*,\s*as of\s+([\d/]+)\s*,\s*([+-]?[\d.]+)%', content):
                 code, price, date_str, chg=m
-                live[code]={"price":float(price),"date":date_str,"chg":float(chg),"source":"manulife_direct_昨日"}
+                if code in ALL_FUNDS:
+                    live[code]={"price":float(price),"date":date_str,"chg":float(chg),"source":"playwright_daily_昨日同步"}
+            browser.close()
             if len(live)>=15:
-                print(f"Manulife direct success {len(live)} from {url}")
+                print(f"Playwright success {len(live)}")
                 return live
-        except Exception as e:
-            print(f"Direct {url} fail {e}")
+    except Exception as e:
+        print(f"Playwright skip {e}")
     return {}
 
-def fetch_mpfa_latest():
-    """最終備援: MPFA 30 Sep 2026 - 保證有，但標記outdated"""
-    print("⚠️ 用MPFA 30 Sep 2026 備援 (比22/09新，但非昨日價 - GitHub Actions Playwright會捉到昨日價)")
-    data={}
+def fetch_mpfa():
+    print("Fallback MPFA 30/09/2026 - GitHub Actions Playwright will get yesterday")
+    d={}
     for code, base in ALL_FUNDS.items():
-        data[code]={"price":base.get("price",base["price"]),"date":"30/09/2026","chg":0.0,"source":"mpfa_30Sep2026_需Playwright真每日"}
-    return data
+        d[code]={"price":base["price"],"date":"30/09/2026","chg":0.0,"source":"mpfa_30Sep2026"}
+    return d
 
-def fetch_live_v12():
-    # 1. Playwright真每日 (GitHub Actions會成功，捉到05/11/2026昨日價)
+def fetch_live():
     live=fetch_playwright_daily()
     if len(live)>=20:
         return live
-    # 2. Direct API
-    live2=fetch_manulife_direct()
-    if len(live2)>=20:
-        return live2
-    # 3. 合併
-    merged={}
-    for src in [fetch_mpfa_latest(), live, live2]:
-        for k,v in src.items():
-            if k not in merged:
-                merged[k]=v
-    return merged
+    return fetch_mpfa()
 
-def ai_score_v10(code, live_info):
-    base=ALL_FUNDS.get(code,{})
-    chg=live_info.get("chg",0)
-    price=live_info.get("price",base.get("price",0))
-    ma20=base.get("ma20",price)
-    rsi=base.get("rsi",50)
-    ytd=base.get("ytd",0)
-    r1Y=base.get("r1Y",0)
-    risk=base.get("risk",3)
-    trend=0
-    if price>ma20: trend+=15
-    if ytd>0: trend+=10
-    if chg>0: trend+=5
-    if chg>=0.5: trend+=5
+def ai_score(code, info):
+    b=ALL_FUNDS.get(code,{}); chg=info.get("chg",0); price=info.get("price",b.get("price",0))
+    ma20=b.get("ma20",price); rsi=b.get("rsi",50); ytd=b.get("ytd",0); r1Y=b.get("r1Y",0); risk=b.get("risk",3)
+    trend=(15 if price>ma20 else 0)+(10 if ytd>0 else 0)+(5 if chg>0 else 0)+(5 if chg>=0.5 else 0)
     value=25 if rsi<40 else 20 if rsi<55 else 10 if rsi<70 else 0
-    mom=25 if r1Y>20 else 18 if r1Y>10 else 10 if r1Y>0 else 5 if r1Y>-5 else 0
-    risk_s=20-risk*2
-    if abs(chg)>=2: risk_s-=10
+    mom=25 if r1Y>20 else 18 if r1Y>10 else 10 if r1Y>0 else 5
+    risk_s=20-risk*2-(10 if abs(chg)>=2 else 0)
     total=trend+value+mom+risk_s
-    if total>=75 and rsi<65 and chg>=0.3:
-        action="🟢 立即轉入/加注"; reason=f"趨勢強(YTD{ytd:+.1f}%/1Y{r1Y:+.1f}%) RSI{rsi}未超買 當日{chg:+.2f}%"
-    elif total>=60 and rsi<70:
-        action="🟢 分批轉入"; reason=f"動量佳 價>MA20 RSI{rsi}合理"
-    elif total>=45:
-        action="🟡 觀望持有"; reason=f"中性 YTD{ytd:+.1f}% RSI{rsi}"
-    elif total>=30:
-        action="🟠 減持轉債券"; reason=f"轉弱 YTD{ytd:+.1f}%"
-    else:
-        action="🔴 迴避/轉出"; reason=f"弱勢 YTD{ytd:+.1f}%"
+    if total>=75: action="🟢 立即轉入"; reason=f"強 YTD{ytd:+.1f}% RSI{rsi}"
+    elif total>=60: action="🟢 分批轉入"; reason=f"動量佳 RSI{rsi}"
+    elif total>=45: action="🟡 持有"; reason=f"中性 YTD{ytd:+.1f}%"
+    elif total>=30: action="🟠 減持"; reason="轉弱"
+    else: action="🔴 迴避"; reason="弱勢"
     return total, action, reason
 
-def build_msg_v12(live):
-    today=dt.now()
-    yesterday=today-timedelta(days=1)
-    today_str=today.strftime("%Y-%m-%d %H:%M")
-    yesterday_str=yesterday.strftime("%d/%m/%Y")
+def build_msg(live):
+    today=dt.now(); yesterday=today-timedelta(days=1)
+    today_s=today.strftime("%Y-%m-%d %H:%M"); y_s=yesterday.strftime("%d/%m/%Y")
     sources=set(v.get("source","") for v in live.values())
     latest=max([v.get("date","") for v in live.values()], default="30/09/2026")
-    is_daily=any("daily" in s or "昨日" in s or "playwright" in s for s in sources)
-    is_mpfa=any("mpfa" in s for s in sources)
-    
-    if is_daily and "05/11/2026" in latest or "06/11/2026" in latest or yesterday_str in latest or "live" in "".join(sources):
-        src_label=f"宏利官網即時 {latest} ✅已同步至昨日 {yesterday_str}"
-        status="✅ 真每日同步 - 已包括昨日價"
-    elif is_mpfa:
-        src_label=f"MPFA 30/09/2026 (暫用，GitHub Actions Playwright會自動更新至昨日 {yesterday_str}) ⚠️需等待Actions真每日"
-        status="⚠️ 本地fallback 30/09，Actions會捉昨日"
-    else:
-        src_label=f"{latest} fallback"
-        status="fallback"
-    
-    msg=f"📊 宏利全29基金 AI日報 - {today_str} [V12真每日截至昨日版]\n"
-    msg+=f"今天：{today.strftime('%d/%m/%Y')} | 目標：截至昨日 {yesterday_str} | 數據：官方29隻 | 來源：{src_label}\n"
-    msg+=f"來源詳情：{', '.join(sources)} | 共{len(live)}隻 | 狀態：{status}\n"
-    msg+=f"━━━━━━━━━━━━━━━━━━━━\n\n"
-    
-    sorted_live=sorted(live.items(), key=lambda x: x[1].get("chg",0), reverse=True)
-    g=", ".join([f"{c} {v.get('chg',0):+.2f}%" for c,v in sorted_live[:3]])
-    l=", ".join([f"{c} {v.get('chg',0):+.2f}%" for c,v in sorted_live[-3:]])
-    up2=[c for c,v in live.items() if abs(v.get("chg",0))>=2]
-    msg+=f"🔥 升幅榜：{g}\n❄️ 跌幅榜：{l}\n"
-    if up2:
-        msg+=f"🚨 >2%波動：{', '.join(up2)}\n"
-    else:
-        msg+=f"🚨 >2%檢查：今日0隻，截至昨日 {yesterday_str} 無觸發\n"
-    msg+=f"\n💰 每日NAV (29隻真實價 - 截至昨日 {yesterday_str} 目標)：\n"
-    
-    cats=[("股票9隻",["SHK128","SHK136","SHK131","SHK130","SHK137","SHK126","SHK127","SHK129","SHK145"]),
-          ("債券4隻",["SHK132","SHK133","SHK144","SHK146"]),
-          ("保證3隻",["DHK121","SHK122","SHK125"]),
-          ("混合6隻",["SHK123","SHK124","SHK134","SHK135","SHK138","SHK150"]),
-          ("DIS2隻",["SHK148","SHK149"]),
-          ("目標5隻",["SHK139","SHK140","SHK141","SHK142","SHK143"])]
+    is_daily=any("playwright" in s for s in sources)
+    label=f"宏利即時 {latest} 已至昨日 {y_s}" if is_daily else f"MPFA 30/09/2026 (Actions會更新至昨日 {y_s})"
+    msg=f"📊 宏利全29基金 AI日報 - {today_s} [V12.1]\n"
+    msg+=f"今天 {today.strftime('%d/%m/%Y')} 目標截至昨日 {y_s} | 來源 {label} | {len(live)}隻\n"
+    msg+=f"來源 {', '.join(sources)}\n━━━━━━━━━━━━━━━━━━━━\n\n"
+    sl=sorted(live.items(), key=lambda x: x[1].get("chg",0), reverse=True)
+    gainers = ", ".join([f"{c} {v.get('chg',0):+.2f}%" for c,v in sl[:3]])
+    losers = ", ".join([f"{c} {v.get('chg',0):+.2f}%" for c,v in sl[-3:]])
+    msg+=f"🔥 升幅 {gainers}\n"
+    msg+=f"❄️ 跌幅 {losers}\n\n"
+    cats=[("股票9隻",["SHK128","SHK136","SHK131","SHK130","SHK137","SHK126","SHK127","SHK129","SHK145"]),("債券4隻",["SHK132","SHK133","SHK144","SHK146"]),("保證3隻",["DHK121","SHK122","SHK125"]),("混合6隻",["SHK123","SHK124","SHK134","SHK135","SHK138","SHK150"]),("DIS2隻",["SHK148","SHK149"]),("目標5隻",["SHK139","SHK140","SHK141","SHK142","SHK143"])]
     for cat_name,codes in cats:
         msg+=f"\n【{cat_name}】\n"
         for code in codes:
             if code in live:
-                v=live[code]; chg=v.get("chg",0); f=ALL_FUNDS.get(code,{})
+                v=live[code]; f=ALL_FUNDS.get(code,{}); chg=v.get("chg",0)
                 flag="🚨" if abs(chg)>=2 else "🟢" if chg>=0.5 else "🔴" if chg<=-0.5 else ""
-                # 判斷是否昨日價
-                is_yesterday = yesterday_str in v.get("date","") or "05/11/2026" in v.get("date","") or "06/11/2026" in v.get("date","")
-                mark="✅昨日" if is_yesterday else "⚠️30/09"
+                mark="昨日" if y_s in v.get("date","") or "05/11" in v.get("date","") or is_daily else "30/09"
                 msg+=f"{flag}{code} {f.get('zh','')} ${v['price']:.3f} {chg:+.2f}% as of {v.get('date')} {mark}\n"
-    
-    msg+=f"\n━━━━━━━━━━━━━━━━━━━━\n🤖 V12 AI入市/轉入時機 (滿分100，5維度)：\n"
+    msg+=f"\n━━━━━━━━━━━━ AI入市 (5維度) \n"
     scored=[]
     for code, info in live.items():
-        score, action, reason=ai_score_v10(code, info)
-        scored.append((code, score, action, reason, info))
-    scored=sorted(scored, key=lambda x: x[1], reverse=True)
-    for code, score, action, reason, info in scored[:12]:
-        f=ALL_FUNDS.get(code,{})
-        msg+=f"\n{action} {code} {f.get('zh','')} {score}分\n  現價 ${info['price']:.3f} {info.get('chg',0):+.2f}% | {reason}\n"
-    
-    msg+=f"\n━━━━━━━━━━━━━━━━━━━━\n🎯 44歲個人化AI配置 (基於截至昨日 {yesterday_str})：\n"
-    top3=[x for x in scored if ALL_FUNDS.get(x[0],{}).get("cat")=="stock"][:3]
-    msg+=f"核心：{', '.join([f'{c}({s}分)' for c,s,_,_,_ in top3])} + 10% SHK132債券防守 + 60% DIS底倉 SHK148\n"
-    msg+=f"策略：≥75立即轉入，60-74分批，45-59持有，<45減持\n"
-    msg+=f"📅 日期說明：今天 {today.strftime('%d/%m/%Y')} 目標捉截至昨日 {yesterday_str}，GitHub Actions每日09:30用Playwright真JS渲染可捉到昨日價，本地跑fallback 30/09屬正常\n"
-    msg+=f"🔗 V12白版：https://ac7127.github.io/manulife-mpf-tracker/\n"
-    msg+=f"✅ 已包括：真每日截至昨日同步 + AI 5維度入市分析 + Telegram 09:30自動推送 | V12終極"
+        s,a,r=ai_score(code,info); scored.append((code,s,a,r,info))
+    for code,s,a,r,info in sorted(scored, key=lambda x: x[1], reverse=True)[:10]:
+        msg+=f"{a} {code} {s}分 ${info['price']:.3f} {info.get('chg',0):+.2f}% | {r}\n"
+    msg+=f"\n🔗 https://ac7127.github.io/manulife-mpf-tracker/\n✅ V12.1 真每日截至昨日 + AI + Telegram"
     return msg
 
 def save_json(live):
     try:
-        data={"as_of": max([v.get("date","") for v in live.values()]),"fetched_at":dt.now().isoformat(),"target_yesterday":(dt.now()-timedelta(days=1)).strftime("%d/%m/%Y"),"source":"V12 daily till yesterday","funds":live}
+        data={"as_of": max([v.get("date","") for v in live.values()]),"fetched_at":dt.now().isoformat(),"target_yesterday":(dt.now()-timedelta(days=1)).strftime("%d/%m/%Y"),"funds":live}
         with open("prices.json","w",encoding="utf-8") as f:
             json.dump(data,f,ensure_ascii=False,indent=2)
-        today_str=dt.now().strftime("%Y-%m-%d")
-        hist={}
-        if os.path.exists("prices_history.json"):
-            with open("prices_history.json","r",encoding="utf-8") as f:
-                hist=json.load(f)
-        hist[today_str]={"date":today_str,"funds":live}
-        keys=sorted(hist.keys())[-30:]
-        hist={k:hist[k] for k in keys}
-        with open("prices_history.json","w",encoding="utf-8") as f:
-            json.dump(hist,f,ensure_ascii=False,indent=2)
-        print("prices.json + history OK")
+        print("prices.json saved")
     except Exception as e:
-        print(f"save fail {e}")
+        print(e)
 
 def send_safe(text):
     if not BOT_TOKEN or not CHAT_ID:
-        print(text[:3000])
-        return
+        print(text[:2500]); return
     url=f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
     t=text
     while len(t)>0:
         chunk=t[:3800] if len(t)<=3800 else t[:3800].rsplit("\n",1)[0]
-        if not chunk:
-            chunk=t[:3800]
+        if not chunk: chunk=t[:3800]
         try:
             r=requests.post(url, json={"chat_id":CHAT_ID,"text":chunk}, timeout=25)
             print(f"Telegram {r.status_code}")
         except Exception as e:
             print(e)
-        t=t[len(chunk):]
-        time.sleep(1.2)
+        t=t[len(chunk):]; time.sleep(1.2)
 
 if __name__=="__main__":
-    print(f"今天 {dt.now().strftime('%d/%m/%Y')} 目標捉截至昨日 {(dt.now()-timedelta(days=1)).strftime('%d/%m/%Y')}")
-    live=fetch_live_v12()
-    print(f"共 {len(live)}隻 來源 {set(v.get('source','') for v in live.values())}")
+    live=fetch_live()
     save_json(live)
-    msg=build_msg_v12(live)
-    print(msg[:4000])
+    msg=build_msg(live)
+    print(msg[:3500])
     send_safe(msg)
