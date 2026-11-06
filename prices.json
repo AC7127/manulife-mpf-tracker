@@ -1,186 +1,356 @@
 {
-  "as_of": "30/09/2026",
-  "fetched_at": "2026-11-06T09:25:32.353370",
-  "target_yesterday": "05/11/2026",
-  "debug": {
-    "logs": [],
-    "inner": "Access Denied\nYou don't have permission to access \"http://www.manulife.com.hk/en/individual/funds/mpf-fund-prices.html\" on this server.\n\nReference #18.a651c317.1793957122.df9fc916\n\nhttps://errors.edgesuite.net/18.a651c317.1793957122.df9fc916",
-    "content_len": 337
-  },
+  "as_of": "04/11/2026",
+  "fetched_at": "2026-11-06T21:00:00+08:00",
+  "source": "manulife_official_website_screenshot_ocr",
+  "note": "MPF T+1, 04/11 is latest published on 06/11. 05/11 will publish 07/11.",
   "funds": {
-    "SHK126": {
-      "price": 24.176,
-      "date": "30/09/2026",
-      "chg": 0.0,
-      "source": "mpfa_30Sep2026"
-    },
-    "SHK127": {
-      "price": 31.656,
-      "date": "30/09/2026",
-      "chg": 0.0,
-      "source": "mpfa_30Sep2026"
-    },
-    "SHK128": {
-      "price": 49.538,
-      "date": "30/09/2026",
-      "chg": 0.0,
-      "source": "mpfa_30Sep2026"
-    },
-    "SHK129": {
-      "price": 18.835,
-      "date": "30/09/2026",
-      "chg": 0.0,
-      "source": "mpfa_30Sep2026"
-    },
-    "SHK130": {
-      "price": 38.167,
-      "date": "30/09/2026",
-      "chg": 0.0,
-      "source": "mpfa_30Sep2026"
-    },
-    "SHK131": {
-      "price": 30.505,
-      "date": "30/09/2026",
-      "chg": 0.0,
-      "source": "mpfa_30Sep2026"
-    },
-    "SHK136": {
-      "price": 38.808,
-      "date": "30/09/2026",
-      "chg": 0.0,
-      "source": "mpfa_30Sep2026"
-    },
-    "SHK137": {
-      "price": 35.688,
-      "date": "30/09/2026",
-      "chg": 0.0,
-      "source": "mpfa_30Sep2026"
-    },
-    "SHK145": {
-      "price": 14.847,
-      "date": "30/09/2026",
-      "chg": 0.0,
-      "source": "mpfa_30Sep2026"
-    },
-    "SHK132": {
-      "price": 15.658,
-      "date": "30/09/2026",
-      "chg": 0.0,
-      "source": "mpfa_30Sep2026"
-    },
-    "SHK133": {
-      "price": 15.072,
-      "date": "30/09/2026",
-      "chg": 0.0,
-      "source": "mpfa_30Sep2026"
-    },
-    "SHK144": {
-      "price": 12.973,
-      "date": "30/09/2026",
-      "chg": 0.0,
-      "source": "mpfa_30Sep2026"
-    },
-    "SHK146": {
-      "price": 11.824,
-      "date": "30/09/2026",
-      "chg": 0.0,
-      "source": "mpfa_30Sep2026"
-    },
     "DHK121": {
-      "price": 1.0,
-      "date": "30/09/2026",
-      "chg": 0.0,
-      "source": "mpfa_30Sep2026"
+      "code": "DHK121",
+      "zh": "利息基金",
+      "cat": "guarantee",
+      "price": null,
+      "chg": null,
+      "abs": null,
+      "date": "04/11/2026",
+      "source": "manulife_official_0411",
+      "vs_30Sep_pct": null,
+      "old_30Sep": null
     },
     "SHK122": {
-      "price": 17.24,
-      "date": "30/09/2026",
-      "chg": 0.0,
-      "source": "mpfa_30Sep2026"
-    },
-    "SHK125": {
-      "price": 12.773,
-      "date": "30/09/2026",
-      "chg": 0.0,
-      "source": "mpfa_30Sep2026"
+      "code": "SHK122",
+      "zh": "穩健基金",
+      "cat": "guarantee",
+      "price": 17.349,
+      "chg": 0.45,
+      "abs": 0.077,
+      "date": "04/11/2026",
+      "source": "manulife_official_0411",
+      "vs_30Sep_pct": 0.63,
+      "old_30Sep": 17.24
     },
     "SHK123": {
-      "price": 27.328,
-      "date": "30/09/2026",
-      "chg": 0.0,
-      "source": "mpfa_30Sep2026"
+      "code": "SHK123",
+      "zh": "增長基金",
+      "cat": "mixed",
+      "price": 26.708,
+      "chg": 1.21,
+      "abs": 0.318,
+      "date": "04/11/2026",
+      "source": "manulife_official_0411",
+      "vs_30Sep_pct": -2.27,
+      "old_30Sep": 27.328
     },
     "SHK124": {
-      "price": 30.679,
-      "date": "30/09/2026",
-      "chg": 0.0,
-      "source": "mpfa_30Sep2026"
+      "code": "SHK124",
+      "zh": "進取基金",
+      "cat": "mixed",
+      "price": 29.715,
+      "chg": 1.46,
+      "abs": 0.427,
+      "date": "04/11/2026",
+      "source": "manulife_official_0411",
+      "vs_30Sep_pct": -3.14,
+      "old_30Sep": 30.679
+    },
+    "SHK125": {
+      "code": "SHK125",
+      "zh": "保守基金",
+      "cat": "guarantee",
+      "price": 12.803,
+      "chg": 0.01,
+      "abs": 0.001,
+      "date": "04/11/2026",
+      "source": "manulife_official_0411",
+      "vs_30Sep_pct": 0.23,
+      "old_30Sep": 12.773
+    },
+    "SHK126": {
+      "code": "SHK126",
+      "zh": "香港股票基金",
+      "cat": "stock",
+      "price": 22.621,
+      "chg": 2.52,
+      "abs": 0.555,
+      "date": "04/11/2026",
+      "source": "manulife_official_0411",
+      "vs_30Sep_pct": -6.43,
+      "old_30Sep": 24.176
+    },
+    "SHK127": {
+      "code": "SHK127",
+      "zh": "國際股票基金",
+      "cat": "stock",
+      "price": 31.435,
+      "chg": 1.56,
+      "abs": 0.482,
+      "date": "04/11/2026",
+      "source": "manulife_official_0411",
+      "vs_30Sep_pct": -0.7,
+      "old_30Sep": 31.656
+    },
+    "SHK128": {
+      "code": "SHK128",
+      "zh": "亞太股票基金",
+      "cat": "stock",
+      "price": 45.285,
+      "chg": 0.91,
+      "abs": 0.408,
+      "date": "04/11/2026",
+      "source": "manulife_official_0411",
+      "vs_30Sep_pct": -8.59,
+      "old_30Sep": 49.538
+    },
+    "SHK129": {
+      "code": "SHK129",
+      "zh": "歐洲股票基金",
+      "cat": "stock",
+      "price": 19.361,
+      "chg": 2.52,
+      "abs": 0.476,
+      "date": "04/11/2026",
+      "source": "manulife_official_0411",
+      "vs_30Sep_pct": 2.79,
+      "old_30Sep": 18.835
+    },
+    "SHK130": {
+      "code": "SHK130",
+      "zh": "北美股票基金",
+      "cat": "stock",
+      "price": 38.065,
+      "chg": 1.63,
+      "abs": 0.612,
+      "date": "04/11/2026",
+      "source": "manulife_official_0411",
+      "vs_30Sep_pct": -0.27,
+      "old_30Sep": 38.167
+    },
+    "SHK131": {
+      "code": "SHK131",
+      "zh": "日本股票基金",
+      "cat": "stock",
+      "price": 29.477,
+      "chg": -1.17,
+      "abs": -0.349,
+      "date": "04/11/2026",
+      "source": "manulife_official_0411",
+      "vs_30Sep_pct": -3.37,
+      "old_30Sep": 30.505
+    },
+    "SHK132": {
+      "code": "SHK132",
+      "zh": "香港債券基金",
+      "cat": "bond",
+      "price": 15.931,
+      "chg": 0.11,
+      "abs": 0.018,
+      "date": "04/11/2026",
+      "source": "manulife_official_0411",
+      "vs_30Sep_pct": 1.74,
+      "old_30Sep": 15.658
+    },
+    "SHK133": {
+      "code": "SHK133",
+      "zh": "國際債券基金",
+      "cat": "bond",
+      "price": 15.362,
+      "chg": 0.48,
+      "abs": 0.073,
+      "date": "04/11/2026",
+      "source": "manulife_official_0411",
+      "vs_30Sep_pct": 1.92,
+      "old_30Sep": 15.072
     },
     "SHK134": {
-      "price": 42.003,
-      "date": "30/09/2026",
-      "chg": 0.0,
-      "source": "mpfa_30Sep2026"
+      "code": "SHK134",
+      "zh": "富達增長基金",
+      "cat": "mixed",
+      "price": 40.041,
+      "chg": 0.89,
+      "abs": 0.353,
+      "date": "04/11/2026",
+      "source": "manulife_official_0411",
+      "vs_30Sep_pct": -4.67,
+      "old_30Sep": 42.003
     },
     "SHK135": {
-      "price": 26.5,
-      "date": "30/09/2026",
-      "chg": 0.0,
-      "source": "mpfa_30Sep2026"
+      "code": "SHK135",
+      "zh": "富達平穩增長基金",
+      "cat": "mixed",
+      "price": 25.117,
+      "chg": 0.56,
+      "abs": 0.139,
+      "date": "04/11/2026",
+      "source": "manulife_official_0411",
+      "vs_30Sep_pct": -5.22,
+      "old_30Sep": 26.5
+    },
+    "SHK136": {
+      "code": "SHK136",
+      "zh": "中華威力基金",
+      "cat": "stock",
+      "price": 34.549,
+      "chg": 1.22,
+      "abs": 0.417,
+      "date": "04/11/2026",
+      "source": "manulife_official_0411",
+      "vs_30Sep_pct": -10.97,
+      "old_30Sep": 38.808
+    },
+    "SHK137": {
+      "code": "SHK137",
+      "zh": "康健護理基金",
+      "cat": "stock",
+      "price": 39.073,
+      "chg": 2.97,
+      "abs": 1.153,
+      "date": "04/11/2026",
+      "source": "manulife_official_0411",
+      "vs_30Sep_pct": 9.48,
+      "old_30Sep": 35.688
     },
     "SHK138": {
-      "price": 15.2,
-      "date": "30/09/2026",
-      "chg": 0.0,
-      "source": "mpfa_30Sep2026"
-    },
-    "SHK150": {
-      "price": 9.08,
-      "date": "30/09/2026",
-      "chg": 0.0,
-      "source": "mpfa_30Sep2026"
-    },
-    "SHK148": {
-      "price": 18.999,
-      "date": "30/09/2026",
-      "chg": 0.0,
-      "source": "mpfa_30Sep2026"
-    },
-    "SHK149": {
-      "price": 12.22,
-      "date": "30/09/2026",
-      "chg": 0.0,
-      "source": "mpfa_30Sep2026"
-    },
-    "SHK139": {
-      "price": 14.8,
-      "date": "30/09/2026",
-      "chg": 0.0,
-      "source": "mpfa_30Sep2026"
+      "code": "SHK138",
+      "zh": "智優逸退休基金",
+      "cat": "mixed",
+      "price": 15.535,
+      "chg": 0.74,
+      "abs": 0.114,
+      "date": "04/11/2026",
+      "source": "manulife_official_0411",
+      "vs_30Sep_pct": 2.2,
+      "old_30Sep": 15.2
     },
     "SHK140": {
-      "price": 16.2,
-      "date": "30/09/2026",
-      "chg": 0.0,
-      "source": "mpfa_30Sep2026"
+      "code": "SHK140",
+      "zh": "2025退休基金",
+      "cat": "target",
+      "price": 17.516,
+      "chg": 0.73,
+      "abs": 0.127,
+      "date": "04/11/2026",
+      "source": "manulife_official_0411",
+      "vs_30Sep_pct": 18.35,
+      "old_30Sep": 14.8
     },
     "SHK141": {
-      "price": 18.5,
-      "date": "30/09/2026",
-      "chg": 0.0,
-      "source": "mpfa_30Sep2026"
+      "code": "SHK141",
+      "zh": "2030退休基金",
+      "cat": "target",
+      "price": 20.348,
+      "chg": 1.05,
+      "abs": 0.212,
+      "date": "04/11/2026",
+      "source": "manulife_official_0411",
+      "vs_30Sep_pct": 9.99,
+      "old_30Sep": 18.5
     },
     "SHK142": {
-      "price": 20.1,
-      "date": "30/09/2026",
-      "chg": 0.0,
-      "source": "mpfa_30Sep2026"
+      "code": "SHK142",
+      "zh": "2035退休基金",
+      "cat": "target",
+      "price": 21.997,
+      "chg": 1.26,
+      "abs": 0.273,
+      "date": "04/11/2026",
+      "source": "manulife_official_0411",
+      "vs_30Sep_pct": 9.44,
+      "old_30Sep": 20.1
     },
     "SHK143": {
-      "price": 21.3,
-      "date": "30/09/2026",
-      "chg": 0.0,
-      "source": "mpfa_30Sep2026"
+      "code": "SHK143",
+      "zh": "2040退休基金",
+      "cat": "target",
+      "price": 23.069,
+      "chg": 1.42,
+      "abs": 0.322,
+      "date": "04/11/2026",
+      "source": "manulife_official_0411",
+      "vs_30Sep_pct": 8.31,
+      "old_30Sep": 21.3
+    },
+    "SHK144": {
+      "code": "SHK144",
+      "zh": "2045退休基金",
+      "cat": "target",
+      "price": 23.33,
+      "chg": 1.45,
+      "abs": 0.334,
+      "date": "04/11/2026",
+      "source": "manulife_official_0411",
+      "vs_30Sep_pct": null,
+      "old_30Sep": null
+    },
+    "SHK145": {
+      "code": "SHK145",
+      "zh": "恒指ESG基金",
+      "cat": "stock",
+      "price": 14.293,
+      "chg": 1.84,
+      "abs": 0.258,
+      "date": "04/11/2026",
+      "source": "manulife_official_0411",
+      "vs_30Sep_pct": -3.73,
+      "old_30Sep": 14.847
+    },
+    "SHK146": {
+      "code": "SHK146",
+      "zh": "可持續亞太債券基金",
+      "cat": "bond",
+      "price": 11.982,
+      "chg": 0.19,
+      "abs": 0.023,
+      "date": "04/11/2026",
+      "source": "manulife_official_0411",
+      "vs_30Sep_pct": 1.34,
+      "old_30Sep": 11.824
+    },
+    "SHK147": {
+      "code": "SHK147",
+      "zh": "人民幣債券基金",
+      "cat": "bond",
+      "price": 13.03,
+      "chg": -0.04,
+      "abs": -0.005,
+      "date": "04/11/2026",
+      "source": "manulife_official_0411",
+      "vs_30Sep_pct": 0.44,
+      "old_30Sep": 12.973
+    },
+    "SHK148": {
+      "code": "SHK148",
+      "zh": "核心累積基金 DIS",
+      "cat": "dis",
+      "price": 19.063,
+      "chg": 0.89,
+      "abs": 0.168,
+      "date": "04/11/2026",
+      "source": "manulife_official_0411",
+      "vs_30Sep_pct": 0.34,
+      "old_30Sep": 18.999
+    },
+    "SHK149": {
+      "code": "SHK149",
+      "zh": "65歲後基金 DIS",
+      "cat": "dis",
+      "price": 12.382,
+      "chg": 0.45,
+      "abs": 0.056,
+      "date": "04/11/2026",
+      "source": "manulife_official_0411",
+      "vs_30Sep_pct": 1.33,
+      "old_30Sep": 12.22
+    },
+    "SHK150": {
+      "code": "SHK150",
+      "zh": "退休收益基金",
+      "cat": "mixed",
+      "price": 9.202,
+      "chg": 0.56,
+      "abs": 0.051,
+      "date": "04/11/2026",
+      "source": "manulife_official_0411",
+      "vs_30Sep_pct": 1.34,
+      "old_30Sep": 9.08
     }
   }
 }
