@@ -1,5 +1,5 @@
 
-name: MPF Daily V12.2 Yesterday Sync Debug
+name: MPF Daily V12.4 Fixed
 on:
   schedule:
     - cron: '30 1 * * *'
@@ -26,11 +26,12 @@ jobs:
           playwright install chromium
           playwright install --with-deps chromium || true
 
-      - name: Run bot V12.2
+      - name: Run bot V12.4
         run: |
           python mpf_x5f_bot.py
           ls -lh
-          cat prices.json | head -100
+          echo "=== prices.json ==="
+          cat prices.json | head -200
         env:
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
           CHAT_ID: ${{ secrets.CHAT_ID }}
@@ -42,14 +43,16 @@ jobs:
           name: debug-logs-${{ github.run_number }}
           path: |
             debug_*.html
-            innerText.txt
+            debug_*.txt
+            screenshot.png
             prices.json
+          if-no-files-found: warn
 
       - name: Commit JSON
         run: |
-          git config user.name "MPF Bot V12.2"
+          git config user.name "MPF Bot V12.4"
           git config user.email "bot@mpf.local"
           git add prices.json prices_history.json || echo "no json"
           git diff --staged --quiet && echo "no changes" && exit 0
-          git commit -m "auto V12.2 $(date +%Y-%m-%d) - try yesterday sync"
+          git commit -m "auto V12.4 $(date +%Y-%m-%d)"
           git push || echo "push fail but telegram sent"
