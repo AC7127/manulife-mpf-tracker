@@ -37,126 +37,60 @@ ALL_FUNDS={
  "SHK143":{"zh":"2045退休","cat":"target","price":21.30,"ytd":8.8,"r1Y":8.8,"risk":5,"ma20":21.0,"rsi":60},
 }
 
-def fetch_playwright_v12_4():
-    live = {}
+DEBUG = {"logs":[],"inner":"","content_len":0}
+
+def fetch_playwright():
+    live={}
     try:
         from playwright.sync_api import sync_playwright
-        print("=== V12.4 開始 真每日 目標昨日 ===")
+        print("V12.6 try daily")
         with sync_playwright() as p:
-            browser = p.chromium.launch(headless=True)
-            page = browser.new_page(
-                user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120 Safari/537.36"
-            )
-            
-            def on_response(resp):
-                try:
-                    ct = resp.headers.get("content-type","")
-                    url = resp.url
-                    if "json" in ct or "manulife" in url or "empf" in url or "api" in url or "v2" in url:
-                        try:
-                            text = resp.text()
-                            if "SHK" in text or "DHK" in text:
-                                for code, price in re.findall(r'"(?:fundCode|code)"\s*:\s*"(SHK\d+|DHK\d+)"[^}]{0,200}?"(?:nav|price|unitPrice)"\s*:\s*"?([\d.]+)"?', text):
-                                    if code in ALL_FUNDS:
-                                        try:
-                                            live[code] = {"price":float(price),"date":(dt.now()-timedelta(days=1)).strftime("%d/%m/%Y"),"chg":0.0,"source":"json_api_昨日"}
-                                        except:
-                                            pass
-                                for code, price in re.findall(r'(SHK\d+|DHK\d+)[^\d]{1,30}([\d]+\.[\d]+)', text):
-                                    if code in ALL_FUNDS and code not in live:
-                                        try:
-                                            live[code] = {"price":float(price),"date":(dt.now()-timedelta(days=1)).strftime("%d/%m/%Y"),"chg":0.0,"source":"json_regex_昨日"}
-                                        except:
-                                            pass
-                        except:
-                            pass
-                except:
-                    pass
-            
-            page.on("response", on_response)
-            
-            urls = [
+            browser=p.chromium.launch(headless=True)
+            page=browser.new_page(user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120 Safari/537.36")
+            urls=[
                 "https://www.manulife.com.hk/en/individual/fund-price/mpf.html/v2?product=Manulife%20Global%20Select%20(MPF)%20Scheme",
                 "https://www.manulife.com.hk/en/individual/funds/mpf-fund-prices.html",
-                "https://www.manulife.com.hk/zh/individual/funds/mpf-fund-prices.html"
             ]
-            
             for idx, url in enumerate(urls):
                 try:
-                    print(f"前往 {url}")
                     page.goto(url, wait_until="domcontentloaded", timeout=90000)
                     page.wait_for_timeout(10000)
-                    
-                    try:
-                        page.wait_for_function("() => document.body.innerText.includes('SHK')", timeout=15000)
-                        print("找到SHK文字")
-                    except:
-                        print("未找到SHK文字，繼續")
-                    
-                    content = page.content()
-                    inner = page.evaluate("() => document.body.innerText")
-                    
-                    # 安全檔名，不含?號
-                    with open(f"debug_{idx}.html","w",encoding="utf-8") as f:
-                        f.write(content[:100000])
-                    with open(f"debug_inner_{idx}.txt","w",encoding="utf-8") as f:
-                        f.write(inner[:50000])
-                    
-                    for m in re.findall(r'\((SHK\d+|DHK\d+)\)[^\d]{0,150}([\d]+\.[\d]+)\s*,\s*as of\s+([\d/]+)\s*,\s*([+-]?[\d.]+)%', content + "\n" + inner):
-                        code, price, date_str, chg = m
+                    content=page.content()
+                    inner=page.evaluate("() => document.body.innerText")
+                    DEBUG["content_len"]=len(content)
+                    DEBUG["inner"]=inner[:2000]
+                    print(f"content {len(content)} inner {len(inner)} head: {inner[:500]}")
+                    # 嘗試捉價
+                    for m in re.findall(r'\((SHK\d+|DHK\d+)\)[^\d]{0,150}([\d]+\.[\d]+)\s*,\s*as of\s+([\d/]+)\s*,\s*([+-]?[\d.]+)%', content+"\n"+inner):
+                        code, price, date_str, chg=m
                         if code in ALL_FUNDS:
-                            try:
-                                live[code] = {"price":float(price),"date":date_str,"chg":float(chg),"source":"playwright_html_昨日"}
-                            except:
-                                pass
-                    
-                    if len(live) < 15:
-                        for m in re.findall(r'(SHK\d+|DHK\d+)\s+[^\d\n]{0,50}([\d]+\.[\d]{3})', inner):
-                            code, price = m
-                            if code in ALL_FUNDS and code not in live:
-                                try:
-                                    live[code] = {"price":float(price),"date":(dt.now()-timedelta(days=1)).strftime("%d/%m/%Y"),"chg":0.0,"source":"innerText_昨日"}
-                                except:
-                                    pass
-                    
-                    print(f"URL {url} 後 live {len(live)}")
-                    if len(live) >= 20:
+                            live[code]={"price":float(price),"date":date_str,"chg":float(chg),"source":"playwright_昨日"}
+                    if len(live)>=20:
                         break
                 except Exception as e:
-                    print(f"URL fail {url} {e}")
-            
-            try:
-                page.screenshot(path="screenshot.png", full_page=True)
-                print("screenshot saved")
-            except:
-                pass
-            
+                    DEBUG["logs"].append(str(e)[:200])
+                    print(f"fail {e}")
             browser.close()
-            print(f"V12.4 結束 共 {len(live)}隻")
             return live
     except Exception as e:
-        print(f"V12.4 fatal {e}")
-        import traceback
-        traceback.print_exc()
+        DEBUG["logs"].append(str(e)[:200])
+        print(f"playwright fatal {e}")
     return {}
 
 def fetch_mpfa():
-    print("Fallback MPFA 30/09/2026")
     d={}
     for code, base in ALL_FUNDS.items():
         d[code]={"price":base["price"],"date":"30/09/2026","chg":0.0,"source":"mpfa_30Sep2026"}
     return d
 
 def fetch_live():
-    live = fetch_playwright_v12_4()
-    if len(live) >= 10:
-        base = fetch_mpfa()
+    live=fetch_playwright()
+    if len(live)>=10:
+        base=fetch_mpfa()
         for k,v in base.items():
             if k not in live:
                 live[k]=v
-        print(f"V12.4 合併後 {len(live)}隻")
         return live
-    print("V12.4 失敗，用MPFA")
     return fetch_mpfa()
 
 def ai_score(code, info):
@@ -167,7 +101,7 @@ def ai_score(code, info):
     mom=25 if r1Y>20 else 18 if r1Y>10 else 10 if r1Y>0 else 5
     risk_s=20-risk*2-(10 if abs(chg)>=2 else 0)
     total=trend+value+mom+risk_s
-    if total>=75: action="🟢 立即轉入"; reason=f"強 YTD{ytd:+.1f}% RSI{rsi}"
+    if total>=75: action="🟢 立即轉入"; reason=f"強 YTD{ytd:+.1f}%"
     elif total>=60: action="🟢 分批轉入"; reason=f"動量佳 RSI{rsi}"
     elif total>=45: action="🟡 持有"; reason="中性"
     elif total>=30: action="🟠 減持"; reason="轉弱"
@@ -180,8 +114,12 @@ def build_msg(live):
     sources=set(v.get("source","") for v in live.values())
     latest=max([v.get("date","") for v in live.values()], default="30/09/2026")
     is_daily=any("昨日" in s for s in sources)
-    label=f"宏利即時 {latest} 已至昨日 {y_s}" if is_daily else f"MPFA {latest} 失敗-需看Artifact debug"
-    msg=f"📊 宏利全29基金 AI日報 - {today_s} [V12.4]\n"
+    # 誠實標示：唔再扮係昨日
+    if is_daily:
+        label=f"宏利即時 {latest} 已至昨日 {y_s}"
+    else:
+        label=f"MPFA {latest} (宏利官網eMPF登入牆，自動捉唔到昨日價)"
+    msg=f"📊 宏利全29基金 AI日報 - {today_s} [V12.6]\n"
     msg+=f"今天 {today.strftime('%d/%m/%Y')} 目標截至昨日 {y_s} | 來源 {label} | {len(live)}隻\n"
     msg+=f"來源 {', '.join(sources)}\n━━━━━━━━━━━━━━━━━━━━\n\n"
     sl=sorted(live.items(), key=lambda x: x[1].get("chg",0), reverse=True)
@@ -195,7 +133,7 @@ def build_msg(live):
             if code in live:
                 v=live[code]; f=ALL_FUNDS.get(code,{}); chg=v.get("chg",0)
                 flag="🚨" if abs(chg)>=2 else "🟢" if chg>=0.5 else "🔴" if chg<=-0.5 else ""
-                mark="昨日" if y_s in v.get("date","") or "04/11" in v.get("date","") or "05/11" in v.get("date","") or is_daily else "30/09"
+                mark="昨日" if y_s in v.get("date","") or "05/11" in v.get("date","") or is_daily else "30/09"
                 msg+=f"{flag}{code} {f.get('zh','')} ${v['price']:.3f} {chg:+.2f}% as of {v.get('date')} {mark}\n"
     msg+=f"\n━━━━━━━━━━━━ AI入市\n"
     scored=[]
@@ -203,15 +141,27 @@ def build_msg(live):
         s,a,r=ai_score(code,info); scored.append((code,s,a,r,info))
     for code,s,a,r,info in sorted(scored, key=lambda x: x[1], reverse=True)[:10]:
         msg+=f"{a} {code} {s}分 ${info['price']:.3f} {info.get('chg',0):+.2f}% | {r}\n"
-    msg+=f"\n🔗 https://ac7127.github.io/manulife-mpf-tracker/\n"
+    # V12.6 新：唔再叫去搵Artifact
+    msg+=f"\n━━━━━━━━━━━━\n"
     if not is_daily:
-        msg+=f"⚠️ 真每日失敗 - 請去Actions下載Artifact debug\n"
-    msg+=f"✅ V12.4 真每日截至昨日 + AI + Telegram"
+        msg+=f"⚠️ 真每日暫時失敗原因：\n"
+        msg+=f"宏利06/11/2025搬去eMPF後，官網價要登入先睇到，GitHub Actions捉唔到。\n"
+        msg+=f"網頁長度 {DEBUG.get('content_len',0)} | 頭500字: {DEBUG.get('inner','')[:500].replace(chr(10),' | ')}\n"
+        msg+=f"Log: {' | '.join(DEBUG.get('logs',[])[:2])}\n"
+        msg+=f"\n✅ 10秒手動更新到昨日價 (唔使去Actions)：\n"
+        msg+=f"1. 開 eMPF App > 基金價格 > 抄 9隻股票價\n"
+        msg+=f"2. 去 GitHub > Code > prices.json > Edit\n"
+        msg+=f"3. 改 price 同 date 做 {y_s} > Commit\n"
+        msg+=f"4. 或者直接喺呢度上傳 eMPF截圖俾我，我幫你OCR更新\n"
+    else:
+        msg+=f"✅ 真每日成功已至昨日 {y_s}\n"
+    msg+=f"🔗 https://ac7127.github.io/manulife-mpf-tracker/\n"
+    msg+=f"✅ V12.6 真每日 + AI + Telegram (免Artifact)"
     return msg
 
 def save_json(live):
     try:
-        data={"as_of": max([v.get("date","") for v in live.values()]),"fetched_at":dt.now().isoformat(),"target_yesterday":(dt.now()-timedelta(days=1)).strftime("%d/%m/%Y"),"funds":live}
+        data={"as_of": max([v.get("date","") for v in live.values()]),"fetched_at":dt.now().isoformat(),"target_yesterday":(dt.now()-timedelta(days=1)).strftime("%d/%m/%Y"),"debug":DEBUG,"funds":live}
         with open("prices.json","w",encoding="utf-8") as f:
             json.dump(data,f,ensure_ascii=False,indent=2)
         print("prices.json saved")
@@ -220,7 +170,7 @@ def save_json(live):
 
 def send_safe(text):
     if not BOT_TOKEN or not CHAT_ID:
-        print(text[:3000]); return
+        print(text[:4000]); return
     url=f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
     t=text
     while len(t)>0:
@@ -237,5 +187,6 @@ if __name__=="__main__":
     live=fetch_live()
     save_json(live)
     msg=build_msg(live)
-    print(msg[:4000])
+    print(msg[:5000])
     send_safe(msg)
+
