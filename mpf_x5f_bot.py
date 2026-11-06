@@ -37,43 +37,35 @@ ALL_FUNDS={
  "SHK143":{"zh":"2045退休","cat":"target","price":21.30,"ytd":8.8,"r1Y":8.8,"risk":5,"ma20":21.0,"rsi":60},
 }
 
-def fetch_playwright_v12_2():
-    """V12.2 終極修復: 多來源 + API攔截 + 舊版V2 endpoint"""
+def fetch_playwright_v12_4():
     live = {}
-    logs = []
     try:
         from playwright.sync_api import sync_playwright
-        print("=== V12.2 Playwright 真每日 開始 ===")
+        print("=== V12.4 開始 真每日 目標昨日 ===")
         with sync_playwright() as p:
             browser = p.chromium.launch(headless=True)
-            context = browser.new_context(
-                user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120.0.0.0 Safari/537.36",
-                locale="en-HK"
+            page = browser.new_page(
+                user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120 Safari/537.36"
             )
-            page = context.new_page()
             
-            captured_urls = []
-            api_data = []
-            
-            def handle_response(resp):
+            def on_response(resp):
                 try:
-                    url = resp.url.lower()
-                    if any(k in url for k in ["fund","price","nav","mpf","api","json","v2"]):
-                        captured_urls.append(resp.url)
-                        # 嘗試讀json
+                    ct = resp.headers.get("content-type","")
+                    url = resp.url
+                    if "json" in ct or "manulife" in url or "empf" in url or "api" in url or "v2" in url:
                         try:
-                            if "json" in resp.headers.get("content-type","") or "v2" in url:
-                                j = resp.json()
-                                txt = json.dumps(j)
-                                # 搵SHK
-                                if "SHK" in txt or "DHK" in txt:
-                                    api_data.append(txt[:2000])
-                                    # 解析
-                                    for m in re.findall(r'"?(SHK\d+|DHK\d+)"?\s*[:\"]+[^\d]*([\d]+\.[\d]+)', txt):
-                                        code, price = m[0], m[1]
+                            text = resp.text()
+                            if "SHK" in text or "DHK" in text:
+                                for code, price in re.findall(r'"(?:fundCode|code)"\s*:\s*"(SHK\d+|DHK\d+)"[^}]{0,200}?"(?:nav|price|unitPrice)"\s*:\s*"?([\d.]+)"?', text):
+                                    if code in ALL_FUNDS:
                                         try:
-                                            if code in ALL_FUNDS:
-                                                live[code] = {"price":float(price),"date":(dt.now()-timedelta(days=1)).strftime("%d/%m/%Y"),"chg":0.0,"source":"api_intercept_昨日"}
+                                            live[code] = {"price":float(price),"date":(dt.now()-timedelta(days=1)).strftime("%d/%m/%Y"),"chg":0.0,"source":"json_api_昨日"}
+                                        except:
+                                            pass
+                                for code, price in re.findall(r'(SHK\d+|DHK\d+)[^\d]{1,30}([\d]+\.[\d]+)', text):
+                                    if code in ALL_FUNDS and code not in live:
+                                        try:
+                                            live[code] = {"price":float(price),"date":(dt.now()-timedelta(days=1)).strftime("%d/%m/%Y"),"chg":0.0,"source":"json_regex_昨日"}
                                         except:
                                             pass
                         except:
@@ -81,108 +73,91 @@ def fetch_playwright_v12_2():
                 except:
                     pass
             
-            page.on("response", handle_response)
+            page.on("response", on_response)
             
-            # 1. 試新版V2 API page (之前成功過)
-            urls_to_try = [
+            urls = [
                 "https://www.manulife.com.hk/en/individual/fund-price/mpf.html/v2?product=Manulife%20Global%20Select%20(MPF)%20Scheme",
                 "https://www.manulife.com.hk/en/individual/funds/mpf-fund-prices.html",
-                "https://www.manulife.com.hk/zh/individual/funds/mpf-fund-prices.html",
-                "https://www.manulife.com.hk/en/individual/funds.html"
+                "https://www.manulife.com.hk/zh/individual/funds/mpf-fund-prices.html"
             ]
             
-            for url in urls_to_try:
+            for idx, url in enumerate(urls):
                 try:
-                    print(f"Try URL: {url}")
-                    page.goto(url, wait_until="networkidle", timeout=60000)
-                    page.wait_for_timeout(6000)
+                    print(f"前往 {url}")
+                    page.goto(url, wait_until="domcontentloaded", timeout=90000)
+                    page.wait_for_timeout(10000)
+                    
+                    try:
+                        page.wait_for_function("() => document.body.innerText.includes('SHK')", timeout=15000)
+                        print("找到SHK文字")
+                    except:
+                        print("未找到SHK文字，繼續")
+                    
                     content = page.content()
+                    inner = page.evaluate("() => document.body.innerText")
                     
-                    # 保存content sample for debug
-                    with open(f"debug_{url.split('/')[-1][:20]}.html","w",encoding="utf-8") as f:
-                        f.write(content[:50000])
+                    # 安全檔名，不含?號
+                    with open(f"debug_{idx}.html","w",encoding="utf-8") as f:
+                        f.write(content[:100000])
+                    with open(f"debug_inner_{idx}.txt","w",encoding="utf-8") as f:
+                        f.write(inner[:50000])
                     
-                    print(f"Content length {len(content)} for {url}")
-                    
-                    # Pattern 1: (SHK128) 49.538, as of 04/11/2026, 0.58%
-                    for m in re.findall(r'\((SHK\d+|DHK\d+)\)[^\d]{0,120}([\d]+\.[\d]+)\s*,\s*as of\s+([\d/]+)\s*,\s*([+-]?[\d.]+)%', content):
+                    for m in re.findall(r'\((SHK\d+|DHK\d+)\)[^\d]{0,150}([\d]+\.[\d]+)\s*,\s*as of\s+([\d/]+)\s*,\s*([+-]?[\d.]+)%', content + "\n" + inner):
                         code, price, date_str, chg = m
                         if code in ALL_FUNDS:
-                            live[code] = {"price":float(price),"date":date_str,"chg":float(chg),"source":"playwright_html_昨日"}
+                            try:
+                                live[code] = {"price":float(price),"date":date_str,"chg":float(chg),"source":"playwright_html_昨日"}
+                            except:
+                                pass
                     
-                    # Pattern 2: SHK128 ... 49.538 table
                     if len(live) < 15:
-                        for m in re.findall(r'(SHK\d+|DHK\d+)[^\d]{1,100}([\d]{1,3}\.[\d]{2,4})', content):
+                        for m in re.findall(r'(SHK\d+|DHK\d+)\s+[^\d\n]{0,50}([\d]+\.[\d]{3})', inner):
                             code, price = m
                             if code in ALL_FUNDS and code not in live:
                                 try:
-                                    live[code] = {"price":float(price),"date":(dt.now()-timedelta(days=1)).strftime("%d/%m/%Y"),"chg":0.0,"source":"playwright_table_昨日"}
+                                    live[code] = {"price":float(price),"date":(dt.now()-timedelta(days=1)).strftime("%d/%m/%Y"),"chg":0.0,"source":"innerText_昨日"}
                                 except:
                                     pass
                     
-                    # Pattern 3:用page evaluate搵所有含SHK文字
-                    if len(live) < 15:
-                        try:
-                            texts = page.evaluate("() => document.body.innerText")
-                            with open("innerText.txt","w",encoding="utf-8") as f:
-                                f.write(texts[:20000])
-                            for m in re.findall(r'(SHK\d+|DHK\d+)[^\d]{1,80}([\d]+\.[\d]+)', texts):
-                                code, price = m
-                                if code in ALL_FUNDS and code not in live:
-                                    live[code] = {"price":float(price),"date":(dt.now()-timedelta(days=1)).strftime("%d/%m/%Y"),"chg":0.0,"source":"innerText_昨日"}
-                        except Exception as e:
-                            print(f"innerText fail {e}")
-                    
-                    print(f"After {url}: live count {len(live)}, captured {len(captured_urls)} urls")
-                    print(f"Sample captured urls: {captured_urls[:5]}")
+                    print(f"URL {url} 後 live {len(live)}")
                     if len(live) >= 20:
                         break
-                        
                 except Exception as e:
-                    print(f"URL {url} fail {e}")
-                    logs.append(str(e))
-                    continue
+                    print(f"URL fail {url} {e}")
             
-            # 最後嘗試：直接去aastocks抓每日 (備用真每日)
-            if len(live) < 15:
-                try:
-                    print("Try AASTOCKS MPF daily as final fallback...")
-                    page.goto("https://www.aastocks.com/tc/mpf/default.aspx", wait_until="networkidle", timeout=60000)
-                    page.wait_for_timeout(5000)
-                    content = page.content()
-                    # aastocks format
-                    for m in re.findall(r'Manulife[^<]*?(SHK\d+|DHK\d+)[^\d]*([\d]+\.[\d]+)', content, re.I):
-                        code, price = m
-                        if code in ALL_FUNDS and code not in live:
-                            live[code] = {"price":float(price),"date":(dt.now()-timedelta(days=1)).strftime("%d/%m/%Y"),"chg":0.0,"source":"aastocks_昨日"}
-                except Exception as e:
-                    print(f"aastocks fail {e}")
+            try:
+                page.screenshot(path="screenshot.png", full_page=True)
+                print("screenshot saved")
+            except:
+                pass
             
             browser.close()
-            print(f"=== V12.2 結束 共 {len(live)}隻 ===")
-            print(f"Captured API urls: {captured_urls}")
-            print(f"API data samples: {api_data[:2]}")
+            print(f"V12.4 結束 共 {len(live)}隻")
             return live
-            
     except Exception as e:
-        print(f"V12.2 Playwright fatal {e}")
+        print(f"V12.4 fatal {e}")
         import traceback
         traceback.print_exc()
-    return live
+    return {}
 
-def fetch_mpfa_fallback():
+def fetch_mpfa():
+    print("Fallback MPFA 30/09/2026")
     d={}
     for code, base in ALL_FUNDS.items():
-        d[code]={"price":base["price"],"date":"30/09/2026","chg":0.0,"source":"mpfa_30Sep2026_fallback"}
+        d[code]={"price":base["price"],"date":"30/09/2026","chg":0.0,"source":"mpfa_30Sep2026"}
     return d
 
-def fetch_live_v12_2():
-    live = fetch_playwright_v12_2()
-    if len(live) >= 15:
-        print(f"✅ V12.2 真每日成功 {len(live)}隻")
+def fetch_live():
+    live = fetch_playwright_v12_4()
+    if len(live) >= 10:
+        base = fetch_mpfa()
+        for k,v in base.items():
+            if k not in live:
+                live[k]=v
+        print(f"V12.4 合併後 {len(live)}隻")
         return live
-    print("⚠️ V12.2 真每日失敗，用MPFA fallback")
-    return fetch_mpfa_fallback()
+    print("V12.4 失敗，用MPFA")
+    return fetch_mpfa()
 
 def ai_score(code, info):
     b=ALL_FUNDS.get(code,{}); chg=info.get("chg",0); price=info.get("price",b.get("price",0))
@@ -194,7 +169,7 @@ def ai_score(code, info):
     total=trend+value+mom+risk_s
     if total>=75: action="🟢 立即轉入"; reason=f"強 YTD{ytd:+.1f}% RSI{rsi}"
     elif total>=60: action="🟢 分批轉入"; reason=f"動量佳 RSI{rsi}"
-    elif total>=45: action="🟡 持有"; reason=f"中性"
+    elif total>=45: action="🟡 持有"; reason="中性"
     elif total>=30: action="🟠 減持"; reason="轉弱"
     else: action="🔴 迴避"; reason="弱勢"
     return total, action, reason
@@ -205,15 +180,14 @@ def build_msg(live):
     sources=set(v.get("source","") for v in live.values())
     latest=max([v.get("date","") for v in live.values()], default="30/09/2026")
     is_daily=any("昨日" in s for s in sources)
-    label=f"宏利即時 {latest} ✅已至昨日 {y_s}" if is_daily else f"MPFA {latest} (真每日失敗，請睇Actions log)"
-    msg=f"📊 宏利全29基金 AI日報 - {today_s} [V12.2]\n"
+    label=f"宏利即時 {latest} 已至昨日 {y_s}" if is_daily else f"MPFA {latest} 失敗-需看Artifact debug"
+    msg=f"📊 宏利全29基金 AI日報 - {today_s} [V12.4]\n"
     msg+=f"今天 {today.strftime('%d/%m/%Y')} 目標截至昨日 {y_s} | 來源 {label} | {len(live)}隻\n"
     msg+=f"來源 {', '.join(sources)}\n━━━━━━━━━━━━━━━━━━━━\n\n"
     sl=sorted(live.items(), key=lambda x: x[1].get("chg",0), reverse=True)
     gainers = ", ".join([f"{c} {v.get('chg',0):+.2f}%" for c,v in sl[:3]])
     losers = ", ".join([f"{c} {v.get('chg',0):+.2f}%" for c,v in sl[-3:]])
-    msg+=f"🔥 升幅 {gainers}\n"
-    msg+=f"❄️ 跌幅 {losers}\n\n"
+    msg+=f"🔥 升幅 {gainers}\n❄️ 跌幅 {losers}\n\n"
     cats=[("股票9隻",["SHK128","SHK136","SHK131","SHK130","SHK137","SHK126","SHK127","SHK129","SHK145"]),("債券4隻",["SHK132","SHK133","SHK144","SHK146"]),("保證3隻",["DHK121","SHK122","SHK125"]),("混合6隻",["SHK123","SHK124","SHK134","SHK135","SHK138","SHK150"]),("DIS2隻",["SHK148","SHK149"]),("目標5隻",["SHK139","SHK140","SHK141","SHK142","SHK143"])]
     for cat_name,codes in cats:
         msg+=f"\n【{cat_name}】\n"
@@ -227,12 +201,12 @@ def build_msg(live):
     scored=[]
     for code, info in live.items():
         s,a,r=ai_score(code,info); scored.append((code,s,a,r,info))
-    for code,s,a,r,info in sorted(scored, key=lambda x: x[1], reverse=True)[:12]:
+    for code,s,a,r,info in sorted(scored, key=lambda x: x[1], reverse=True)[:10]:
         msg+=f"{a} {code} {s}分 ${info['price']:.3f} {info.get('chg',0):+.2f}% | {r}\n"
     msg+=f"\n🔗 https://ac7127.github.io/manulife-mpf-tracker/\n"
     if not is_daily:
-        msg+=f"⚠️ 真每日失敗 - 請去Actions睇debug_*.html + innerText.txt log\n"
-    msg+=f"✅ V12.2 真每日截至昨日 + AI + Telegram"
+        msg+=f"⚠️ 真每日失敗 - 請去Actions下載Artifact debug\n"
+    msg+=f"✅ V12.4 真每日截至昨日 + AI + Telegram"
     return msg
 
 def save_json(live):
@@ -260,7 +234,7 @@ def send_safe(text):
         t=t[len(chunk):]; time.sleep(1.2)
 
 if __name__=="__main__":
-    live=fetch_live_v12_2()
+    live=fetch_live()
     save_json(live)
     msg=build_msg(live)
     print(msg[:4000])
