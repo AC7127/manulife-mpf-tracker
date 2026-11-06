@@ -1,7 +1,12 @@
 {
   "as_of": "30/09/2026",
-  "fetched_at": "2026-11-06T09:13:17.855366",
+  "fetched_at": "2026-11-06T09:25:32.353370",
   "target_yesterday": "05/11/2026",
+  "debug": {
+    "logs": [],
+    "inner": "Access Denied\nYou don't have permission to access \"http://www.manulife.com.hk/en/individual/funds/mpf-fund-prices.html\" on this server.\n\nReference #18.a651c317.1793957122.df9fc916\n\nhttps://errors.edgesuite.net/18.a651c317.1793957122.df9fc916",
+    "content_len": 337
+  },
   "funds": {
     "SHK126": {
       "price": 24.176,
