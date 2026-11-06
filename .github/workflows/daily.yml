@@ -1,4 +1,5 @@
-name: MPF Daily V12 Yesterday Sync
+
+name: MPF Daily V12.2 Yesterday Sync Debug
 on:
   schedule:
     - cron: '30 1 * * *'
@@ -10,34 +11,45 @@ jobs:
     permissions:
       contents: write
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0
 
-      - name: Setup Python
-        uses: actions/setup-python@v5
+      - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
-      - name: Install deps
+      - name: Install deps + Playwright
         run: |
           pip install requests playwright
           playwright install chromium
           playwright install --with-deps chromium || true
 
-      - name: Run bot
-        run: python mpf_x5f_bot.py
+      - name: Run bot V12.2
+        run: |
+          python mpf_x5f_bot.py
+          ls -lh
+          cat prices.json | head -100
         env:
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
           CHAT_ID: ${{ secrets.CHAT_ID }}
 
+      - name: Upload debug logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: debug-logs-${{ github.run_number }}
+          path: |
+            debug_*.html
+            innerText.txt
+            prices.json
+
       - name: Commit JSON
         run: |
-          git config user.name "MPF Bot V12"
+          git config user.name "MPF Bot V12.2"
           git config user.email "bot@mpf.local"
           git add prices.json prices_history.json || echo "no json"
           git diff --staged --quiet && echo "no changes" && exit 0
-          git commit -m "auto V12 $(date +%Y-%m-%d)"
+          git commit -m "auto V12.2 $(date +%Y-%m-%d) - try yesterday sync"
           git push || echo "push fail but telegram sent"
