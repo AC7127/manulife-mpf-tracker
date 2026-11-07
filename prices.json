@@ -1,238 +1,276 @@
 {
   "as_of": "05/11/2026 (5隻) + 04/11/2026 (24隻)",
-  "source": "manulife_official_0511_screenshot + 0411",
+  "is_auto": false,
+  "debug_logs": [
+    "goto https://www.manulife.com.hk/zh-hant/individual/funds/mpf-fund-prices.html",
+    "inner len 246 head: Access Denied | You don't have permission to access \"http://www.manulife.com.hk/zh-hant/individual/funds/mpf-fund-prices.html\" on this server. |  | Reference #18.a651c317.1794034575.f1f61e87 |  | https://errors.edgesuite.net/18.a651c317.1794034575.f1f61e87",
+    "inner parsed 0 funds, dates: ",
+    "goto https://www.manulife.com.hk/en/individual/funds/mpf-fund-prices.html",
+    "inner len 241 head: Access Denied | You don't have permission to access \"http://www.manulife.com.hk/en/individual/funds/mpf-fund-prices.html\" on this server. |  | Reference #18.a651c317.1794034598.f1f75c7d |  | https://errors.edgesuite.net/18.a651c317.1794034598.f1f75c7d",
+    "inner parsed 0 funds, dates: "
+  ],
+  "api_hits": [],
   "funds": {
     "DHK121": {
       "zh": "利息基金",
       "cat": "guarantee",
       "price": null,
       "chg": null,
-      "vs": null,
-      "date": "04/11/2026"
+      "date": "04/11/2026",
+      "source": "fallback_0511",
+      "vs": null
     },
     "SHK122": {
       "zh": "穩健基金",
       "cat": "guarantee",
       "price": 17.349,
       "chg": 0.45,
-      "vs": 0.63,
-      "date": "04/11/2026"
+      "date": "04/11/2026",
+      "source": "fallback_0511",
+      "vs": 0.63
     },
     "SHK123": {
       "zh": "增長基金",
       "cat": "mixed",
       "price": 26.636,
       "chg": -0.27,
-      "vs": -2.53,
-      "date": "05/11/2026"
+      "date": "05/11/2026",
+      "source": "fallback_0511",
+      "vs": -2.53
     },
     "SHK124": {
       "zh": "進取基金",
       "cat": "mixed",
       "price": 29.638,
       "chg": -0.26,
-      "vs": -3.39,
-      "date": "05/11/2026"
+      "date": "05/11/2026",
+      "source": "fallback_0511",
+      "vs": -3.39
     },
     "SHK125": {
       "zh": "保守基金",
       "cat": "guarantee",
       "price": 12.805,
       "chg": 0.02,
-      "vs": 0.25,
-      "date": "05/11/2026"
+      "date": "05/11/2026",
+      "source": "fallback_0511",
+      "vs": 0.25
     },
     "SHK126": {
       "zh": "香港股票基金",
       "cat": "stock",
       "price": 23.392,
       "chg": 3.41,
-      "vs": -3.24,
-      "date": "05/11/2026"
+      "date": "05/11/2026",
+      "source": "fallback_0511",
+      "vs": -3.24
     },
     "SHK127": {
       "zh": "國際股票基金",
       "cat": "stock",
       "price": 30.527,
       "chg": -2.89,
-      "vs": -3.57,
-      "date": "05/11/2026"
+      "date": "05/11/2026",
+      "source": "fallback_0511",
+      "vs": -3.57
     },
     "SHK128": {
       "zh": "亞太股票基金",
       "cat": "stock",
       "price": 45.285,
       "chg": 0.91,
-      "vs": -8.59,
-      "date": "04/11/2026"
+      "date": "04/11/2026",
+      "source": "fallback_0511",
+      "vs": -8.59
     },
     "SHK129": {
       "zh": "歐洲股票基金",
       "cat": "stock",
       "price": 19.361,
       "chg": 2.52,
-      "vs": 2.79,
-      "date": "04/11/2026"
+      "date": "04/11/2026",
+      "source": "fallback_0511",
+      "vs": 2.79
     },
     "SHK130": {
       "zh": "北美股票基金",
       "cat": "stock",
       "price": 38.065,
       "chg": 1.63,
-      "vs": -0.27,
-      "date": "04/11/2026"
+      "date": "04/11/2026",
+      "source": "fallback_0511",
+      "vs": -0.27
     },
     "SHK131": {
       "zh": "日本股票基金",
       "cat": "stock",
       "price": 29.477,
       "chg": -1.17,
-      "vs": -3.37,
-      "date": "04/11/2026"
+      "date": "04/11/2026",
+      "source": "fallback_0511",
+      "vs": -3.37
     },
     "SHK132": {
       "zh": "香港債券基金",
       "cat": "bond",
       "price": 15.931,
       "chg": 0.11,
-      "vs": 1.74,
-      "date": "04/11/2026"
+      "date": "04/11/2026",
+      "source": "fallback_0511",
+      "vs": 1.74
     },
     "SHK133": {
       "zh": "國際債券基金",
       "cat": "bond",
       "price": 15.362,
       "chg": 0.48,
-      "vs": 1.92,
-      "date": "04/11/2026"
+      "date": "04/11/2026",
+      "source": "fallback_0511",
+      "vs": 1.92
     },
     "SHK134": {
       "zh": "富達增長基金",
       "cat": "mixed",
       "price": 40.041,
       "chg": 0.89,
-      "vs": -4.67,
-      "date": "04/11/2026"
+      "date": "04/11/2026",
+      "source": "fallback_0511",
+      "vs": -4.67
     },
     "SHK135": {
       "zh": "富達平穩增長基金",
       "cat": "mixed",
       "price": 25.117,
       "chg": 0.56,
-      "vs": -5.22,
-      "date": "04/11/2026"
+      "date": "04/11/2026",
+      "source": "fallback_0511",
+      "vs": -5.22
     },
     "SHK136": {
       "zh": "中華威力基金",
       "cat": "stock",
       "price": 34.549,
       "chg": 1.22,
-      "vs": -10.97,
-      "date": "04/11/2026"
+      "date": "04/11/2026",
+      "source": "fallback_0511",
+      "vs": -10.97
     },
     "SHK137": {
       "zh": "康健護理基金",
       "cat": "stock",
       "price": 39.073,
       "chg": 2.97,
-      "vs": 9.48,
-      "date": "04/11/2026"
+      "date": "04/11/2026",
+      "source": "fallback_0511",
+      "vs": 9.48
     },
     "SHK138": {
       "zh": "智優逸退休基金",
       "cat": "mixed",
       "price": 15.535,
       "chg": 0.74,
-      "vs": 2.2,
-      "date": "04/11/2026"
+      "date": "04/11/2026",
+      "source": "fallback_0511",
+      "vs": 2.2
     },
     "SHK140": {
       "zh": "2025退休基金",
       "cat": "target",
       "price": 17.516,
       "chg": 0.73,
-      "vs": 18.35,
-      "date": "04/11/2026"
+      "date": "04/11/2026",
+      "source": "fallback_0511",
+      "vs": 18.35
     },
     "SHK141": {
       "zh": "2030退休基金",
       "cat": "target",
       "price": 20.348,
       "chg": 1.05,
-      "vs": 9.99,
-      "date": "04/11/2026"
+      "date": "04/11/2026",
+      "source": "fallback_0511",
+      "vs": 9.99
     },
     "SHK142": {
       "zh": "2035退休基金",
       "cat": "target",
       "price": 21.997,
       "chg": 1.26,
-      "vs": 9.43,
-      "date": "04/11/2026"
+      "date": "04/11/2026",
+      "source": "fallback_0511",
+      "vs": 9.43
     },
     "SHK143": {
       "zh": "2040退休基金",
       "cat": "target",
       "price": 23.069,
       "chg": 1.42,
-      "vs": 8.32,
-      "date": "04/11/2026"
+      "date": "04/11/2026",
+      "source": "fallback_0511",
+      "vs": 8.32
     },
     "SHK144": {
       "zh": "2045退休基金",
       "cat": "target",
       "price": 23.33,
       "chg": 1.45,
-      "vs": 9.48,
-      "date": "04/11/2026"
+      "date": "04/11/2026",
+      "source": "fallback_0511",
+      "vs": 9.48
     },
     "SHK145": {
       "zh": "恒指ESG基金",
       "cat": "stock",
       "price": 14.293,
       "chg": 1.84,
-      "vs": -3.73,
-      "date": "04/11/2026"
+      "date": "04/11/2026",
+      "source": "fallback_0511",
+      "vs": -3.73
     },
     "SHK146": {
       "zh": "可持續亞太債券基金",
       "cat": "bond",
       "price": 11.982,
       "chg": 0.19,
-      "vs": 1.34,
-      "date": "04/11/2026"
+      "date": "04/11/2026",
+      "source": "fallback_0511",
+      "vs": 1.34
     },
     "SHK147": {
       "zh": "人民幣債券基金",
       "cat": "bond",
       "price": 13.03,
       "chg": -0.04,
-      "vs": 0.44,
-      "date": "04/11/2026"
+      "date": "04/11/2026",
+      "source": "fallback_0511",
+      "vs": 0.44
     },
     "SHK148": {
       "zh": "核心累積基金 DIS",
       "cat": "dis",
       "price": 19.063,
       "chg": 0.89,
-      "vs": 0.34,
-      "date": "04/11/2026"
+      "date": "04/11/2026",
+      "source": "fallback_0511",
+      "vs": 0.34
     },
     "SHK149": {
       "zh": "65歲後基金 DIS",
       "cat": "dis",
       "price": 12.382,
       "chg": 0.45,
-      "vs": 1.33,
-      "date": "04/11/2026"
+      "date": "04/11/2026",
+      "source": "fallback_0511",
+      "vs": 1.33
     },
     "SHK150": {
       "zh": "退休收益基金",
       "cat": "mixed",
       "price": 9.202,
       "chg": 0.56,
-      "vs": 1.35,
-      "date": "04/11/2026"
+      "date": "04/11/2026",
+      "source": "fallback_0511",
+      "vs": 1.35
     }
   }
 }
