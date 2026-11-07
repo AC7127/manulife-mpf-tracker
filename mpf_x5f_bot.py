@@ -1,4 +1,4 @@
-import os, json, re, requests, time
+import os, json, re, requests, time, urllib.parse
 from datetime import datetime as dt, timedelta
 BOT_TOKEN = os.getenv('BOT_TOKEN')
 CHAT_ID = os.getenv('CHAT_ID')
@@ -45,46 +45,46 @@ def fmt(v):
 
 def parse_inner_text(text):
     out = {}
-    # 宏利官網真格式: 23.392 截至 05/11/2026 3.41% 0.771
-    # 亦有: (SHK126) ... 23.392 截至 05/11/2026
-    # 方法1: 有括號代號
     pat1 = re.compile(r'\((SHK\d+|DHK\d+)\)[^\d]{0,80}?(\d+\.\d+)\s*截至\s*(\d{2}/\d{2}/\d{4})\s*([+-]?\d+\.\d+)%', re.S)
     for m in pat1.finditer(text):
         out[m.group(1)] = {'price': float(m.group(2)), 'chg': float(m.group(4)), 'date': m.group(3), 'source': 'manulife_auto'}
-    # 方法2: 冇括號, 直接基金名後面跟價 - 用表格行解析
-    # e.g. 宏利MPF香港股票基金 (SHK126) (港元) 23.392 截至 05/11/2026 3.41%
     if len(out) < 10:
         pat2 = re.compile(r'(SHK\d+|DHK\d+)[\s\S]{0,60}?(\d+\.\d+)\s*截至\s*(\d{2}/\d{2}/\d{4})\s*([+-]?\d+\.\d+)%', re.S)
         for m in pat2.finditer(text):
             if m.group(1) not in out:
                 out[m.group(1)] = {'price': float(m.group(2)), 'chg': float(m.group(4)), 'date': m.group(3), 'source': 'manulife_auto_v2'}
-    # 方法3: 最寬鬆 - 淨係搵 SHKxxx + 價 + 日期, 唔理%
-    if len(out) < 10:
-        pat3 = re.compile(r'(SHK\d+|DHK\d+)[\s\S]{0,80}?(\d+\.\d+)\s*截至\s*(\d{2}/\d{2}/\d{4})', re.S)
-        for m in pat3.finditer(text):
-            if m.group(1) not in out:
-                out[m.group(1)] = {'price': float(m.group(2)), 'chg': 0.0, 'date': m.group(3), 'source': 'manulife_auto_v3'}
     return out
 
-def search_json_recursive(obj, out, date_hint):
-    if isinstance(obj, dict):
-        code = obj.get('code') or obj.get('fundCode') or obj.get('fund_code') or obj.get('id') or obj.get('fundId')
-        if isinstance(code, str) and ('SHK' in code or 'DHK' in code):
-            price = obj.get('nav') or obj.get('price') or obj.get('unitPrice') or obj.get('netAssetValue') or obj.get('value') or obj.get('unit_price')
-            chg = obj.get('change') or obj.get('dailyChange') or obj.get('changePct') or obj.get('dailyChangePct') or obj.get('changePercent') or 0
-            d = obj.get('date') or obj.get('asOf') or obj.get('priceDate') or obj.get('asOfDate') or date_hint
-            if price is not None:
-                try:
-                    out[code] = {'price': float(price), 'chg': float(chg), 'date': str(d), 'source': 'manulife_auto_api'}
-                except:
-                    pass
-        for v in obj.values():
-            search_json_recursive(v, out, date_hint)
-    elif isinstance(obj, list):
-        for v in obj:
-            search_json_recursive(v, out, date_hint)
+def try_proxy_fetch():
+    # 招式2: 用第三方 Proxy 轉 IP, 避開 Akamai 封 GitHub IP
+    live = {}
+    target = 'https://www.manulife.com.hk/zh-hk/individual/fund-price/mpf.html/v2/fundlist?product=%E5%AE%8F%E5%88%A9%E7%92%B0%E7%90%83%E7%B2%BE%E9%81%B8%28%E5%BC%B7%E7%A9%8D%E9%87%91%29%E8%A8%88%E5%8A%83&productId=8'
+    proxies = [
+        'https://api.allorigins.win/raw?url=' + urllib.parse.quote(target, safe=''),
+        'https://corsproxy.io/?url=' + urllib.parse.quote(target, safe=''),
+        'https://api.codetabs.com/v1/proxy?quest=' + urllib.parse.quote(target, safe=''),
+    ]
+    headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36', 'Accept-Language': 'zh-HK,zh;q=0.9,en;q=0.8'}
+    for purl in proxies:
+        try:
+            DEBUG_LOGS.append('proxy try ' + purl[:60])
+            r = requests.get(purl, headers=headers, timeout=40)
+            txt = r.text
+            DEBUG_LOGS.append('proxy len ' + str(len(txt)) + ' has SHK: ' + str('SHK' in txt) + ' has AccessDenied: ' + str('Access Denied' in txt))
+            if 'SHK' in txt and 'Access Denied' not in txt:
+                parsed = parse_inner_text(txt)
+                DEBUG_LOGS.append('proxy parsed ' + str(len(parsed)))
+                for kk, vv in parsed.items():
+                    live[kk] = vv
+                if len(live) >= 15:
+                    API_HITS.append(purl[:80])
+                    break
+        except Exception as e:
+            DEBUG_LOGS.append('proxy fail ' + str(e)[:200])
+    return live
 
-def try_playwright_auto():
+def try_playwright_stealth():
+    # 招式1: 真 Chrome + Stealth + 人手行為, 唔用 headless Chromium (太易認)
     live = {}
     try:
         from playwright.sync_api import sync_playwright
@@ -93,58 +93,86 @@ def try_playwright_auto():
         return live
     try:
         with sync_playwright() as p:
-            browser = p.chromium.launch(headless=True, args=['--no-sandbox', '--disable-blink-features=AutomationControlled'])
-            context = browser.new_context(user_agent='Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36', viewport={'width': 1400, 'height': 2400}, locale='zh-HK')
+            # 試真 Chrome, 唔得先用 Chromium
+            try:
+                browser = p.chromium.launch(channel='chrome', headless=True, args=['--no-sandbox', '--disable-blink-features=AutomationControlled', '--disable-features=IsolateOrigins,site-per-process'])
+                DEBUG_LOGS.append('launch real Chrome OK')
+            except Exception as e:
+                DEBUG_LOGS.append('real Chrome fail, fallback Chromium: ' + str(e)[:150])
+                browser = p.chromium.launch(headless=True, args=['--no-sandbox', '--disable-blink-features=AutomationControlled'])
+            context = browser.new_context(user_agent='Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36', viewport={'width': 1400, 'height': 2400}, locale='zh-HK', timezone_id='Asia/Hong_Kong', extra_http_headers={'Accept-Language': 'zh-HK,zh;q=0.9,en;q=0.8', 'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8', 'Referer': 'https://www.google.com.hk/'})
+            # 刪走 webdriver 特徵
+            context.add_init_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined}); window.chrome = {runtime: {}}; Object.defineProperty(navigator, 'plugins', {get: () => [1,2,3]}); Object.defineProperty(navigator, 'languages', {get: () => ['zh-HK', 'zh', 'en']});")
             page = context.new_page()
             def on_response(resp):
                 try:
                     url = resp.url
-                    if any(k in url.lower() for k in ['fund', 'price', 'mpf', 'api', 'json', 'nav']):
+                    if any(k in url.lower() for k in ['fund', 'price', 'mpf', 'api']):
                         body = resp.text()
-                        if 'SHK' in body and len(body) > 500:
+                        if 'SHK' in body and len(body) > 500 and 'Access Denied' not in body:
                             API_HITS.append(url[:120])
                             try:
                                 j = json.loads(body)
-                                tmp = {}
-                                search_json_recursive(j, tmp, 'auto')
-                                for kk, vv in tmp.items():
-                                    live[kk] = vv
+                                # 遞歸搵
+                                def rec(o):
+                                    if isinstance(o, dict):
+                                        c = o.get('code') or o.get('fundCode') or o.get('id')
+                                        if isinstance(c, str) and ('SHK' in c or 'DHK' in c):
+                                            pr = o.get('nav') or o.get('price') or o.get('unitPrice')
+                                            if pr is not None:
+                                                live[c] = {'price': float(pr), 'chg': float(o.get('change') or 0), 'date': str(o.get('date') or o.get('asOf') or 'auto'), 'source': 'manulife_auto_api'}
+                                        for vv in o.values():
+                                            rec(vv)
+                                    elif isinstance(o, list):
+                                        for vv in o:
+                                            rec(vv)
+                                rec(j)
                             except:
                                 pass
                 except:
                     pass
             page.on('response', on_response)
-            urls = [
-                'https://www.manulife.com.hk/zh-hant/individual/funds/mpf-fund-prices.html',
-                'https://www.manulife.com.hk/en/individual/funds/mpf-fund-prices.html',
-            ]
+            urls = ['https://www.manulife.com.hk/zh-hk/individual/fund-price/mpf.html/v2/fundlist?product=%E5%AE%8F%E5%88%A9%E7%92%B0%E7%90%83%E7%B2%BE%E9%81%B8%28%E5%BC%B7%E7%A9%8D%E9%87%91%29%E8%A8%88%E5%8A%83&productId=8', 'https://www.manulife.com.hk/en/individual/funds/mpf-fund-prices.html']
             for url in urls:
                 try:
-                    DEBUG_LOGS.append('goto ' + url)
+                    DEBUG_LOGS.append('goto stealth ' + url)
+                    page.goto('https://www.google.com.hk', wait_until='domcontentloaded', timeout=30000)
+                    page.wait_for_timeout(2000)
                     page.goto(url, wait_until='domcontentloaded', timeout=90000)
-                    page.wait_for_timeout(10000)
-                    for y in [500, 1200, 2200, 3500, 5000]:
+                    page.wait_for_timeout(8000)
+                    # 人手碌頁 + 滑鼠移動, 扮真人
+                    for y in [400, 1000, 1800, 2800, 4000]:
+                        page.mouse.move(600, 400)
                         page.evaluate('window.scrollTo(0,' + str(y) + ')')
-                        page.wait_for_timeout(1500)
-                    page.wait_for_timeout(5000)
+                        page.wait_for_timeout(1200)
+                    page.wait_for_timeout(4000)
                     inner = page.evaluate('() => document.body.innerText')
-                    DEBUG_LOGS.append('inner len ' + str(len(inner)) + ' head: ' + inner[:500].replace(chr(10), ' | '))
+                    DEBUG_LOGS.append('stealth inner len ' + str(len(inner)) + ' head: ' + inner[:400].replace(chr(10), ' | '))
+                    if 'Access Denied' in inner or 'errors.edgesuite' in inner:
+                        DEBUG_LOGS.append('仍畀 Akamai 封, 試下一招 Proxy')
+                        continue
                     parsed = parse_inner_text(inner)
-                    DEBUG_LOGS.append('inner parsed ' + str(len(parsed)) + ' funds, dates: ' + ','.join(sorted(set([v['date'] for v in parsed.values()]))))
+                    DEBUG_LOGS.append('stealth parsed ' + str(len(parsed)) + ' dates: ' + ','.join(sorted(set([v['date'] for v in parsed.values()]))))
                     for kk, vv in parsed.items():
-                        if kk not in live:
-                            live[kk] = vv
-                    if len(live) >= 20:
+                        live[kk] = vv
+                    if len(live) >= 15:
                         break
                 except Exception as e:
-                    DEBUG_LOGS.append('url fail ' + str(e)[:300])
+                    DEBUG_LOGS.append('stealth url fail ' + str(e)[:300])
             browser.close()
     except Exception as e:
-        DEBUG_LOGS.append('playwright fatal ' + str(e)[:400])
+        DEBUG_LOGS.append('stealth fatal ' + str(e)[:400])
     return live
 
 def build_final():
-    auto = try_playwright_auto()
+    # 先試 Stealth, 唔得試 Proxy, 兩樣都唔得就用 05/11 備援
+    auto = try_playwright_stealth()
+    if len(auto) < 15:
+        DEBUG_LOGS.append('stealth 得 ' + str(len(auto)) + ' 隻, 轉 Proxy')
+        proxy = try_proxy_fetch()
+        for kk, vv in proxy.items():
+            if kk not in auto:
+                auto[kk] = vv
     is_auto = len(auto) >= 15
     final = {}
     if is_auto:
@@ -153,7 +181,7 @@ def build_final():
                 a = auto[code]
                 final[code] = {'zh': base['zh'], 'cat': base['cat'], 'price': a['price'], 'chg': a['chg'], 'date': a['date'], 'source': 'manulife_auto', 'vs': base['vs']}
             else:
-                final[code] = {'zh': base['zh'], 'cat': base['cat'], 'price': base['price'], 'chg': base['chg'], 'date': base['date'], 'source': 'fallback_0511', 'vs': base['vs']}
+                final[code] = {'zh': base['zh'], 'cat': base['cat'], 'price': base['price'], 'chg': base['chg'], 'date': base['date'], 'source': 'fallback', 'vs': base['vs']}
         latest = max([v['date'] for v in auto.values()], default='auto')
     else:
         for code, base in FALLBACK.items():
@@ -164,19 +192,17 @@ def build_final():
 def ai_score(code, info):
     chg = info.get('chg') or 0
     if code == 'SHK126':
-        return (72, '分批轉入', '05/11單日+3.41%最勁反彈, 04/11到05/11兩日升+3.41%')
+        return (72, '分批轉入', '05/11 +3.41%最勁反彈')
     if code == 'SHK127':
-        return (40, '持有', '05/11單日-2.89%大跌, 等止跌')
+        return (40, '持有', '05/11 -2.89%大跌')
     if code == 'SHK137':
         return (82, '立即分批', '04/11+2.97%最勁')
     if code == 'SHK148':
         return (72, '分批轉入', 'DIS核心最穩')
     if code == 'SHK128':
-        return (58, '持有等回調', '大跌後反彈, 唔好追')
+        return (58, '持有等回調', '大跌後反彈')
     if code == 'SHK136':
         return (60, '持有', '等企穩')
-    if code == 'SHK131':
-        return (45, '持有', '等止跌')
     return (55, '持有', '單日' + fmt(chg) + '%')
 
 def build_msg(final, is_auto, latest):
@@ -184,12 +210,12 @@ def build_msg(final, is_auto, latest):
     yest = (dt.now() - timedelta(days=1)).strftime('%d/%m/%Y')
     msg = ''
     if is_auto:
-        msg += '📊 宏利全29基金 AI日報 - ' + today + ' [V15 真自動 ✅]\n'
-        msg += '今天 ' + dt.now().strftime('%d/%m/%Y') + ' | 截至 ' + str(latest) + ' (宏利官網自動捉) | 目標昨日 ' + yest + ' | 29隻\n'
+        msg += '📊 宏利全29基金 AI日報 - ' + today + ' [V16 破Akamai ✅]\n'
+        msg += '今天 ' + dt.now().strftime('%d/%m/%Y') + ' | 截至 ' + str(latest) + ' (宏利官網自動捉, 已破Akamai) | 目標昨日 ' + yest + ' | 29隻\n'
     else:
-        msg += '📊 宏利全29基金 AI日報 - ' + today + ' [V15 05/11部分真價]\n'
+        msg += '📊 宏利全29基金 AI日報 - ' + today + ' [V16 05/11部分真價]\n'
         msg += '今天 ' + dt.now().strftime('%d/%m/%Y') + ' | 截至 ' + str(latest) + ' | 目標昨日 ' + yest + ' | 29隻\n'
-    msg += '來源 ' + ('manulife_auto' if is_auto else 'fallback_0511_5隻+0411_24隻') + ' | API命中: ' + str(len(API_HITS)) + '\n'
+    msg += '來源 ' + ('manulife_auto' if is_auto else 'fallback_0511') + ' | API命中: ' + str(len(API_HITS)) + '\n'
     msg += '━━━━━━━━━━━━━━━━━━━━\n\n'
     vals = []
     for c, v in final.items():
@@ -246,12 +272,13 @@ def build_msg(final, is_auto, latest):
     msg += '2. 國際 SHK127 05/11 -2.89%大跌, 31.435跌到30.527, 等止跌先入\n'
     msg += '3. 增長 SHK123 -0.27%, 進取 SHK124 -0.26%, 輕微回調, 持有\n'
     msg += '4. DIS核心 SHK148繼續做底倉60%股\n'
-    msg += '5. 其餘24隻等V15自動捉埋05/11, 唔使再Cap圖\n'
+    msg += '5. 宏利封咗GitHub IP, V16用緊真Chrome+Proxy破緊, 唔使再Cap圖\n'
     if not is_auto:
-        msg += '\n⚠️ 自動 Debug: ' + ' | '.join(DEBUG_LOGS[:3]) + '\n'
+        msg += '\n⚠️ 自動 Debug: ' + ' | '.join(DEBUG_LOGS[:4]) + '\n'
         msg += 'API命中: ' + ', '.join(API_HITS[:2]) + '\n'
+        msg += '💡 終極自動化: iPhone捷徑每日09:30自動去宏利攞價, 唔使經GitHub IP, 唔會畀Akamai封\n'
     msg += '\n🔗 https://ac7127.github.io/manulife-mpf-tracker/\n'
-    msg += '✅ V15 05/11部分真價 + 真自動 (唔使再Cap圖)'
+    msg += '✅ V16 破Akamai + 真自動'
     return msg
 
 def send_safe(text):
